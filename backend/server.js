@@ -1,8 +1,12 @@
 import app from './app.js'
 import dotenv from 'dotenv'
-dotenv.config({path:'./config/config.env'})
+import dbServer  from './config/db.js';
 
-const port=process.env.Port || 3000;
+dotenv.config({path:'./config/config.env'})
+dbServer()
+const port=process.env.PORT || 3000;
+
+
 
 app.listen(port,()=>{
     console.log(`server running on port : ${port}`)
