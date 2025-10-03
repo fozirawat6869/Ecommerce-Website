@@ -7,8 +7,8 @@ import mongoose from 'mongoose'
 .then(()=>{
     console.log("connect to the database", dbPort)
 })
-.catch((error)=>{
-    console.log("error :- not connected to the database",error.message)
-})
+// .catch((error)=>{
+//     console.log("error :- not connected to the database",error.message)
+// })
 }
 export default dbServer
