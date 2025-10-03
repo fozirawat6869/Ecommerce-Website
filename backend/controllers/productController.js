@@ -1,5 +1,6 @@
 import productSchema from '../models/prodectModel.js'
 import HandleError from '../utils/handleErrors.js'
+import handleAsyncErrors from '../middleware/handleErrorAsync.js'
 
 // get all products
 export  const getAllProducts=async(req,res)=>{
@@ -56,7 +57,7 @@ export const deleteProduct=async(req,res)=>{
 }
 
 // get single product
-export const getSingleProduct=async(req,res,next)=>{
+export const getSingleProduct=handleAsyncErrors(async(req,res,next)=>{
     // const id=req.params.id
     const id = req.params.id.trim();
     const singleProduct=await productSchema.findOne({_id:id})
@@ -74,4 +75,4 @@ export const getSingleProduct=async(req,res,next)=>{
       singleProduct
     })
   
-}
+})
