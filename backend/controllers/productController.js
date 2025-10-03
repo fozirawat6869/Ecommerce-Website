@@ -5,7 +5,7 @@ import handleAsyncErrors from '../middleware/handleErrorAsync.js'
 // get all products
 export  const getAllProducts=handleAsyncErrors(async(req,res)=>{
     // res.status(200).json("get all Products")
-    const allProduct=await productSchema.find()
+    const allProduct=await connection.query("select * from allProducts=?",[])
     console.log(allProduct)
     res.status(200).json({
       success:true,
