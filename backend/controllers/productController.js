@@ -3,7 +3,7 @@ import HandleError from '../utils/handleErrors.js'
 import handleAsyncErrors from '../middleware/handleErrorAsync.js'
 
 // get all products
-export  const getAllProducts=async(req,res)=>{
+export  const getAllProducts=handleAsyncErrors(async(req,res)=>{
     // res.status(200).json("get all Products")
     const allProduct=await productSchema.find()
     console.log(allProduct)
@@ -12,10 +12,10 @@ export  const getAllProducts=async(req,res)=>{
       allProduct:allProduct
     })
 
-}
+})
 
 // create product
-export const createProduct=async(req,res)=>{
+export const createProduct=handleAsyncErrors(async(req,res)=>{
     console.log(req.body)
     // res.status(201).json("product created")
   const product=await productSchema.create(req.body)
@@ -25,10 +25,10 @@ export const createProduct=async(req,res)=>{
     createdProduct:product
   })
   
-}
+})
 
 // update product
-export const updateProduct=async(req,res)=>{
+export const updateProduct=handleAsyncErrors(async(req,res)=>{
    const id=req.params.id
  
   console.log(id)
@@ -41,10 +41,10 @@ export const updateProduct=async(req,res)=>{
     success:true,
     updatedProduct:updateProduct
   })
-}
+})
 
 // delete product
-export const deleteProduct=async(req,res)=>{
+export const deleteProduct=handleAsyncErrors(async(req,res)=>{
   const id=req.params.id
   console.log
    const deleteProduct=await productSchema.deleteOne({_id:id})
@@ -54,7 +54,7 @@ export const deleteProduct=async(req,res)=>{
     message:"Product deleted successfully",
     deleteProduct
    })
-}
+})
 
 // get single product
 export const getSingleProduct=handleAsyncErrors(async(req,res,next)=>{
