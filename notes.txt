@@ -1,0 +1,12 @@
+.stack is not a function, it is just a property of Error objects that shows where the error came from.
+
+
+✅ How It Works (Simple Explanation)
+
+CustomError is a child of JavaScript's built-in Error.
+
+super(message) tells the parent Error class what message to use.
+
+this.statusCode lets you attach a custom HTTP status code like 400 or 404.
+
+Error.captureStackTrace(...) gives a cleaner, more accurate error log (optional but useful).
