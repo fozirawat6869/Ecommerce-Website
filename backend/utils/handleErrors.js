@@ -1,6 +1,6 @@
 // We are creating a class named CustomError
 // It gets all the features of the built-in Error class
-class CustomError extends Error {
+class HandleError extends Error {
 
   // This runs when we create the error: new CustomError("message", 404)
   constructor(message, statusCode) {
@@ -24,6 +24,8 @@ class CustomError extends Error {
      It takes two arguments:
      1. The error object (this)
      2`. A function to exclude from the stack trace (this.constructor)
+          or
+     2. The function you don;t want to show in the stack trace
      3. This is optional but helps in cleaner error logs.
      4. More info: https://v8.dev/docs/stack-trace-api#customizing-stack-traces
     */
@@ -31,4 +33,4 @@ class CustomError extends Error {
 }
 
 // Export it so we can use it in other files (like controllers)
-export default CustomError;
+export default HandleError;

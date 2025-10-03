@@ -1,9 +1,11 @@
 import productSchema from '../models/prodectModel.js'
+import HandleError from '../utils/handleErrors.js'
 
 // get all products
 export  const getAllProducts=async(req,res)=>{
     // res.status(200).json("get all Products")
     const allProduct=await productSchema.find()
+    console.log(allProduct)
     res.status(200).json({
       success:true,
       allProduct:allProduct
@@ -54,15 +56,18 @@ export const deleteProduct=async(req,res)=>{
 }
 
 // get single product
-export const getSingleProduct=async(req,res)=>{
+export const getSingleProduct=async(req,res,next)=>{
     // const id=req.params.id
     const id = req.params.id.trim();
     const singleProduct=await productSchema.findOne({_id:id})
     if(!singleProduct){
-      return res.status(404).json({
-        success:false,
-        message:"Product not found"
-      })}
+       return next(new HandleError("Product not found",400)) 
+      //  res.status(400).json({
+      //       success:false,
+      //       message:"Product not found"
+      //   })
+       
+    }
 
     res.status(200).json({
       success:true,
