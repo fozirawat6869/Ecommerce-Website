@@ -9,7 +9,7 @@ function Footer() {
   return (
     <>
     <footer className='py-10 bg-green-200'>
-       <div className='flex gap-5 flex-col md:flex-row justify-evenly  px-5 mx-auto container '>
+       <div className='flex gap-5 flex-col md:flex-row justify-evenly  px-5 mx-auto container bg-red-300 '>
          {/* Section one */}
          <div className='flex flex-col gap-3  bg-yellow-300 p-5 rounded-2xl'>
             <h1 className='text-2xl font-bold text-center '>Contact Us</h1>
