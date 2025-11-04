@@ -5,13 +5,13 @@ import connection from '../config/sqldb.js'
 
 
 export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
-    connection.query("select * from products",(err,result)=>{
-    // if(err){
-    //   return res.status(400).json({
-    //      success:false,
-    //      message:"error in query",   
-    //   })
-    // }
+  // console.log(req.query)  get the page,limit form query
+  
+   let page = parseInt(req.query.page) || 1;   // if no page given, use 1
+  let limit = parseInt(req.query.limit) ||2; // if no limit given, use 2
+   let offset = (page - 1) * limit;
+    connection.query(`select * from products limit ${limit} offset ${offset}`,(err,result)=>{
+    // console.log(result)
      if(err){
       return next(new HandleError("error in query of allProducts",400))
      }
@@ -24,6 +24,22 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
 })
 
 
+export const productDetails=(req,res)=>{
+
+ 
+  const {id}=req.params
+  console.log(id)
+  connection.query("select * from products where product_id=?",[id],(result,err)=>{
+    console.log(result)
+    if(err){
+      return console.log("err in query of details product",err)
+    }
+    res.status(201).json({
+      success:true,
+      productDetail:result[0]
+    })
+  })
+}
 
 export const createProduct=(req,res)=>{
   console.log(req.body)

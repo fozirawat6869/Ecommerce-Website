@@ -53,7 +53,7 @@ const Categories = () => {
               <span className="text-gray-700">{item.icon}</span>
             </div>
             {/* Label */}
-            <p className="text-sm sm:text-base text-gray-800 mt-2 font-medium">
+            <p className="text-base sm:text-base text-gray-800 mt-2 font-medium">
               {item.name}
             </p>
           </div>
