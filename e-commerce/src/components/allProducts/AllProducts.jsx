@@ -15,12 +15,13 @@ function AllProducts() {
 
    const [page,setPage]=useState(1)
 
-   
+
   const [categoryValue,setCategoryValue]=useState("")
+  const [price,setPrice]=useState("")
     
     const fetchProducts=async()=>{
         try{
-            const res=await axios.get(`http://localhost:8000/api/products?category=${categoryValue}&page=${page}&limit=${10}`)
+            const res=await axios.get(`http://localhost:8000/api/products?category=${categoryValue}&price=${price}&page=${page}&limit=${10}`)
             // setData(res.data.allProduct)
             console.log(res.data.allProduct)
             const data=res.data.allProduct
@@ -33,16 +34,43 @@ function AllProducts() {
   
 // useQuery hook  to fetch and cache data
     const{data}=useQuery({
-        queryKey:['products',page,categoryValue],
+        queryKey:['products',page,categoryValue,price],
         queryFn:fetchProducts,  
         cacheTime:1000*60*5,
         staleTime:1000*60*5
     })
 
-    // const handleCategoryHandler=(e)=>{
+    // const filterHandler=(e)=>{
+    //    if(categoryValue===e.target.value){
+    //     setCategoryValue("")
+    //    }else{
     //     setCategoryValue(e.target.value)
-    //     setPage(1)
+    //    }
+
+    //    if(price===e.target.value){
+    //       setPrice("")
+    //     }else{
+    //         setPrice(e.target.value)
+    //     }
     // }
+
+    const handleCategory = (e) => {
+  if (categoryValue === e.target.value) {
+    setCategoryValue(""); // uncheck
+  } else {
+    setCategoryValue(e.target.value); // check
+  }
+  setPage(1);
+};
+
+const handlePrice = (e) => {
+  if (price === e.target.value) {
+    setPrice(""); // uncheck
+  } else {
+    setPrice(e.target.value); // check
+  }
+  setPage(1);
+};
 
   return (
     <>
@@ -68,7 +96,7 @@ function AllProducts() {
                  <input
                   type="checkbox"
                   value="Men" 
-                  onChange={(e)=>{setCategoryValue(e.target.value),setPage(1)}} 
+                  onChange={handleCategory} 
                   checked={categoryValue==="Men"}
                   
                   />
@@ -79,7 +107,7 @@ function AllProducts() {
                  <input 
                  type="checkbox"
                   value="Women" 
-                  onChange={(e)=>{setCategoryValue(e.target.value),setPage(1)}} 
+                  onChange={handleCategory} 
                   checked={categoryValue==="Women"}
                   />
                  <label htmlFor="">Women</label>
@@ -105,31 +133,54 @@ function AllProducts() {
            {showSection.price && (
             <div className='flex flex-col pt-3 '>
                 <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="100" />
+                 <input type="checkbox" name="" id="" value="100"
+                 checked={price==="100"}
+                    onChange={handlePrice} 
+                    />
                  <label htmlFor="">₹100</label>
                 </div>
                 <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="200" />
+                 <input type="checkbox" name="" id="" value="200" 
+                 checked={price==="200"}
+                    onChange={handlePrice} 
+                   
+                 />
                  <label htmlFor="">₹200</label>
                 </div>
                 <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="300" />
+                 <input type="checkbox" name="" id="" value="300"
+                    onChange={handlePrice} 
+                    checked={price==="300"}
+                 />
                  <label htmlFor="">₹300</label>
                 </div>
                  <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="400" />
+                 <input type="checkbox" name="" id="" value="400"
+                    onChange={handlePrice} 
+                   checked={price==="400"}
+                 />
+
                  <label htmlFor="">₹400</label>
                 </div>
                  <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="500" />
+                 <input type="checkbox" name="" id="" value="500" 
+                 checked={price==="500"}
+                   onChange={handlePrice} 
+                 />
                  <label htmlFor="">₹500</label>
                 </div>
                  <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="500" />
+                 <input type="checkbox" name="" id="" value="1000" 
+                 checked={price==="1000"}              
+                    onChange={handlePrice}
+                  />
                  <label htmlFor="">₹1000</label>
                 </div>
                  <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="1000" />
+                 <input type="checkbox" name="" id="" value="1000plus"
+                    onChange={handlePrice} 
+                     checked={price==="1000plus"}
+                  />
                  <label htmlFor="">₹1000+</label>
                 </div>
             </div>

@@ -7,15 +7,25 @@ import connection from '../config/sqldb.js'
 export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
   // console.log(req.query)  get the page,limit form query
   let category=req.query.category;
-  console.log(category)
+  let price=req.query.price;
+  // console.log(price)
+  // console.log(category)
    let page = parseInt(req.query.page) || 1;   // if no page given, use 1
   let limit = parseInt(req.query.limit) ||2; // if no limit given, use 2
    let offset = (page - 1) * limit;
-   let query="select * from products"
+   let query="select * from products where 1=1"
   //   if category is there in query
-      if(category){
-        query+=` where category = "${category}" || ""`
+      if(category==="Men" || category==="Women"){
+        query+=` and category = "${category}"`
       }
+     if(price==="100" || price==="200" || price==="300" || price==="400" || price==="500" || price==="1000"  ){    
+          query+=` and price<=${price}`
+       }
+       if(price==="1000plus"){
+        query+=` and price>=1000 `
+       }
+  
+    
       // pagination
         query += ` LIMIT ${limit} OFFSET ${offset}`;
     connection.query(query,(err,result)=>{
