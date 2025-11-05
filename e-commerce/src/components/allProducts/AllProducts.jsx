@@ -15,11 +15,12 @@ function AllProducts() {
 
    const [page,setPage]=useState(1)
 
-
+   
+  const [categoryValue,setCategoryValue]=useState("")
     
     const fetchProducts=async()=>{
         try{
-            const res=await axios.get(`http://localhost:8000/api/products?page=${page}&limit=${10}`)
+            const res=await axios.get(`http://localhost:8000/api/products?category=${categoryValue}&page=${page}&limit=${10}`)
             // setData(res.data.allProduct)
             console.log(res.data.allProduct)
             const data=res.data.allProduct
@@ -32,11 +33,16 @@ function AllProducts() {
   
 // useQuery hook  to fetch and cache data
     const{data}=useQuery({
-        queryKey:['products',page],
+        queryKey:['products',page,categoryValue],
         queryFn:fetchProducts,  
         cacheTime:1000*60*5,
         staleTime:1000*60*5
     })
+
+    // const handleCategoryHandler=(e)=>{
+    //     setCategoryValue(e.target.value)
+    //     setPage(1)
+    // }
 
   return (
     <>
@@ -59,16 +65,29 @@ function AllProducts() {
            {showSection.category && (
             <div className='flex flex-col pt-3 '>
                 <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="Men" />
+                 <input
+                  type="checkbox"
+                  value="Men" 
+                  onChange={(e)=>{setCategoryValue(e.target.value),setPage(1)}} 
+                  checked={categoryValue==="Men"}
+                  
+                  />
+
                  <label htmlFor="">Men</label>
                 </div>
                 <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="Women" />
+                 <input 
+                 type="checkbox"
+                  value="Women" 
+                  onChange={(e)=>{setCategoryValue(e.target.value),setPage(1)}} 
+                  checked={categoryValue==="Women"}
+                  />
                  <label htmlFor="">Women</label>
-                </div><div className='flex gap-3'>
+                </div>
+                {/* <div className='flex gap-3'>
                  <input type="checkbox" name="" id="" value="Men" />
                  <label htmlFor="">Men</label>
-                </div>
+                </div> */}
             </div>
         )}
        </div>
