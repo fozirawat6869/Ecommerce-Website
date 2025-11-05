@@ -6,13 +6,22 @@ import connection from '../config/sqldb.js'
 
 export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
   // console.log(req.query)  get the page,limit form query
-  
+  let category=req.query.category;
+  console.log(category)
    let page = parseInt(req.query.page) || 1;   // if no page given, use 1
   let limit = parseInt(req.query.limit) ||2; // if no limit given, use 2
    let offset = (page - 1) * limit;
-    connection.query(`select * from products limit ${limit} offset ${offset}`,(err,result)=>{
+   let query="select * from products"
+  //   if category is there in query
+      if(category){
+        query+=` where category = "${category}" || ""`
+      }
+      // pagination
+        query += ` LIMIT ${limit} OFFSET ${offset}`;
+    connection.query(query,(err,result)=>{
     // console.log(result)
      if(err){
+      console.log(err)
       return next(new HandleError("error in query of allProducts",400))
      }
     res.status(200).json({
@@ -56,3 +65,5 @@ export const createProduct=(req,res)=>{
 );
 
 }
+
+
