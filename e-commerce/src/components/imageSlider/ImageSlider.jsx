@@ -75,7 +75,7 @@ export default function ImageSlider() {
   }, []);
 
   return (
-  <div className="bg-gray-100 ">
+  <div className="bg-gray-100 relative">
 
     
     <div className="w-[95%] mx-auto  overflow-hidden rounded-md ">
@@ -95,7 +95,7 @@ export default function ImageSlider() {
       </div>
 
       {/* Dots */}
-      <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
         {images.map((_, i) => (
           <span
             key={i}
