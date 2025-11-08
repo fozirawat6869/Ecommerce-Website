@@ -13,7 +13,7 @@ function Home() {
     
     <Categories/>
     <ImageSlider/>
-    
+    <Main/>
  
    
     </>

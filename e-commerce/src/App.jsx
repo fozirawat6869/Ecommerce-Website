@@ -10,12 +10,9 @@ import Nav from './components/nav/Nav'
 import { QueryClient,QueryClientProvider } from '@tanstack/react-query'
 
 const Home=lazy(()=>import('./components/home/Home'))
-const AllProduct=lazy(()=>new Promise((resolve)=>{
-   setTimeout(()=>{resolve(import('./components/allProducts/AllProduct'))},5000)
-}))
-// const AllProducts=lazy(()=>import('./components/allProducts/AllProducts'))
+const AllProduct=lazy(()=>import('./components/allProducts/AllProduct'))
 const ProductDetails=lazy(()=>import('./components/pages/ProductDetails'))
-// const NewelyProducts=lazy(()=>import('./components/newelyCreatedProducts/NewlyProducts'))
+const NewlyAddedProduct=lazy(()=>import('./components/pages/NewlyAddedProduct'))
 
 function App() {
     
@@ -33,7 +30,7 @@ function App() {
      
       <Route path='/AllProducts' element={<AllProduct/>}/>
       <Route path='/product/:id' element={<ProductDetails/>}/>
-      {/* <Route path='/newelyProducts' element={<NewelyProducts/>}/> */}
+      <Route path='/newlyAddedProducts' element={<NewlyAddedProduct/>}/>
       
     </Routes>
     </Suspense>
