@@ -76,4 +76,40 @@ export const createProduct=(req,res)=>{
 
 }
 
+// for show newly added product in home page in main
+
+export const newlyAddedProducts=(req,res)=>{
+  // let datys=15
+  connection.query("select * from products where created_at >= DATE_SUB(NOW(),INTERVAL 15 DAY) order by created_at desc",(err,result)=>{
+    if(err){
+      return next(new HandleError("error in query of newly added products",400))
+    }
+    res.status(200).json({
+      success:true,
+      newlyAddedProducts:result
+    }) 
+  })
+}
+
+
+// export const newlyAddedProducts = (req, res) => {
+//   const query = `
+//     SELECT * FROM products
+//     WHERE created_at >= DATE_SUB(NOW(), INTERVAL 15 DAY)
+//     ORDER BY created_at DESC
+//   `;
+
+//   connection.query(query, (err, result) => {
+//     if (err) {
+//       console.log(err);
+//       return res.status(500).json({ success: false, message: 'Database error' });
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       newlyAddedProducts: result
+//     });
+//   });
+// };
+
 
