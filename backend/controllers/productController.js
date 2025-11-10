@@ -83,7 +83,7 @@ export const newlyAddedProducts=(req,res)=>{
   // console.log(req.query) get the page and limit from query
   let {page,limit}=req.query;
   page=Number(page)||1
-  limit=Number(limit)||5
+  limit=Number(limit)||8
   let offset=(page-1)*limit
     connection.query(`select * from products where created_at >= DATE_SUB(NOW(),INTERVAL 15 DAY) order by created_at desc limit ${limit} offset ${offset}`,(err,result)=>{
     if(err){
@@ -97,24 +97,5 @@ export const newlyAddedProducts=(req,res)=>{
 }
 
 
-// export const newlyAddedProducts = (req, res) => {
-//   const query = `
-//     SELECT * FROM products
-//     WHERE created_at >= DATE_SUB(NOW(), INTERVAL 15 DAY)
-//     ORDER BY created_at DESC
-//   `;
-
-//   connection.query(query, (err, result) => {
-//     if (err) {
-//       console.log(err);
-//       return res.status(500).json({ success: false, message: 'Database error' });
-//     }
-
-//     res.status(200).json({
-//       success: true,
-//       newlyAddedProducts: result
-//     });
-//   });
-// };
 
 
