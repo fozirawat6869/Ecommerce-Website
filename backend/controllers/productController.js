@@ -80,7 +80,12 @@ export const createProduct=(req,res)=>{
 
 export const newlyAddedProducts=(req,res)=>{
   // let datys=15
-  connection.query("select * from products where created_at >= DATE_SUB(NOW(),INTERVAL 15 DAY) order by created_at desc",(err,result)=>{
+  // console.log(req.query) get the page and limit from query
+  let {page,limit}=req.query;
+  page=Number(page)||1
+  limit=Number(limit)||5
+  let offset=(page-1)*limit
+    connection.query(`select * from products where created_at >= DATE_SUB(NOW(),INTERVAL 15 DAY) order by created_at desc limit ${limit} offset ${offset}`,(err,result)=>{
     if(err){
       return next(new HandleError("error in query of newly added products",400))
     }

@@ -4,13 +4,13 @@ import { useState,useEffect } from 'react';
 
 function NewlyAddedProduct() {
      
-        const [page,setPage]=useState(1)
-     
+    const [page,setPage]=useState(1)
+     let limit =5;
 
       const [newlyProduct,setNewlyProduct]=useState([])
         // const [page,setPage]
         useEffect(()=>{
-             fetch("http://localhost:8000/api/newlyAddedProducts")
+             fetch(`http://localhost:8000/api/newlyAddedProducts?page=${page}&limit=5`)
              .then(res=>res.json())
              .then(data=>{
                 console.log(data.newlyAddedProducts)
@@ -18,7 +18,7 @@ function NewlyAddedProduct() {
             })
              .catch(err=>console.log(err))
              
-        },[])
+        },[page])
   return (
   <>
      <div className='bg-gray-100 p-3 px-10'>
@@ -48,7 +48,19 @@ function NewlyAddedProduct() {
             ))
         }
      </div>
-      
+        {/* Pagination */}
+     <div className='pt-3 bg-gray-100 '>
+       <div className='flex justify-center bg-white gap-5 p-5 '>
+           <button
+           disabled={page===1}
+            onClick={()=>setPage(page-1)}
+            className=' bg-red-500 px-4 py-2 rounded-xl text-white text-[16px] cursor-pointer'>Previous</button>
+            <button 
+            disabled={newlyProduct.length<limit}
+            onClick={()=>setPage(page+1)}
+            className=' bg-green-500 px-4 py-2 rounded-xl text-white text-[16px] cursor-pointer'>Next</button>
+        </div>
+     </div>
     </div>
       </div>
   </>

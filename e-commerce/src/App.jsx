@@ -24,7 +24,7 @@ function App() {
   <BrowserRouter>
   <Nav/>
   {/* <Suspense fallback={<div>Loading...</div>}> */}
-          <Suspense fallback={<div style={{ textAlign: 'center', marginTop: '50px',color:'black' }} className='text-center text-black text-6xl'>⏳ Loading...</div>}>
+          <Suspense fallback={<div className='bg-gray-100 px-10 py-2'><h1 className=' bg-white text-center p-5 text-black text-6xl'>⏳ Loading...</h1></div>}>
     <Routes>
       <Route path='/' element={<Home/>}/>
      
