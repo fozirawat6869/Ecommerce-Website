@@ -83,7 +83,7 @@ import {
 import { GiSpeaker, GiRazor } from "react-icons/gi";
 import { MdOutlineEarbuds, MdOutlineKitchen } from "react-icons/md";
 import { GiTShirt, GiLargeDress } from "react-icons/gi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const categories = [
   { name: "Men", icon: <GiTShirt size={26} className="text-blue-600" /> },
@@ -99,12 +99,13 @@ const categories = [
 ];
 
 const Categories = () => {
+  
   const navigate = useNavigate();
   const [selectedCategoryItem, setSelectedCategoryItem] = useState(null);
 
   useEffect(() => {
     if (selectedCategoryItem === "Men") {
-      navigate("/men");
+      navigate(`/Category/${selectedCategoryItem}`);
     }
   }, [selectedCategoryItem]);
 
