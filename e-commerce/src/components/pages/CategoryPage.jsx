@@ -1,35 +1,4 @@
-// import { useQuery } from '@tanstack/react-query'
-// import React from 'react'
-// import { useParams } from 'react-router-dom'
 
-// function MenCategoryPage() {
-//     const param=useParams()
-//    const category=param.category
-
-
-//     const fetchFunction=async()=>{
-//         const res=await fetch(`http://localhost:8000/api/products?category=${category}`)
-//         const data=await res.json()
-//         console.log(data)
-//         return data
-//     }
-    
-
-//      const {data,isLoading,error}=useQuery({
-//         queryKey:["CategoyBasedQuery"],
-//         queryFn:fetchFunction
-//      })
-
-//   return (
-//     <>
-//      <div>
-    
-//      </div>
-//     </>
-//   )
-// }
-
-// export default MenCategoryPage
 
 
 import React, { useEffect,useState } from 'react'
@@ -357,9 +326,5 @@ const handlePrice = (e) => {
 }
 
 export default CategoryPage
-
-
-
-
 
 
