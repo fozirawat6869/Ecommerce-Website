@@ -8,7 +8,9 @@ import { FaInstagramSquare } from "react-icons/fa";
 function Footer() {
   return (
     <>
-    <footer className='py-10 bg-gray-100 '>
+    <footer className='py-10 bg-gray-100  '>
+
+
        <div className='flex gap-5 flex-col md:flex-row justify-evenly mx-auto px-5 container   '>
          {/* Section one */}
          <div className='flex flex-col gap-3 bg-white  p-5 rounded-2xl'>
@@ -16,6 +18,7 @@ function Footer() {
             <p className='  flex gap-2 text-base p-2'><span className='flex justify-center items-center'><FaPhoneAlt/></span>Phone :- 8755306869</p>
             <p className='flex gap-2 text-base p-2'><span className='flex justify-center items-center'><MdEmail /></span>Email :- rawatmayur0703@gmail.com</p>
          </div>
+
          {/* Section two */}
           <div className='flex flex-col gap-3  bg-white p-5 rounded-2xl'>
             <h1 className='text-2xl font-bold text-center'>Follow me</h1>

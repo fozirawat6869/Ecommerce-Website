@@ -87,7 +87,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const categories = [
   { name: "Men", icon: <GiTShirt size={26} className="text-blue-600" /> },
-  { name: "Women ", icon: <GiLargeDress size={26} className="text-red-600" /> },
+  { name: "Women", icon: <GiLargeDress size={26} className="text-red-600" /> },
   { name: "Mouse", icon: <FaMouse size={26} /> },
   { name: "Camera", icon: <FaCamera size={26} /> },
   { name: "Earphones", icon: <MdOutlineEarbuds size={26} /> },
@@ -106,6 +106,10 @@ const Categories = () => {
   useEffect(() => {
     if (selectedCategoryItem === "Men") {
       navigate(`/Category/${selectedCategoryItem}`);
+    }
+    if(selectedCategoryItem === "Women"){
+      console.log("Women selected")
+      navigate(`/Category/${selectedCategoryItem}`)
     }
   }, [selectedCategoryItem]);
 

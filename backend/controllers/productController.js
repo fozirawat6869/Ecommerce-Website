@@ -43,6 +43,98 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
 })
 
 
+
+// export const getAllProducts = handleAsyncErrors(async (req, res, next) => {
+//   let {
+//     category,
+//     brand,
+//     size,
+//     color,
+//     type,
+//     ram,
+//     storage,
+//     minPrice,
+//     maxPrice,
+//     page,
+//     limit
+//   } = req.query;
+
+//   // Default pagination
+//   page = parseInt(page) || 1;
+//   limit = parseInt(limit) || 10;
+//   let offset = (page - 1) * limit;
+
+//   // Base Query
+//   let query = `SELECT * FROM products WHERE 1=1`;
+
+//   // ----------------------------
+//   //   APPLY FILTERS IF PRESENT
+//   // ----------------------------
+
+//   // CATEGORY FILTER
+//   if (category) {
+//     query += ` AND category = "${category}"`;
+//   }
+
+//   // BRAND FILTER
+//   if (brand) {
+//     query += ` AND brand = "${brand}"`;
+//   }
+
+//   // SIZE (Men/Women clothing)
+//   if (size) {
+//     query += ` AND size = "${size}"`;
+//   }
+
+//   // COLOR
+//   if (color) {
+//     query += ` AND color = "${color}"`;
+//   }
+
+//   // TYPE (Bluetooth / Wired / Wireless / DSLR etc.)
+//   if (type) {
+//     query += ` AND type = "${type}"`;
+//   }
+
+//   // RAM (Mobiles)
+//   if (ram) {
+//     query += ` AND ram = "${ram}"`;
+//   }
+
+//   // STORAGE (Mobiles)
+//   if (storage) {
+//     query += ` AND storage = "${storage}"`;
+//   }
+
+//   // PRICE RANGE
+//   if (minPrice) {
+//     query += ` AND price >= ${minPrice}`;
+//   }
+//   if (maxPrice) {
+//     query += ` AND price <= ${maxPrice}`;
+//   }
+
+//   // PAGINATION
+//   query += ` LIMIT ${limit} OFFSET ${offset}`;
+
+//   // RUN SQL QUERY
+//   connection.query(query, (err, result) => {
+//     if (err) {
+//       console.log(err);
+//       return next(new HandleError("Error in product query", 400));
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       products: result,
+//     });
+//   });
+// });
+
+
+
+
+
 export const productDetails=(req,res)=>{
 
  
