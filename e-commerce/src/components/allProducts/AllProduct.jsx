@@ -332,6 +332,3 @@ const handlePrice = (e) => {
 
 export default AllProducts
 
-
-
-
