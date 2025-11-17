@@ -111,6 +111,27 @@ const Categories = () => {
       console.log("Women selected")
       navigate(`/Category/${selectedCategoryItem}`)
     }
+    if(selectedCategoryItem === "Mouse"){
+      navigate(`/Category/${selectedCategoryItem}`) 
+    }
+    if(selectedCategoryItem === "Camera"){
+      navigate(`/Category/${selectedCategoryItem}`) 
+    }
+    if(selectedCategoryItem === "Earphones"){ 
+      navigate(`/Category/${selectedCategoryItem}`)
+    }
+    if(selectedCategoryItem === "Mobiles"){
+      navigate(`/Category/${selectedCategoryItem}`)
+    }
+    if(selectedCategoryItem === "Speakers"){
+      navigate(`/Category/${selectedCategoryItem}`)
+    }
+    if(selectedCategoryItem === "Televisions"){
+      navigate(`/Category/${selectedCategoryItem}`)
+    }
+    if(selectedCategoryItem === "Trimmers"){
+      navigate(`/Category/${selectedCategoryItem}`)
+    }
   }, [selectedCategoryItem]);
 
   return (
