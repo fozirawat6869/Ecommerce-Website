@@ -40,19 +40,7 @@ function AllProducts() {
         staleTime:1000*60*5
     })
 
-    // const filterHandler=(e)=>{
-    //    if(categoryValue===e.target.value){
-    //     setCategoryValue("")
-    //    }else{
-    //     setCategoryValue(e.target.value)
-    //    }
-
-    //    if(price===e.target.value){
-    //       setPrice("")
-    //     }else{
-    //         setPrice(e.target.value)
-    //     }
-    // }
+   
 
     const handleCategory = (e) => {
   if (categoryValue === e.target.value) {
