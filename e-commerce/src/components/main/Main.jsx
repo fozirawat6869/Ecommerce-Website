@@ -10,7 +10,7 @@ function Main() {
     fetch("http://localhost:8000/api/newlyAddedProducts")
       .then(res => res.json())
       .then(data => {
-        console.log(data.newlyAddedProducts)
+        console.log("newly home data",data.newlyAddedProducts)
         setNewlyProduct(data.newlyAddedProducts)
       })
       .catch(err => console.log(err))

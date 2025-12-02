@@ -13,6 +13,7 @@ function NewlyAddedProduct() {
              fetch(`http://localhost:8000/api/newlyAddedProducts?page=${page}&limit=8`)
              .then(res=>res.json())
              .then(data=>{
+                console.log("newly added product data",data)
                 console.log(data.newlyAddedProducts)
                  setNewlyProduct(data.newlyAddedProducts)
             })
