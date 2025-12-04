@@ -44,7 +44,7 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
 
 
 
-export const categoryProducts =(req,res) => {
+export const categoryProducts =handleAsyncErrors(async(req,res) => {
   console.log(req.body)
   console.log("Query params:", req.query); 
 
@@ -59,7 +59,7 @@ export const categoryProducts =(req,res) => {
     console.log(result)
     if(err){
       console.log("err in query of category products",err)
-      return res.status(500).json({message:"Database Error"})
+      return next(new HandleError("error is in query of category products",400))
     }
     res.status(200).json({
       success: true,
@@ -67,60 +67,11 @@ export const categoryProducts =(req,res) => {
     })
   })
 
-};
+});
 
 
 
 
-// export const categoryProducts = (req, res) => {
-//   console.log("Incoming filters =>", req.query);
-
-//   let { category, page = 1, limit = 10, ...filters } = req.query;
-
-//   const offset = (page - 1) * limit;
-
-//   // Base query
-//   let sql = `SELECT * FROM products WHERE 1`;
-
-//   let params = [];
-
-//   // Category filter
-//   if (category) {
-//     sql += " AND category = ?";
-//     params.push(category);
-//   }
-
-//   // Dynamic filters (sizes, colors, brand, prices, type...)
-//   Object.keys(filters).forEach((key) => {
-//     if (filters[key]) {
-
-//       if (key === "prices") {
-//         sql += " AND price <= ?";
-//         params.push(filters[key]);
-//       } else {
-//         sql += ` AND ${key} = ?`;
-//         params.push(filters[key]);
-//       }
-//     }
-//   });
-
-//   // Pagination
-//   sql += " LIMIT ? OFFSET ?";
-//   params.push(Number(limit), Number(offset));
-
-//   console.log("Final SQL Query =>", sql);
-//   console.log("Params =>", params);
-
-//   // Run Query
-//   db.query(sql, params, (err, result) => {
-//     if (err) {
-//       console.log("Query Error:", err);
-//       return res.status(500).json({ message: "Database Error" });
-//     }
-
-//     res.status(200).json(result);
-//   });
-// };
 
 
 
