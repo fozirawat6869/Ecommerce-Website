@@ -26,8 +26,8 @@ function CategoryPage() {
 
       const res = await axios.get(`http://localhost:8000/api/productsCategory?${queryParams}`)
       console.log("all data for backend", queryParams)
-      console.log(res)
-      // return res.data || []
+      console.log(res.data.categoryProducts)
+      return res.data.categoryProducts || []
     } catch {
       console.log("error in fetching products")
     }
@@ -103,8 +103,15 @@ console.log("hlo",showSection)
       {/* RIGHT PRODUCTS */}
       <div className='flex flex-col w-full bg-white'>
         <h1 className='text-center font-bold text-2xl py-5'>{category} Products</h1>
-        <div className='flex gap-5 flex-wrap justify-center pb-4'>
-          {data?.map((item) => (
+        <div className='flex gap-5 flex-wrap justify-center pb-4 '>
+            {data?.length === 0 ? (
+      <div className='bg-gray-100 pt-3 w-full'>
+        <h2 className="text-lg font-semibold text-gray-600 bg-white text-center pt-4 ">
+      No products available
+    </h2>
+      </div>
+  ) : (
+          data?.map((item) => (
             <Link
               to={`/product/${item.product_id}`}
               key={item.product_id}
@@ -119,7 +126,7 @@ console.log("hlo",showSection)
                 <p className='font-bold text-[18px]'>₹{item.price}</p>
               </div>
             </Link>
-          ))}
+          ))   )}
         </div>
 
         {/* Pagination */}
