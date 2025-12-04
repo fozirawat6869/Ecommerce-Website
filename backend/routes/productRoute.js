@@ -15,6 +15,6 @@ router.route('/products').get(getAllProducts).post(createProduct)
 
 
  // Category filtered products
-router.route('/products/category').get(categoryProducts)  
+router.route('/productsCategory').get(categoryProducts)  
 
 export default router

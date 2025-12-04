@@ -35,8 +35,8 @@ export const filterConfig = {
   Mobiles: {
     brand: ["Samsung", "Apple", "Vivo", "Oppo", "Realme", "Xiaomi"],
     prices: ["5000", "10000", "15000", "20000", "30000"],
-    ram: ["4GB", "6GB", "8GB", "12GB"],
-    storage: ["64GB", "128GB", "256GB"]
+    ram: ["4 GB", "6 GB", "8 GB", "12 GB"],
+    storage: ["64 GB", "128 GB", "256 GB"]
   },
 
   Speakers: {

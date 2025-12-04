@@ -34,11 +34,11 @@ function ProductDetails() {
 
   return (
     <main className="px-10 bg-gray-100 py-2">
-    <div className="p-8 bg-white flex gap-14 justify-center ">
+    <div className="p-8 bg-white flex gap-30 justify-center ">
        
       
       {/* LEFT SIDE (Main Image + Extra Images Below) */}
-      <div className="flex flex-col items-center gap-6 justify-center ">
+      <div className="flex flex-col items-center gap-10 justify-center ">
 
         {/* MAIN IMAGE */}
         <div className="w-[420px] h-[420px] border-gray-100 border-6 rounded-lg shadow flex justify-center items-center">
