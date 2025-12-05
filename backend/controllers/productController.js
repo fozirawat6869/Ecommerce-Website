@@ -5,7 +5,10 @@ import connection from '../config/sqldb.js'
 
 
 export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
-  // console.log(req.query)  get the page,limit form query
+  console.log("all products ")
+  console.log(req.query)
+ 
+  console.log(req.query)  //  get the page,limit form query
   let category=req.query.category;
   let price=req.query.price;
   // console.log(price)
@@ -41,6 +44,22 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
   })
   
 })
+
+export const test=handleAsyncErrors(async(req,res,next)=>{
+  connection.query("select * from products",(err,result)=>{
+    console.log(result)
+    if(err){
+      console.log("err in query of all products",err)
+      return next(new HandleError("error in query of all products",400))
+    }
+  res.status(200).json({
+    success:true,
+    message:"this is test api"
+  })
+})
+})
+
+
 
 
 

@@ -1,3 +1,6 @@
+
+
+
 import React, { useEffect,useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
@@ -20,10 +23,13 @@ function AllProducts() {
   const [price,setPrice]=useState("")
     
     const fetchProducts=async()=>{
+      console.log("flo")
         try{
             const res=await axios.get(`http://localhost:8000/api/products?category=${categoryValue}&price=${price}&page=${page}&limit=${10}`)
             // setData(res.data.allProduct)
-            console.log(res.data.allProduct)
+
+            console.log(res)
+            // console.log(res.data.allProduct)
             const data=res.data.allProduct
             return data
         }
