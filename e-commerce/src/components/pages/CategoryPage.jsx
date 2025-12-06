@@ -30,6 +30,7 @@ function CategoryPage() {
       return res.data.categoryProducts || []
     } catch {
       console.log("error in fetching products")
+      return []
     }
   }
 

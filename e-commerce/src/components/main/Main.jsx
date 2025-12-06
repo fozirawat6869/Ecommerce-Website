@@ -13,7 +13,10 @@ function Main() {
         console.log("newly home data",data.newlyAddedProducts)
         setNewlyProduct(data.newlyAddedProducts)
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        return []
+      })
   }, [])
 
   return (

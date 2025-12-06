@@ -45,33 +45,34 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
   
 })
 
-export const test=handleAsyncErrors(async(req,res,next)=>{
-  connection.query("select * from products",(err,result)=>{
-    console.log(result)
-    if(err){
-      console.log("err in query of all products",err)
-      return next(new HandleError("error in query of all products",400))
-    }
-  res.status(200).json({
-    success:true,
-    message:"this is test api"
-  })
-})
-})
 
 
 
 
 
-export const categoryProducts =handleAsyncErrors(async(req,res) => {
+
+
+
+
+
+
+
+export const categoryProducts=handleAsyncErrors(async(req,res) => {
   console.log(req.body)
   console.log("Query params:", req.query); 
 
-
-   
   const {category,categories,limit,page}=req.query
+
   let offset = (page - 1) * limit;
   let query=`select * from products where category=?`
+        
+    
+       
+     if(categories==="Shirts" || categories==="T-Shirts" || categories==="Jeans" || categories==="Jackets" || categories==="Hoodies" ){
+         query+=` and sub_category="${categories}"`
+        }
+      
+
         query += ` LIMIT ${limit} OFFSET ${offset}`;
   
   connection.query(query,[category],(err,result)=>{
@@ -88,6 +89,14 @@ export const categoryProducts =handleAsyncErrors(async(req,res) => {
 
 });
 
+
+// Query params: [Object: null prototype] {
+//   category: 'Men',
+//   categories: 'T-Shirts',
+//   sizes: 'L',
+//   page: '1',
+//   limit: '10'
+// }
 
 
 
@@ -141,7 +150,8 @@ export const newlyAddedProducts=(req,res)=>{
   limit=Number(limit)||8
   let offset=(page-1)*limit
     connection.query(`select * from products where created_at >= DATE_SUB(NOW(),INTERVAL 15 DAY) order by created_at desc limit ${limit} offset ${offset}`,(err,result)=>{
-    if(err){
+      console.log(result)
+      if(err){
       return next(new HandleError("error in query of newly added products",400))
     }
     res.status(200).json({
