@@ -5,12 +5,12 @@ import { useState,useEffect } from 'react';
 function NewlyAddedProduct() {
      
     const [page,setPage]=useState(1)
-     let limit =8;
+     let limit =12;
 
       const [newlyProduct,setNewlyProduct]=useState([])
         // const [page,setPage]
         useEffect(()=>{
-             fetch(`http://localhost:8000/api/newlyAddedProducts?page=${page}&limit=8`)
+             fetch(`http://localhost:8000/api/newlyAddedProducts?page=${page}&limit=12`)
              .then(res=>res.json())
              .then(data=>{
                 console.log("newly added product data",data)
