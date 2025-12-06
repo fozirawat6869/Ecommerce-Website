@@ -1,6 +1,4 @@
 
-
-
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -34,14 +32,14 @@ function ProductDetails() {
 
   return (
     <main className="px-10 bg-gray-100 py-2">
-    <div className="p-8 bg-white flex gap-30 justify-center ">
+    <div className="p-8 bg-white flex gap-10 justify-center ">
        
       
       {/* LEFT SIDE (Main Image + Extra Images Below) */}
-      <div className="flex flex-col items-center gap-10 justify-center ">
+      <div className="flex flex-col items-center gap-10 justify-center  ">
 
         {/* MAIN IMAGE */}
-        <div className="w-[420px] h-[420px] border-gray-100 border-6 rounded-lg shadow flex justify-center items-center">
+        <div className=" w-[420px] h-[420px]  border-gray-100 border-6 rounded-lg shadow flex justify-center items-center">
           <img
             src={selectedImage}
             alt="product"
@@ -67,7 +65,7 @@ function ProductDetails() {
       </div>
 
       {/* RIGHT SIDE (Product Info) */}
-      <div className="w-1/3 flex flex-col gap-4 justify-center border-6 border-gray-100 p-5">
+      <div className="w-160  flex flex-col gap-4 justify-center border-6 border-gray-100 p-5">
 
         {/* PRODUCT NAME */}
         <h1 className="text-3xl font-bold">{product.name}</h1>
