@@ -10,3 +10,151 @@ super(message) tells the parent Error class what message to use.
 this.statusCode lets you attach a custom HTTP status code like 400 or 404.
 
 Error.captureStackTrace(...) gives a cleaner, more accurate error log (optional but useful).
+
+
+
+
+
+
+
+
+✅ Step 1: Update your products table (keep it simple)
+
+Keep only the common fields:
+
+CREATE TABLE products (
+    product_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2) NOT NULL,
+    category_id INT,
+    FOREIGN KEY (category_id) REFERENCES categories(category_id)
+);
+
+
+Why?
+
+Because every product has:
+
+name
+
+description
+
+price
+
+category
+
+Other things (size, color, brand, RAM, storage, etc.) will NOT go in this table.
+
+✅ Step 2: Create categories table
+CREATE TABLE categories (
+    category_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL
+);
+
+
+Insert the categories you currently have:
+
+Men
+Women
+Mouse
+Camera
+Earphones
+Mobiles
+Speakers
+Televisions
+Trimmers
+Watches
+
+✅ Step 3: Create attributes table
+
+This table stores all possible attribute NAMES.
+
+CREATE TABLE attributes (
+    attribute_id INT PRIMARY KEY AUTO_INCREMENT,
+    attribute_name VARCHAR(100) NOT NULL,
+    category_id INT,
+    FOREIGN KEY (category_id) REFERENCES categories(category_id)
+);
+
+
+Now insert attributes for each category.
+
+Examples:
+Men
+
+size
+
+color
+
+category (Shirt, T-shirt, Jeans)
+
+price
+
+Mobiles
+
+brand
+
+ram
+
+storage
+
+color
+
+price
+
+Watches
+
+brand
+
+color
+
+type
+
+✅ Step 4: Create attribute_values table
+
+This table stores possible values of each attribute.
+
+CREATE TABLE attribute_values (
+    attribute_value_id INT PRIMARY KEY AUTO_INCREMENT,
+    attribute_id INT NOT NULL,
+    value VARCHAR(255) NOT NULL,
+    FOREIGN KEY (attribute_id) REFERENCES attributes(attribute_id)
+);
+
+
+Example inserts:
+
+For Men → size
+S
+M
+L
+XL
+2XL
+
+For Mobiles → RAM
+4GB
+6GB
+8GB
+12GB
+
+For Mobiles → storage
+64GB
+128GB
+256GB
+
+✅ Step 5: Create product_attribute_values table (VERY IMPORTANT)
+
+This links:
+
+product → attribute → value
+
+CREATE TABLE product_attribute_values (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    attribute_id INT NOT NULL,
+    attribute_value_id INT NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (attribute_id) REFERENCES attributes(attribute_id),
+    FOREIGN KEY (attribute_value_id) REFERENCES attribute_values(attribute_value_id)
+);
