@@ -29,7 +29,7 @@ function CategoryPage() {
       console.log(res.data.categoryProducts)
       return res.data.categoryProducts || []
     } catch {
-      console.log("error in fetching products")
+      console.log("error in fetching category products")
       return []
     }
   }

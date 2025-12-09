@@ -47,59 +47,60 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
 
 
 
+export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
+    try {
+        console.log("Query params:", req.query);
 
+        const { category, categories, limit, page } = req.query;
 
+        const limitNum = parseInt(limit) || 10;
+        const pageNum = parseInt(page) || 1;
+        const offset = (pageNum - 1) * limitNum;
 
+        let query = `SELECT * FROM products WHERE 1=1`;
+        let params = [];
 
-
-
-
-
-
-
-export const categoryProducts=handleAsyncErrors(async(req,res) => {
-  console.log(req.body)
-  console.log("Query params:", req.query); 
-
-  const {category,categories,limit,page}=req.query
-
-  let offset = (page - 1) * limit;
-  let query=`select * from products where category=?`
-        
-    
-       
-     if(categories==="Shirts" || categories==="T-Shirts" || categories==="Jeans" || categories==="Jackets" || categories==="Hoodies" ){
-         query+=` and sub_category="${categories}"`
+        // Filter by category if provided
+        if (category) {
+            query += ` AND category = ?`;
+            params.push(category);
         }
-      
 
-        query += ` LIMIT ${limit} OFFSET ${offset}`;
-  
-  connection.query(query,[category],(err,result)=>{
-    console.log(result)
-    if(err){
-      console.log("err in query of category products",err)
-      return next(new HandleError("error is in query of category products",400))
+        // Filter by sub_category if provided
+        if (categories) {
+            query += ` AND sub_category = ?`;
+            params.push(categories);
+        }
+
+        // Add pagination
+        query += ` LIMIT ? OFFSET ?`;
+        params.push(limitNum, offset);
+
+        connection.query(query, params, (err, result) => {
+            if (err) {
+                console.error("Error in query:", err);
+                return next(new HandleError("Database query error", 400));
+            }
+
+            if (result.length === 0) {
+                return res.status(200).json({
+                    success: false,
+                    message: "No products available for this category",
+                    products: []
+                });
+            }
+
+            res.status(200).json({
+                success: true,
+                categoryProducts: result
+            });
+        });
+
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return next(new HandleError("Server error", 500));
     }
-    res.status(200).json({
-      success: true,
-      categoryProducts: result
-    })
-  })
-
 });
-
-
-// Query params: [Object: null prototype] {
-//   category: 'Men',
-//   categories: 'T-Shirts',
-//   sizes: 'L',
-//   page: '1',
-//   limit: '10'
-// }
-
-
-
 
 
 
