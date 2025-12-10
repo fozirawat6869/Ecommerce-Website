@@ -1,152 +1,12 @@
 
 
-
-
-// import React, { useState } from 'react'
-// import { Link } from 'react-router-dom';
-
-// function UserLoginPage() {
-
-//     const [step, setStep] = useState(1); // 1 = enter mobile, 2 = enter OTP
-//     const [mobile, setMobile] = useState("");
-//     const [otp, setOtp] = useState("");
-//     const [mobileError, setMobileError] = useState(""); // for mobile validation
-//     const [otpError, setOtpError] = useState(""); // for OTP validation
-
-//     // Handle mobile input change
-//     const handleMobileChange = (e) => {
-//         const value = e.target.value;
-//         // Only allow digits and max 10 digits
-//         if (/^\d*$/.test(value) && value.length <= 10) {
-//             setMobile(value);
-//             setMobileError("");
-//         } else if (!/^\d*$/.test(value)) {
-//             setMobileError("Please enter only numbers");
-//         }
-//     };
-
-//     // Handle OTP input change
-//     const handleOtpChange = (e) => {
-//         const value = e.target.value;
-//         // Only digits, max 6
-//         if (/^\d*$/.test(value) && value.length <= 6) {
-//             setOtp(value);
-//             setOtpError("");
-//         } else if (!/^\d*$/.test(value)) {
-//             setOtpError("Please enter only numbers");
-//         }
-//     };
-
-//     // Generate OTP button
-//     const handleGenerateOtp = (e) => {
-//         e.preventDefault();
-//         if (mobile.length !== 10) {
-//             setMobileError("Please enter a valid 10-digit mobile number");
-//             return;
-//         }
-//         console.log("Generate OTP for mobile:", mobile);
-//         setStep(2);
-//     };
-
-//     // Submit OTP button
-//     const handleSubmitOtp = (e) => {
-//         e.preventDefault();
-//         if (otp.length !== 6) {
-//             setOtpError("Please enter a valid 6-digit OTP");
-//             return;
-//         }
-//         console.log("Submit OTP:", otp, "for mobile:", mobile);
-//         alert(`Logged in with mobile ${mobile}`);
-//         setStep(1);
-//         setMobile("");
-//         setOtp("");
-//     };
-
-//     return (
-//         <>
-//             <div className='bg-gray-100 px-10 pt-2 '>
-//                 <div className='bg-white p-28 flex justify-center items-center'>
-//                     <div className="bg-white outline-5 outline-gray-100 p-6 w-120 h-80 rounded-xl shadow-lg ">
-
-//                         <h2 className="text-2xl font-bold text-center mb-6 text-blue-500 font-bold">User Login</h2>
-
-//                         {/* Step 1: Mobile Number */}
-//                         {step === 1 && (
-//                             <form onSubmit={handleGenerateOtp}>
-//                                 <label className="block font-medium mb-1 pl-2">Mobile Number</label>
-//                                 <input
-//                                     type="tel"
-//                                     value={mobile}
-//                                     onChange={handleMobileChange}
-//                                     placeholder="Enter your mobile number"
-//                                     className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-1 focus:ring-1
-//                                       ${mobileError ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"}`}
-//                                     maxLength={10}
-//                                     required
-//                                 />
-//                                 {/* Inline error message with reserved space */}
-//                                 <p className="text-red-500 pt-[0.5px] text-sm mb-2 h-5">{mobileError ? mobileError : " "}</p>
-
-//                                 <button
-//                                     type="submit"
-//                                     className="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-gray-800 transition"
-//                                 >
-//                                     Generate OTP
-//                                 </button>
-//                                   <Link><h1 className='mt-5 text-center text-[16px] hover:text-blue-500 cursor-pointer'>Create an account ?</h1></Link>
-                                
-//                             </form>
-//                         )}
-
-//                         {/* Step 2: OTP */}
-//                         {step === 2 && (
-//                             <form onSubmit={handleSubmitOtp}>
-//                                 <p className="mb-4 text-gray-700">
-//                                     Enter OTP sent to <strong>{mobile}</strong>
-//                                 </p>
-//                                 <input
-//                                     type="text"
-//                                     value={otp}
-//                                     onChange={handleOtpChange}
-//                                     placeholder="Enter OTP"
-//                                     className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-4
-//                                       ${otpError ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"}`}
-//                                     maxLength={6}
-//                                     required
-//                                 />
-//                                 <p className="text-red-500 text-sm mb-2 h-5">{otpError ? otpError : " "}</p>
-
-//                                 <button
-//                                     type="submit"
-//                                     className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
-//                                 >
-//                                     Submit
-//                                 </button>
-//                                 <button
-//                                     type="button"
-//                                     className="mt-2 w-full text-sm text-blue-600 hover:underline"
-//                                     onClick={() => setStep(1)}
-//                                 >
-//                                     Edit mobile number
-//                                 </button>
-//                             </form>
-//                         )}
-//                     </div>
-//                 </div>
-//             </div>
-//         </>
-//     )
-// }
-
-// export default UserLoginPage
-
-
-
 import React, { useState } from 'react'
 import axios from "axios";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function RegisterPage() {
+     
+    const navigate=useNavigate();
 
     const [step, setStep] = useState(1);
     const [mobile, setMobile] = useState("");
@@ -209,7 +69,7 @@ function RegisterPage() {
         }
 
         try {
-            const res = await axios.post("http://localhost:8000/api/register", {
+            const res = await axios.post("http://localhost:8000/api/verifyOTP", {
                 mobile: mobile,
                 otp: otp
             });
@@ -217,7 +77,7 @@ function RegisterPage() {
             console.log("OTP Verification Response:", res.data);
 
             if (res.data.success) {
-                alert("Login successful!");
+               navigate('/')
             } else {
                 setOtpError("Invalid OTP. Try again.");
                 return;

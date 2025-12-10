@@ -2,6 +2,9 @@
 import HandleError from '../utils/handleErrors.js'
 import handleAsyncErrors from '../middleware/handleErrorAsync.js'
 import connection from '../config/sqldb.js'
+import twilio from 'twilio'
+
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 
 export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
@@ -163,15 +166,84 @@ export const newlyAddedProducts=(req,res)=>{
 }
 
 
-// user login 
+// user otp send 
 
-export const userLogin=(req,res)=>{
+export const sendOTP=(req,res)=>{
     console.log(req.body)
     const {mobile}=req.body
-    // logic for user login can be added here
-    res.status(200).json({
-      success:true,
-      message:`OTP sent to mobile number ${mobile}`
-    })
+    
+    const otp=Math.floor(100000+Math.random()*900000)
+    //  const expireTime = Date.now() + 5 * 60 * 1000; // 5 minutes from now
+  const expireTime = new Date(Date.now() + 5 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+
+    const query=`REPLACE INTO user_otps(mobile, otp, expires_at)
+        VALUES (?, ?, ?)`
+    connection.query(query,[mobile,otp,expireTime],async (err,result)=>{
+       console.log(result)
+      
+      if(err){
+        console.log("error in query of send otp",err)
+        return next(new HandleError("error in query of send otp",400))
+      }
+
+try {
+   const message = await client.messages.create({
+        body: `Your OTP is ${otp}`,
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: `+91${mobile}`
+    });
+
+   return res.status(200).json({
+      success: true,
+      message: `OTP sent to mobile number ${mobile}`
+   });
+
+} catch (err) {
+   console.log("Twilio error:", err);
+   return res.status(500).json({
+      success: false,
+      message: "Failed to send OTP",
+      error: err.message
+   });
+}
+
+      })
+
+
+}
+
+
+
+// veryfiy otp
+export const verifyOTP=(req,res)=>{
+  console.log(req.body)
+  //  { mobile: '8755306869', otp: '553306' }
+  const {mobile,otp}=req.body
+  
+  const query=`select * from user_otps where mobile=?`
+  connection.query(query,[mobile],(err,result)=>{
+      console.log(result)
+       if(err){
+        console.log(err)
+      }
+     if(result[0].otp==otp){
+        connection.query(`insert into users (mobile) values (?)`,[mobile],(err,result)=>{
+          if(err){
+            console.log("error in insert user",err)
+          }
+          res.status(200).json({
+            success:true,
+            message:"OTP verified successfully, user registered"
+          })
+        })
+     }
+    
+     
+      // if(result.[2])
+  })
+
+
+
+
 }
 

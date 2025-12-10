@@ -7,6 +7,7 @@ import { IoSearch, IoCart } from "react-icons/io5";
 import { IoMdPersonAdd } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { CgProfile } from "react-icons/cg";
 
 function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
