@@ -1,5 +1,5 @@
 import express from 'express'
-import {getAllProducts,createProduct,productDetails,newlyAddedProducts,categoryProducts} from '../controllers/productController.js'
+import {getAllProducts,createProduct,productDetails,newlyAddedProducts,categoryProducts,userLogin} from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
 
 const router=express.Router();
@@ -18,5 +18,10 @@ router.route('/products').get(getAllProducts).post(createProduct)
 
  // Category filtered products
 router.route('/productsCategory').get(categoryProducts)  
+
+
+// user login
+router.route('/login').post(userLogin)
+
 
 export default router

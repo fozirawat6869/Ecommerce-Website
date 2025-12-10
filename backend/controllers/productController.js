@@ -163,5 +163,15 @@ export const newlyAddedProducts=(req,res)=>{
 }
 
 
+// user login 
 
+export const userLogin=(req,res)=>{
+    console.log(req.body)
+    const {mobile}=req.body
+    // logic for user login can be added here
+    res.status(200).json({
+      success:true,
+      message:`OTP sent to mobile number ${mobile}`
+    })
+}
 

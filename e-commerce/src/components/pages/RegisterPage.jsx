@@ -146,7 +146,7 @@ import React, { useState } from 'react'
 import axios from "axios";
 import { Link } from 'react-router-dom';
 
-function UserLoginPage() {
+function RegisterPage() {
 
     const [step, setStep] = useState(1);
     const [mobile, setMobile] = useState("");
@@ -186,7 +186,7 @@ function UserLoginPage() {
         }
 
         try {
-            const res = await axios.post("http://localhost:8000/api/login", {
+            const res = await axios.post("http://localhost:8000/api/register", {
                 mobile: mobile
             });
 
@@ -209,7 +209,7 @@ function UserLoginPage() {
         }
 
         try {
-            const res = await axios.post("http://localhost:8000/api/login", {
+            const res = await axios.post("http://localhost:8000/api/register", {
                 mobile: mobile,
                 otp: otp
             });
@@ -240,7 +240,7 @@ function UserLoginPage() {
                 <div className='bg-white p-28 flex justify-center items-center'>
                     <div className="bg-white outline-5 outline-gray-100 p-6 w-120 h-80 rounded-xl shadow-lg ">
 
-                        <h2 className="text-2xl font-bold text-center mb-6 text-blue-500 font-bold">User Login</h2>
+                        <h2 className="text-2xl font-bold text-center mb-6 text-blue-500 font-bold">User Register</h2>
 
                         {/* Step 1 */}
                         {step === 1 && (
@@ -268,9 +268,9 @@ function UserLoginPage() {
                                     Generate OTP
                                 </button>
 
-                                <Link to={'/register'}>
-                                    <h1 className='mt-5 text-center text-[16px] hover:text-blue-500 cursor-pointer'>
-                                        Create an account ?
+                                <Link to={'/login'} className='flex justify-center items-center'>
+                                    <h1 className='mt-5 text-center text-[16px]   hover:text-blue-500 cursor-pointer'>
+                                        Existing user ? Login
                                     </h1>
                                 </Link>
                             </form>
@@ -319,4 +319,4 @@ function UserLoginPage() {
     )
 }
 
-export default UserLoginPage;
+export default RegisterPage;

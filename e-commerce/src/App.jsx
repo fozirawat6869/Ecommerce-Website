@@ -13,7 +13,7 @@ const ProductDetails=lazy(()=>import('./components/pages/ProductDetails'))
 const NewlyAddedProduct=lazy(()=>import('./components/pages/NewlyAddedProduct'))
 const MenCategoryPage=lazy(()=>import('./components/pages/CategoryPage'))  
 const UserLoginPage=lazy(()=>import('./components/pages/UserLoginPage'))
-
+const RegisterPage=lazy(()=>import('./components/pages/RegisterPage'))
 
 import Layout from "./components/layout/Layout";
 
@@ -31,7 +31,7 @@ function App() {
   
   {/* <Nav/> */}
   
-    <Suspense fallback={<div className='bg-gray-100 px-10 py-2'><h1 className=' bg-white text-center p-5 text-black text-6xl'>⏳ Loading...</h1></div>}>
+    <Suspense fallback={<div className='bg-gray-100 px-10 py-2 '><h1 className=' bg-white text-center p-5 text-black text-6xl'>⏳ Loading...</h1></div>}>
     <Routes>
       <Route element={<Layout/>}>
       <Route path='/' element={<Home/>}/>
@@ -41,6 +41,7 @@ function App() {
       <Route path='/newlyAddedProducts' element={<NewlyAddedProduct/>}/>
       <Route path='/Category/:category' element={<MenCategoryPage/>} />
       <Route path='/login' element={<UserLoginPage/>} />
+      <Route path='/register' element={<RegisterPage/>} />
 
       <Route path="*" element={<div className='px-10 py-5 text-center '>Page not found</div>}  />
       
