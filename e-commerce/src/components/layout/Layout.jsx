@@ -6,13 +6,15 @@ import Footer from "../footer/Footer";
 
 function Layout(){
 
-   const location=useLocation();
-   const hide=location.pathname==='/login'   
+//    const location=useLocation();
+//    const hide=location.pathname==='/login'   
   return(
     <>
-    {!hide && <Nav/>}
+    {/* {!hide && <Nav/>} */}
+    <Nav/>
     <Outlet/>
-    {!hide && <Footer/>}
+    <Footer/>
+    {/* {!hide && <Footer/>} */}
     </>
   )
 }
