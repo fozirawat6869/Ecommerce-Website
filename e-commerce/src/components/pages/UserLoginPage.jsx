@@ -3,20 +3,24 @@
 
 
 // import React, { useState } from 'react'
-// import { Link } from 'react-router-dom';
+// import axios from "axios";
+// import { Link, useNavigate } from 'react-router-dom';
 
 // function UserLoginPage() {
 
-//     const [step, setStep] = useState(1); // 1 = enter mobile, 2 = enter OTP
+//     const [step, setStep] = useState(1);
 //     const [mobile, setMobile] = useState("");
 //     const [otp, setOtp] = useState("");
-//     const [mobileError, setMobileError] = useState(""); // for mobile validation
-//     const [otpError, setOtpError] = useState(""); // for OTP validation
+//     const [mobileError, setMobileError] = useState("");
+//     const [otpError, setOtpError] = useState("");
 
-//     // Handle mobile input change
+ 
+
+//     const navigate=useNavigate();
+
+//     // Handle mobile input
 //     const handleMobileChange = (e) => {
 //         const value = e.target.value;
-//         // Only allow digits and max 10 digits
 //         if (/^\d*$/.test(value) && value.length <= 10) {
 //             setMobile(value);
 //             setMobileError("");
@@ -25,10 +29,9 @@
 //         }
 //     };
 
-//     // Handle OTP input change
+//     // Handle OTP input
 //     const handleOtpChange = (e) => {
 //         const value = e.target.value;
-//         // Only digits, max 6
 //         if (/^\d*$/.test(value) && value.length <= 6) {
 //             setOtp(value);
 //             setOtpError("");
@@ -37,30 +40,88 @@
 //         }
 //     };
 
-//     // Generate OTP button
-//     const handleGenerateOtp = (e) => {
+//     // Generate OTP API
+//     const handleGenerateOtp = async (e) => {
 //         e.preventDefault();
+
 //         if (mobile.length !== 10) {
 //             setMobileError("Please enter a valid 10-digit mobile number");
 //             return;
 //         }
-//         console.log("Generate OTP for mobile:", mobile);
-//         setStep(2);
+
+//         try {
+//             const res = await axios.post("http://localhost:8000/api/register", {
+//                 mobile: mobile
+//             });
+
+//             console.log("OTP Sent:", res.data);
+//             setStep(2);
+
+//         } catch (error) {
+//             console.log(error);
+//             setMobileError("Error sending OTP. Try again.");
+//         }
 //     };
 
-//     // Submit OTP button
-//     const handleSubmitOtp = (e) => {
-//         e.preventDefault();
-//         if (otp.length !== 6) {
-//             setOtpError("Please enter a valid 6-digit OTP");
-//             return;
-//         }
-//         console.log("Submit OTP:", otp, "for mobile:", mobile);
-//         alert(`Logged in with mobile ${mobile}`);
-//         setStep(1);
-//         setMobile("");
-//         setOtp("");
-//     };
+//     // Submit OTP API
+
+//       const handleGenerateOtp = async (e) => {
+//     e.preventDefault();
+
+//     if (mobile.length !== 10) {
+//         setMobileError("Please enter a valid 10-digit mobile number");
+//         return;
+//     }
+
+//     try {
+//         console.log("Sending mobile:", mobile);
+//         const res = await axios.post(
+//             "http://localhost:8000/api/register",
+//             { mobile: mobile },
+//             { headers: { "Content-Type": "application/json" } }
+//         );
+
+//         console.log("OTP Sent:", res.data);
+//         setStep(2);
+
+//     } catch (error) {
+//         console.log("Error from backend:", error.response?.data);
+//         setMobileError(error.response?.data?.message || "Something went wrong");
+//     }
+// };
+//     // const handleSubmitOtp = async (e) => {
+//     //     e.preventDefault();
+
+//     //     if (otp.length !== 6) {
+//     //         setOtpError("Please enter a valid 6-digit OTP");
+//     //         return;
+//     //     }
+
+//     //     try {
+//     //         const res = await axios.post("http://localhost:8000/api/verifyOTP", {
+//     //             mobile: mobile,
+//     //             otp: otp
+//     //         });
+
+//     //         console.log("OTP Verification Response:", res.data);
+
+//     //         if (res.data.success) {
+//     //             navigate('/')
+//     //         } else {
+//     //             setOtpError("Invalid OTP. Try again.");
+//     //             return;
+//     //         }
+
+//     //         // Reset fields
+//     //         setStep(1);
+//     //         setMobile("");
+//     //         setOtp("");
+
+//     //     } catch (error) {
+//     //         console.log(error);
+//     //         setOtpError("Invalid OTP. Try again.");
+//     //     }
+//     // };
 
 //     return (
 //         <>
@@ -70,7 +131,7 @@
 
 //                         <h2 className="text-2xl font-bold text-center mb-6 text-blue-500 font-bold">User Login</h2>
 
-//                         {/* Step 1: Mobile Number */}
+//                         {/* Step 1 */}
 //                         {step === 1 && (
 //                             <form onSubmit={handleGenerateOtp}>
 //                                 <label className="block font-medium mb-1 pl-2">Mobile Number</label>
@@ -80,12 +141,14 @@
 //                                     onChange={handleMobileChange}
 //                                     placeholder="Enter your mobile number"
 //                                     className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-1 focus:ring-1
-//                                       ${mobileError ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"}`}
+//                                     ${mobileError ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"}`}
 //                                     maxLength={10}
 //                                     required
 //                                 />
-//                                 {/* Inline error message with reserved space */}
-//                                 <p className="text-red-500 pt-[0.5px] text-sm mb-2 h-5">{mobileError ? mobileError : " "}</p>
+
+//                                 <p className="text-red-500 pt-[0.5px] text-sm mb-2 h-5">
+//                                     {mobileError ? mobileError : " "}
+//                                 </p>
 
 //                                 <button
 //                                     type="submit"
@@ -93,27 +156,33 @@
 //                                 >
 //                                     Generate OTP
 //                                 </button>
-//                                   <Link><h1 className='mt-5 text-center text-[16px] hover:text-blue-500 cursor-pointer'>Create an account ?</h1></Link>
-                                
+
+//                                 <Link to={'/register'}>
+//                                     <h1 className='mt-5 text-center text-[16px] hover:text-blue-500 cursor-pointer'>
+//                                         Create an account ?
+//                                     </h1>
+//                                 </Link>
 //                             </form>
 //                         )}
 
-//                         {/* Step 2: OTP */}
+//                         {/* Step 2 */}
 //                         {step === 2 && (
 //                             <form onSubmit={handleSubmitOtp}>
 //                                 <p className="mb-4 text-gray-700">
 //                                     Enter OTP sent to <strong>{mobile}</strong>
 //                                 </p>
+
 //                                 <input
 //                                     type="text"
 //                                     value={otp}
 //                                     onChange={handleOtpChange}
 //                                     placeholder="Enter OTP"
 //                                     className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-4
-//                                       ${otpError ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"}`}
+//                                     ${otpError ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"}`}
 //                                     maxLength={6}
 //                                     required
 //                                 />
+
 //                                 <p className="text-red-500 text-sm mb-2 h-5">{otpError ? otpError : " "}</p>
 
 //                                 <button
@@ -122,6 +191,7 @@
 //                                 >
 //                                     Submit
 //                                 </button>
+
 //                                 <button
 //                                     type="button"
 //                                     className="mt-2 w-full text-sm text-blue-600 hover:underline"
@@ -138,13 +208,13 @@
 //     )
 // }
 
-// export default UserLoginPage
+// export default UserLoginPage;
 
 
 
 import React, { useState } from 'react'
 import axios from "axios";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function UserLoginPage() {
 
@@ -153,6 +223,8 @@ function UserLoginPage() {
     const [otp, setOtp] = useState("");
     const [mobileError, setMobileError] = useState("");
     const [otpError, setOtpError] = useState("");
+
+    const navigate = useNavigate();
 
     // Handle mobile input
     const handleMobileChange = (e) => {
@@ -186,16 +258,19 @@ function UserLoginPage() {
         }
 
         try {
-            const res = await axios.post("http://localhost:8000/api/login", {
-                mobile: mobile
-            });
+            console.log("Sending mobile:", mobile);
+            const res = await axios.post(
+                "http://localhost:8000/api/login",
+                { mobile: mobile },
+                { headers: { "Content-Type": "application/json" } }
+            );
 
             console.log("OTP Sent:", res.data);
             setStep(2);
 
         } catch (error) {
-            console.log(error);
-            setMobileError("Error sending OTP. Try again.");
+            console.log("Error from backend:", error.response?.data);
+            setMobileError(error.response?.data?.message || "Something went wrong");
         }
     };
 
@@ -209,15 +284,16 @@ function UserLoginPage() {
         }
 
         try {
-            const res = await axios.post("http://localhost:8000/api/login", {
-                mobile: mobile,
-                otp: otp
-            });
+            const res = await axios.post(
+                "http://localhost:8000/api/verifyOTP",
+                { mobile: mobile, otp: otp },
+                { headers: { "Content-Type": "application/json" } }
+            );
 
             console.log("OTP Verification Response:", res.data);
 
             if (res.data.success) {
-                alert("Login successful!");
+                navigate('/');
             } else {
                 setOtpError("Invalid OTP. Try again.");
                 return;
@@ -230,93 +306,91 @@ function UserLoginPage() {
 
         } catch (error) {
             console.log(error);
-            setOtpError("Invalid OTP. Try again.");
+            setOtpError(error.response?.data?.message || "Invalid OTP. Try again.");
         }
     };
 
     return (
-        <>
-            <div className='bg-gray-100 px-10 pt-2 '>
-                <div className='bg-white p-28 flex justify-center items-center'>
-                    <div className="bg-white outline-5 outline-gray-100 p-6 w-120 h-80 rounded-xl shadow-lg ">
+        <div className='bg-gray-100 px-10 pt-2 '>
+            <div className='bg-white p-28 flex justify-center items-center'>
+                <div className="bg-white outline-5 outline-gray-100 p-6 w-120 h-80 rounded-xl shadow-lg ">
+                    <h2 className="text-2xl font-bold text-center mb-6 text-blue-500 font-bold">User Login</h2>
 
-                        <h2 className="text-2xl font-bold text-center mb-6 text-blue-500 font-bold">User Login</h2>
+                    {/* Step 1 */}
+                    {step === 1 && (
+                        <form onSubmit={handleGenerateOtp}>
+                            <label className="block font-medium mb-1 pl-2">Mobile Number</label>
+                            <input
+                                type="tel"
+                                value={mobile}
+                                onChange={handleMobileChange}
+                                placeholder="Enter your mobile number"
+                                className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-1 focus:ring-1
+                                ${mobileError ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"}`}
+                                maxLength={10}
+                                required
+                            />
 
-                        {/* Step 1 */}
-                        {step === 1 && (
-                            <form onSubmit={handleGenerateOtp}>
-                                <label className="block font-medium mb-1 pl-2">Mobile Number</label>
-                                <input
-                                    type="tel"
-                                    value={mobile}
-                                    onChange={handleMobileChange}
-                                    placeholder="Enter your mobile number"
-                                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-1 focus:ring-1
-                                    ${mobileError ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"}`}
-                                    maxLength={10}
-                                    required
-                                />
+                            <p className="text-red-500 pt-[0.5px] text-sm mb-2 h-5">
+                                {mobileError ? mobileError : " "}
+                            </p>
 
-                                <p className="text-red-500 pt-[0.5px] text-sm mb-2 h-5">
-                                    {mobileError ? mobileError : " "}
-                                </p>
+                            <button
+                                type="submit"
+                                className="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-gray-800 transition"
+                            >
+                                Generate OTP
+                            </button>
 
-                                <button
-                                    type="submit"
-                                    className="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-gray-800 transition"
-                                >
-                                    Generate OTP
-                                </button>
+                            <Link to={'/register'}>
+                                <h1 className='mt-5 text-center text-[16px] hover:text-blue-500 cursor-pointer'>
+                                    Create an account ?
+                                </h1>
+                            </Link>
+                        </form>
+                    )}
 
-                                <Link to={'/register'}>
-                                    <h1 className='mt-5 text-center text-[16px] hover:text-blue-500 cursor-pointer'>
-                                        Create an account ?
-                                    </h1>
-                                </Link>
-                            </form>
-                        )}
+                    {/* Step 2 */}
+                    {step === 2 && (
+                        <form onSubmit={handleSubmitOtp}>
+                            <p className="mb-4 text-gray-700">
+                                Enter OTP sent to <strong>{mobile}</strong>
+                            </p>
 
-                        {/* Step 2 */}
-                        {step === 2 && (
-                            <form onSubmit={handleSubmitOtp}>
-                                <p className="mb-4 text-gray-700">
-                                    Enter OTP sent to <strong>{mobile}</strong>
-                                </p>
+                            <input
+                                type="text"
+                                value={otp}
+                                onChange={handleOtpChange}
+                                placeholder="Enter OTP"
+                                className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-4
+                                ${otpError ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"}`}
+                                maxLength={6}
+                                required
+                            />
 
-                                <input
-                                    type="text"
-                                    value={otp}
-                                    onChange={handleOtpChange}
-                                    placeholder="Enter OTP"
-                                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-4
-                                    ${otpError ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"}`}
-                                    maxLength={6}
-                                    required
-                                />
+                            <p className="text-red-500 text-sm mb-2 h-5">{otpError ? otpError : " "}</p>
 
-                                <p className="text-red-500 text-sm mb-2 h-5">{otpError ? otpError : " "}</p>
+                            <button
+                                type="submit"
+                                className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
+                            >
+                                Submit
+                            </button>
 
-                                <button
-                                    type="submit"
-                                    className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
-                                >
-                                    Submit
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className="mt-2 w-full text-sm text-blue-600 hover:underline"
-                                    onClick={() => setStep(1)}
-                                >
-                                    Edit mobile number
-                                </button>
-                            </form>
-                        )}
-                    </div>
+                            <button
+                                type="button"
+                                className="mt-2 w-full text-sm text-blue-600 hover:underline"
+                                onClick={() => setStep(1)}
+                            >
+                                Edit mobile number
+                            </button>
+                        </form>
+                    )}
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 
 export default UserLoginPage;
+

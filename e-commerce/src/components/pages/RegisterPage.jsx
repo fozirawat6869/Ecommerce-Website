@@ -38,29 +38,7 @@ function RegisterPage() {
 
     // Generate OTP API
 
-    const handleGenerateOtp = async (e) => {
-    e.preventDefault();
-
-    if (mobile.length !== 10) {
-        setMobileError("Please enter a valid 10-digit mobile number");
-        return;
-    }
-
-    try {
-        console.log("Sending mobile:", mobile);
-        const res = await axios.post(
-            "http://localhost:8000/api/register",
-            { mobile: mobile },
-            { headers: { "Content-Type": "application/json" } }
-        );
-
-        console.log("OTP Sent:", res.data);
-        setStep(2);
-
-    } catch (error) {
-        console.log("Error from backend:", error.response?.data);
-        setMobileError(error.response?.data?.message || "Something went wrong");
-    }
+    
 };
 
   
