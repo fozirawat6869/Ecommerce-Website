@@ -1,5 +1,5 @@
 import express from 'express'
-import {getAllProducts,createProduct,productDetails,newlyAddedProducts,categoryProducts,sendOTP,verifyOTP} from '../controllers/productController.js'
+import {getAllProducts,createProduct,productDetails,newlyAddedProducts,categoryProducts,sendOTP,verifyOTP,login} from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
 
 const router=express.Router();
@@ -20,8 +20,13 @@ router.route('/products').get(getAllProducts).post(createProduct)
 router.route('/productsCategory').get(categoryProducts)  
 
 
-// user login
+// user register
 router.route('/register').post(sendOTP)
 router.route('/verifyOTP').post(verifyOTP) 
+
+
+// user login
+router.route('/login').post(login)
+
 
 export default router

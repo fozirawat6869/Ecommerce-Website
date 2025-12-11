@@ -168,49 +168,142 @@ export const newlyAddedProducts=(req,res)=>{
 
 // user otp send 
 
-export const sendOTP=(req,res)=>{
-    console.log("selnd otp api",req.body)
-    const {mobile}=req.body
+
+export const sendOTP = (req, res, next) => {
+    console.log("send otp api", req.body);
+    const { mobile } = req.body;
+
+    if (!mobile) {
+        return res.status(400).json({
+            success: false,
+            message: "Please provide mobile number"
+        });
+    }
+
+    // 1️⃣ Check if mobile is already registered
+    connection.query(
+        `SELECT mobile FROM users WHERE mobile = ?`,
+        [mobile],
+        async (err, result) => {
+            if (err) {
+                console.log("Error in query of check mobile", err);
+                return next(new HandleError("Error in query of check mobile", 400));
+            }
+
+            if (result.length > 0) {
+                // Mobile already exists
+                return res.status(400).json({
+                    success: false,
+                    message: "Mobile number is already registered"
+                });
+            }
+
+            // 2️⃣ Generate OTP
+            const otp = Math.floor(100000 + Math.random() * 900000);
+            const expireTime = new Date(Date.now() + 5 * 60 * 1000)
+                .toISOString()
+                .slice(0, 19)
+                .replace('T', ' ');
+
+            // 3️⃣ Save OTP in DB
+            const query = `REPLACE INTO user_otps(mobile, otp, expires_at) VALUES (?, ?, ?)`;
+            connection.query(query, [mobile, otp, expireTime], async (err, result) => {
+                if (err) {
+                    console.log("Error in query of send OTP", err);
+                    return next(new HandleError("Error in query of send OTP", 400));
+                }
+
+                // 4️⃣ Send OTP using Twilio
+                try {
+                    const message = await client.messages.create({
+                        body: `Your OTP is ${otp}`,
+                        from: process.env.TWILIO_PHONE_NUMBER,
+                        to: `+91${mobile}`
+                    });
+
+                    return res.status(200).json({
+                        success: true,
+                        message: `OTP sent to mobile number ${mobile}`
+                    });
+
+                } catch (err) {
+                    console.log("Twilio error:", err);
+                    return res.status(500).json({
+                        success: false,
+                        message: "Failed to send OTP",
+                        error: err.message
+                    });
+                }
+            });
+        }
+    );
+}
+
+
+// export const sendOTP=(req,res)=>{
+//     console.log("selnd otp api",req.body)
+//     const {mobile}=req.body
+
+//     if(!mobile){
+//       return res.status(400).json({
+//         success:false,
+//         message:"please provide mobile number"
+//       })
+//     }
+
+//     connection.query(`select mobile from users where mobile=?`,[mobile],async (err,result)=>{
+//         if(err){
+//           console.log("error in query of check mobile",err)
+//           return next(new HandleError("error in query of check mobile",400))
+//         }
+//         if(result.length>0){
+//           return res.status(400).json({
+//             success:false,
+//             message:"mobile number already registered, please login"
+//           })
+//         }
+        
+//     })
     
-    const otp=Math.floor(100000+Math.random()*900000)
-    //  const expireTime = Date.now() + 5 * 60 * 1000; // 5 minutes from now
-  const expireTime = new Date(Date.now() + 5 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+//     const otp=Math.floor(100000+Math.random()*900000)
+//     //  const expireTime = Date.now() + 5 * 60 * 1000; // 5 minutes from now
+//   const expireTime = new Date(Date.now() + 5 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
 
-    const query=`REPLACE INTO user_otps(mobile, otp, expires_at)
-        VALUES (?, ?, ?)`
-    connection.query(query,[mobile,otp,expireTime],async (err,result)=>{
-       console.log(result)
+//     const query=`REPLACE INTO user_otps(mobile, otp, expires_at)
+//         VALUES (?, ?, ?)`
+//     connection.query(query,[mobile,otp,expireTime],async (err,result)=>{
+//        console.log(result)
       
-      if(err){
-        console.log("error in query of send otp",err)
-        return next(new HandleError("error in query of send otp",400))
-      }
+//       if(err){
+//         console.log("error in query of send otp",err)
+//         return next(new HandleError("error in query of send otp",400))
+//       }
 
-try {
-   const message = await client.messages.create({
-        body: `Your OTP is ${otp}`,
-        from: process.env.TWILIO_PHONE_NUMBER,
-        to: `+91${mobile}`
-    });
+// try {
+//    const message = await client.messages.create({
+//         body: `Your OTP is ${otp}`,
+//         from: process.env.TWILIO_PHONE_NUMBER,
+//         to: `+91${mobile}`
+//     });
 
-   return res.status(200).json({
-      success: true,
-      message: `OTP sent to mobile number ${mobile}`
-   });
+//    return res.status(200).json({
+//       success: true,
+//       message: `OTP sent to mobile number ${mobile}`
+//    });
 
-} catch (err) {
-   console.log("Twilio error:", err);
-   return res.status(500).json({
-      success: false,
-      message: "Failed to send OTP",
-      error: err.message
-   });
-}
+// } catch (err) {
+//    console.log("Twilio error:", err);
+//    return res.status(500).json({
+//       success: false,
+//       message: "Failed to send OTP",
+//       error: err.message
+//    });
+// }
 
-      })
+//       })
 
 
-}
+// }
 
 
 
@@ -245,13 +338,13 @@ export const verifyOTP=(req,res)=>{
           })
         })
      }
-    
-     
-      // if(result.[2])
   })
-
-
-
-
 }
 
+
+
+// login conteoler
+
+export const login=(req,res)=>{
+    console.log(req.body)
+}
