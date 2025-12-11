@@ -169,7 +169,7 @@ export const newlyAddedProducts=(req,res)=>{
 // user otp send 
 
 export const sendOTP=(req,res)=>{
-    console.log(req.body)
+    console.log("selnd otp api",req.body)
     const {mobile}=req.body
     
     const otp=Math.floor(100000+Math.random()*900000)
@@ -216,7 +216,7 @@ try {
 
 // veryfiy otp
 export const verifyOTP=(req,res)=>{
-  console.log(req.body)
+  console.log("verify otp api",req.body)
   //  { mobile: '8755306869', otp: '553306' }
   const {mobile,otp}=req.body
   
@@ -226,6 +226,14 @@ export const verifyOTP=(req,res)=>{
        if(err){
         console.log(err)
       }
+      
+      if(result[0].otp!==otp){
+        return res.status(400).json({
+          success: false,
+          message: "otp is wrong"
+        });
+      }
+
      if(result[0].otp==otp){
         connection.query(`insert into users (mobile) values (?)`,[mobile],(err,result)=>{
           if(err){

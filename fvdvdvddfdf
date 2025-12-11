@@ -1,0 +1,44 @@
+[33md003e7b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Add config.env to .gitignore and remove secrets
+[33md42f9ef[m add backend logic for user register with otp
+[33md295282[m[33m ([m[1;31morigin/main[m[33m)[m create registerPage with ui
+[33m88549b9[m create ui for UserLoginPage
+[33m79d454b[m add layout component to use location and outletd
+[33m84c3382[m make an api for categoryPage to manage all filters
+[33mf47e33e[m setup the database structure
+[33m97bb168[m change xampp to simple mysqlworkbench and add more query for categoryPage
+[33m42d674b[m make productDetails responsive
+[33m56343ff[m fix some bugs
+[33mdf239a0[m add error handling
+[33mc02b489[m i have created a api for CategoryPage
+[33m780478d[m i have completed the frontend logic for CategoryPage where all filters are available
+[33m9895ca5[m remove the extra code
+[33md484eba[m update the ui of ProductDetails
+[33m0626f2c[m add a product
+[33m0c5d47a[m little bit bug fixes
+[33m33eab47[m create productDetails ui
+[33m81e68fe[m add filterConfig.js for different filters for diffeent category
+[33m66ff994[m bug fix in nav component
+[33me3df233[m  create a category page half done
+[33m2e5b8df[m make little bit more responsive nav,newlyAddedProduct and category component
+[33m4562b7f[m add pagination in newlyAddedProduct component
+[33m804b8fd[m create a newlyAddedProducts in main section and also create a NewlyAddedProducts component to see the all newlyAddedProducts
+[33m226059d[m added lazy loading in AllProduct component for optimizations
+[33m70e72d2[m add price logic in filter section
+[33mfbc117e[m add logic for category section in filter
+[33mfbdea2f[m add price,color,size section without logic and also add pagination with caching in allProducts route
+[33m16ea90d[m create a category section in down the nav
+[33mf19b47d[m ImageSlider is done
+[33meb532b5[m create navbar
+[33m01ce580[m remove unnecessary comments in footer
+[33md0c836b[m create responsive footer
+[33m2078682[m remove mongebd and now i use mysqldb
+[33ma33bbf2[m handle CasteError :- like invalid id(short id)
+[33ma0e25e9[m add a last line of defence for promise rejection
+[33m5a5de46[m make a handleErrorAsync.js instead of try/catch for all controller
+[33ma6f4f7b[m add middleware error.js
+[33m9f4b26b[m add handleErrors in utils for conditional errors
+[33m86897a8[m make cotroller,routes,connect DB, create productSchema,like all setup done
+[33md4bd94e[m Remove config.env from tracking to keep it private
+[33m6b9dfbf[m setup basic project like created server and .env file
+[33me80d976[m basic project setup done like create server with .env file
+[33m1bb6fbb[m Initial commit

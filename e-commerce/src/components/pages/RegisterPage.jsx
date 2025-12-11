@@ -55,7 +55,7 @@ function RegisterPage() {
 
         } catch (error) {
             console.log(error);
-            setMobileError("Error sending OTP. Try again.");
+            setMobileError("Wrong number. Try again.");
         }
     };
 
