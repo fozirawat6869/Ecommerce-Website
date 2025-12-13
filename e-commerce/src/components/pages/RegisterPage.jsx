@@ -54,12 +54,7 @@ function RegisterPage() {
 
         console.log("OTP Sent Response:", res.data);
 
-        // if (res.data.success) {
-        //     setStep(2);
-        //      setSessionId(res.data.session_id);
-        // } else {
-        //     setMobileError("Failed to send OTP");
-        // }
+     
 
         if (res.data.success) {
     // Check backend message
