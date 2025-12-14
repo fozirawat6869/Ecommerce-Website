@@ -4,6 +4,7 @@ import handleAsyncErrors from '../middleware/handleErrorAsync.js'
 import connection from '../config/sqldb.js'
 import dotenv from 'dotenv';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
 dotenv.config({ path: './config/config.env' });
 
@@ -129,9 +130,9 @@ export const loginOTP = (req, res) => {
 // verify 
 export const verifyOTP = async (req, res) => {
   console.log("verify otp api", req.body);
-  const { session_id, otp } = req.body;
+  const { session_id, otp,mobile } = req.body;
 
-  if (!session_id || !otp) {
+  if (!session_id || !otp || !mobile) {
     return res.status(400).json({ success: false, message: "Session ID and OTP are required" });
   }
 
@@ -140,8 +141,10 @@ export const verifyOTP = async (req, res) => {
       `https://2factor.in/API/V1/${process.env.API_KEY}/SMS/VERIFY/${session_id}/${otp}`
     );
 
+    const token=jwt.sign({ mobile:mobile },process.env.JWT_SECRET,{ expiresIn:'7d' })
+    console.log("Generated JWT Token:", token);
     if (response.data.Status === "Success") {
-      return res.status(200).json({ success: true, message: "OTP verified successfully" });
+      return res.status(200).json({ success: true, message: "OTP verified successfully", token });
     } else {
       return res.status(400).json({ success: false, message: "Invalid OTP" });
     }

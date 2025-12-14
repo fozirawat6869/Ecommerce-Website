@@ -88,6 +88,7 @@ function UserLoginPage() {
             console.log("OTP Verification Response:", res.data);
 
             if (res.data.success) {
+                localStorage.setItem('token',res.data.token);   
                 navigate('/');
             } else {
                 setOtpError("Invalid OTP. Try again.");
