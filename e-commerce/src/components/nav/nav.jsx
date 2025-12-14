@@ -11,14 +11,17 @@ import { CgProfile } from "react-icons/cg";
 
 function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const navigate=useNavigate()
 
-  useNavigate 
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const navigate = useNavigate();
+
+ 
+
 
   return (
     <>
-      <nav className="flex items-center  justify-between px-3 md:px-20 py-3 bg-white sticky top-0 border-b border-gray-200 z-50">
+      <nav className="flex items-center justify-between px-3 md:px-20 py-3 bg-white sticky top-0 border-b border-gray-200 z-50">
 
         {/* Left: Logo */}
         <Link
@@ -37,50 +40,23 @@ function Nav() {
           } lg:flex lg:flex-row lg:static lg:w-auto lg:shadow-none lg:gap-8 items-center transition-all duration-300`}
         >
           <li>
-            <Link
-              to="/"
-              className="block px-4 py-2 hover:text-blue-600 text-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
+            <Link to="/" className="block px-4 py-2 hover:text-blue-600 text-center" onClick={() => setIsMenuOpen(false)}>Home</Link>
           </li>
-
           <li>
-            <Link
-              to="/AllProducts"
-              className="block px-4 py-2 hover:text-blue-600 text-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Products
-            </Link>
+            <Link to="/AllProducts" className="block px-4 py-2 hover:text-blue-600 text-center" onClick={() => setIsMenuOpen(false)}>Products</Link>
           </li>
-
           <li>
-            <Link
-              to="/about"
-              className="block px-4 py-2 hover:text-blue-600 text-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About Us
-            </Link>
+            <Link to="/about" className="block px-4 py-2 hover:text-blue-600 text-center" onClick={() => setIsMenuOpen(false)}>About Us</Link>
           </li>
-
           <li>
-            <Link
-              to="/contact"
-              className="block px-4 py-2 hover:text-blue-600 text-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Contact Us
-            </Link>
+            <Link to="/contact" className="block px-4 py-2 hover:text-blue-600 text-center" onClick={() => setIsMenuOpen(false)}>Contact Us</Link>
           </li>
         </ul>
 
         {/* Right side */}
         <div className="flex items-center gap-4">
 
-          {/* Search (hidden on small + medium) */}
+          {/* Search */}
           <div className="hidden lg:block">
             <form className="relative">
               <input
@@ -92,13 +68,56 @@ function Nav() {
             </form>
           </div>
 
-          {/* Login */}
-          <div 
-           onClick={()=>navigate('/login')}
-          className="flex items-center gap-1 hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer">
-            <IoMdPersonAdd className="text-2xl" />
-            <p className="hidden lg:block">Login</p>
-          </div>
+
+
+
+{/* Login / Profile */}
+<div className="relative group">
+  <div
+    onClick={() => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login"); // go to login if not logged in
+      }
+    }}
+    className="flex items-center gap-1 hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer"
+  >
+    {localStorage.getItem("token") ? (
+      <CgProfile className="text-2xl" />
+    ) : (
+      <IoMdPersonAdd className="text-2xl" />
+    )}
+    <p className="hidden lg:block">
+      {localStorage.getItem("token") ? "Profile" : "Login"}
+    </p>
+  </div>
+
+  {/* Hover Dropdown */}
+  {localStorage.getItem("token") && (
+    <ul className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50">
+      <li
+        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+        onClick={() => navigate("/profile")}
+      >
+        Profile
+      </li>
+      <li
+        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+        onClick={() => {
+          localStorage.removeItem("token"); // remove token
+          // don't navigate, user clicks login manually
+          window.location.reload(); // optional: to update the icon
+        }}
+      >
+        Logout
+      </li>
+    </ul>
+  )}
+</div>
+
+
+
+
 
           {/* Cart */}
           <Link to="/cart" className="relative flex items-center gap-1">
@@ -109,13 +128,9 @@ function Nav() {
             <p className="hidden lg:block">Cart</p>
           </Link>
 
-          {/* Hamburger for Mobile + Medium */}
+          {/* Hamburger */}
           <div className="lg:hidden cursor-pointer" onClick={toggleMenu}>
-            {isMenuOpen ? (
-              <RxCross2 className="text-2xl" />
-            ) : (
-              <GiHamburgerMenu className="text-2xl" />
-            )}
+            {isMenuOpen ? <RxCross2 className="text-2xl" /> : <GiHamburgerMenu className="text-2xl" />}
           </div>
         </div>
       </nav>
@@ -124,4 +139,5 @@ function Nav() {
 }
 
 export default Nav;
+
 
