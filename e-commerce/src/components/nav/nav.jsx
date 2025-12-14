@@ -103,6 +103,13 @@ function Nav() {
       </li>
       <li
         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+        onClick={() => {()=>navigate("/orders")
+        }}
+      >
+        Orders
+      </li>
+       <li
+        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
         onClick={() => {
           localStorage.removeItem("token"); // remove token
           // don't navigate, user clicks login manually

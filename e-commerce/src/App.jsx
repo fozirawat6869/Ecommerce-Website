@@ -14,8 +14,10 @@ const NewlyAddedProduct=lazy(()=>import('./components/pages/NewlyAddedProduct'))
 const MenCategoryPage=lazy(()=>import('./components/pages/CategoryPage'))  
 const UserLoginPage=lazy(()=>import('./components/pages/UserLoginPage'))
 const RegisterPage=lazy(()=>import('./components/pages/RegisterPage'))
+const UserProfile=lazy(()=>import('./components/pages/UserProfile'))
 
 import Layout from "./components/layout/Layout";
+
 
 
 
@@ -42,6 +44,7 @@ function App() {
       <Route path='/Category/:category' element={<MenCategoryPage/>} />
       <Route path='/login' element={<UserLoginPage/>} />
       <Route path='/register' element={<RegisterPage/>} />
+      <Route path='/profile' element={<UserProfile/>} />
 
       <Route path="*" element={<div className='px-10 py-5 text-center '>Page not found</div>}  />
       
