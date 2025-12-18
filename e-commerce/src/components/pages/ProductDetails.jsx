@@ -43,7 +43,7 @@ function ProductDetails() {
           <img
             src={selectedImage}
             alt="product"
-            className="h-full object-contain rounded"
+            className="h-full w-full object-cover object-contain rounded"
           />
         </div>
 
