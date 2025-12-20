@@ -1,5 +1,7 @@
 import express from 'express'
-import {getAllProducts,createProduct,productDetails,newlyAddedProducts,categoryProducts,sendOTP,verifyOTP,loginOTP} from '../controllers/productController.js'
+import {getAllProducts,createProduct,productDetails,newlyAddedProducts
+    ,categoryProducts,sendOTP,verifyOTP,loginOTP
+       ,categories} from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
 
 const router=express.Router();
@@ -27,6 +29,8 @@ router.route('/verifyOTP').post(verifyOTP)
 
 // user login
 router.route('/login').post(loginOTP)
+
+router.route('/categories').get(categories)
 
 
 export default router
