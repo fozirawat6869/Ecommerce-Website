@@ -1,7 +1,7 @@
 import express from 'express'
 import {getAllProducts,createProduct,productDetails,newlyAddedProducts
     ,categoryProducts,sendOTP,verifyOTP,loginOTP
-       ,categories,attributes} from '../controllers/productController.js'
+       ,categories,attributes,attribute_values} from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
 
 const router=express.Router();
@@ -33,6 +33,9 @@ router.route('/login').post(loginOTP)
 router.route('/categories').get(categories)
 
 router.route('/attributes').get(attributes)
+
+router.route('/attribute_values').get(attribute_values)
+
 
 
 export default router

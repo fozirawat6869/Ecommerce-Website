@@ -351,4 +351,18 @@ export const attributes=(req,res)=>{
 
 
 
+export const attribute_values=(req,res)=>{
+    connection.query('select * from attribute_values ',(err,result)=>{
+      console.log(result)
+      if(err){
+        console.log("error in attribute_values api")
+        return;
+      }
+      res.status(200).json({
+        success:true,
+        attribute_values:result
+      })
+    })
+}
+
 
