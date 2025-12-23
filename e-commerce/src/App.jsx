@@ -18,8 +18,10 @@ const UserProfile=lazy(()=>import('./components/pages/UserProfile'))
 const Orders=lazy(()=>import('./components/pages/Orders'))
 
 const CreateProduct=lazy(()=>import('./components/pages/CreateProduct'))
+const AdminHomePage=lazy(()=>import('./components/pages/AdminHomePage'))
 
 import Layout from "./components/layout/Layout";
+
 
 
 
@@ -52,6 +54,7 @@ function App() {
       <Route path='/orders' element={<Orders/>}  />
 
       <Route path='/createProduct' element={<CreateProduct/>}  />
+      <Route path='/adminHome' element={<AdminHomePage/>} />
 
       <Route path="*" element={<div className='px-10 py-5 text-center '>Page not found</div>}  />
       
