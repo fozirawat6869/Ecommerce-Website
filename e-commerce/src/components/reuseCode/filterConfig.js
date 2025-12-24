@@ -1,13 +1,13 @@
 export const filterConfig = {
   Men: {
-    menCategories: ["Shirts", "T-Shirts", "Jeans", "Jackets", "Hoodies"],
+    Category: ["Shirts", "T-Shirts", "Jeans", "Jackets", "Hoodies"],
     sizes: ["S", "M", "L", "XL", "2XL"],
     colors: ["Black", "White", "Blue", "Gray", "Red"],
     prices: ["500", "1000", "1500", "2000", "3000"]
   },
 
   Women: {
-    womenCategories: ["Tops", "Kurtis", "Jeans", "Saree", "Dress"],
+    Category: ["Tops", "Kurtis", "Jeans", "Saree", "Dress"],
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Pink", "Black", "Red", "White", "Blue"],
     prices: ["500", "1000", "1500", "2000", "3000"]
@@ -67,91 +67,3 @@ export const filterConfig = {
 };
 
 
-
-// export const filterConfig = {
-//   Men: {
-//     subCategories: ["Shirts", "T-Shirts", "Jeans", "Jackets", "Hoodies"],
-//     attributes: {
-//       size: ["S", "M", "L", "XL", "2XL"],
-//       color: ["Black", "White", "Blue", "Gray", "Red"]
-//     },
-//     priceRanges: [500, 1000, 1500, 2000, 3000]
-//   },
-
-//   Women: {
-//     subCategories: ["Tops", "Kurtis", "Jeans", "Saree", "Dress"],
-//     attributes: {
-//       size: ["XS", "S", "M", "L", "XL"],
-//       color: ["Pink", "Black", "Red", "White", "Blue"]
-//     },
-//     priceRanges: [500, 1000, 1500, 2000, 3000]
-//   },
-
-//   Mouse: {
-//     attributes: {
-//       brand: ["Logitech", "HP", "Dell", "Razer", "Zebronics"],
-//       type: ["Wired", "Wireless"]
-//     },
-//     priceRanges: [300, 500, 700, 1000, 1500]
-//   },
-
-//   Camera: {
-//     attributes: {
-//       brand: ["Canon", "Nikon", "Sony", "Fujifilm"],
-//       type: ["DSLR", "Mirrorless", "Digital"]
-//     },
-//     priceRanges: [20000, 30000, 40000, 50000]
-//   },
-
-//   Earphones: {
-//     attributes: {
-//       brand: ["Boat", "Sony", "JBL", "Realme", "Boult"],
-//       type: ["Wired", "Wireless", "Neckband"],
-//       color: ["Black", "White", "Blue", "Red"]
-//     },
-//     priceRanges: [300, 500, 1000, 1500, 2000]
-//   },
-
-//   Mobiles: {
-//     attributes: {
-//       brand: ["Samsung", "Apple", "Vivo", "Oppo", "Realme", "Xiaomi"],
-//       ram: ["4GB", "6GB", "8GB", "12GB"],
-//       storage: ["64GB", "128GB", "256GB"]
-//     },
-//     priceRanges: [5000, 10000, 15000, 20000, 30000]
-//   },
-
-//   Speakers: {
-//     attributes: {
-//       brand: ["Boat", "JBL", "Sony", "Zebronics", "Marshall"],
-//       type: ["Bluetooth", "Wired", "Portable"]
-//     },
-//     priceRanges: [500, 800, 1000, 1500, 2000]
-//   },
-
-//   Televisions: {
-//     attributes: {
-//       brand: ["Sony", "LG", "Samsung", "Mi", "OnePlus"],
-//       screenSize: ["32", "43", "50", "55"],
-//       type: ["LED", "QLED", "OLED"]
-//     },
-//     priceRanges: [15000, 20000, 30000, 40000]
-//   },
-
-//   Trimmers: {
-//     attributes: {
-//       brand: ["Philips", "Nova", "Bombay Shaving", "Mi"],
-//       type: ["Cordless", "Corded"]
-//     },
-//     priceRanges: [300, 500, 800, 1000]
-//   },
-
-//   Watches: {
-//     attributes: {
-//       brand: ["Boat", "FireBoltt", "Noise", "Fastrack"],
-//       type: ["Analog", "Digital", "Smartwatch"],
-//       color: ["Black", "Blue", "White", "Gray"]
-//     },
-//     priceRanges: [500, 800, 1000, 1500]
-//   }
-// };

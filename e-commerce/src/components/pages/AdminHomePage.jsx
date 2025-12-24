@@ -27,7 +27,7 @@ function AdminHomePage() {
 
         <div className="bg-white p-5 rounded-xl shadow">
           <h2 className="text-gray-500">Revenue</h2>
-          <p className="text-2xl font-bold">₹1,20,000</p>
+          <p className="text-2xl font-bold">₹1,30,000</p>
         </div>
 
       </div>
