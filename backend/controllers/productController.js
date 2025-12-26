@@ -283,39 +283,29 @@ export const productDetails=(req,res)=>{
 
 export const createProduct=(req,res)=>{
   console.log(req.body)
-  const {name,description,price}=req.body
-  connection.query("INSERT INTO products (name, description, price) VALUES (?, ?, ?)",
-  [name, description, price],
-  (err, result) => {
-    if (err){
-      console.log("Error in query:", err);
-  return res.status(500).json({ success:false, message: "Error" });
-    } 
-    res.json({ success:true, result });
-  }
-);
+  
 
 }
 
 // for show newly added product in home page in main
 
 export const newlyAddedProducts=(req,res)=>{
-  // let datys=15
+  
   // console.log(req.query) get the page and limit from query
-  let {page,limit}=req.query;
-  page=Number(page)||1
-  limit=Number(limit)||8
-  let offset=(page-1)*limit
-    connection.query(`select * from products where created_at >= DATE_SUB(NOW(),INTERVAL 15 DAY) order by created_at desc limit ${limit} offset ${offset}`,(err,result)=>{
-      console.log(result)
-      if(err){
-      return next(new HandleError("error in query of newly added products",400))
-    }
-    res.status(200).json({
-      success:true,
-      newlyAddedProducts:result
-    }) 
-  })
+  // let {page,limit}=req.query;
+  // page=Number(page)||1
+  // limit=Number(limit)||8
+  // let offset=(page-1)*limit
+  //   connection.query(`select * from products where created_at >= DATE_SUB(NOW(),INTERVAL 15 DAY) order by created_at desc limit ${limit} offset ${offset}`,(err,result)=>{
+  //     console.log(result)
+  //     if(err){
+  //     return next(new HandleError("error in query of newly added products",400))
+  //   }
+  //   res.status(200).json({
+  //     success:true,
+  //     newlyAddedProducts:result
+  //   }) 
+  // })
 }
 
 // api for frontend to show the categories in ui
