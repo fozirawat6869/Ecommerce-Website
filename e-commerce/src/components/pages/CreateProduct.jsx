@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { filterConfig } from "../reuseCode/filterConfig"; // import config
+import { filterConfig } from "../reuseCode/filterConfig";
 
 function CreateProductAdmin() {
   const [categories, setCategories] = useState([]);
@@ -24,49 +24,56 @@ function CreateProductAdmin() {
       .catch((err) => console.log(err));
   }, []);
 
-  // When category changes
+  // Category change
   const handleCategoryChange = (e) => {
-    const categoryName = e.target.value;
+    const category = e.target.value;
 
     setFormData({
-      ...formData,
-      category: categoryName,
+      name: "",
+      description: "",
+      price: "",
+      category,
       attributes: {}
     });
 
-    // Load attributes from config
-    setActiveAttributes(filterConfig[categoryName] || {});
+    setActiveAttributes(filterConfig[category] || {});
   };
 
-  // Handle attribute value change
+  // Checkbox handler (MULTI VALUE)
   const handleAttributeChange = (attrName, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      attributes: {
-        ...prev.attributes,
-        [attrName]: value
-      }
-    }));
+    setFormData((prev) => {
+      const currentValues = prev.attributes[attrName] || [];
+
+      return {
+        ...prev,
+        attributes: {
+          ...prev.attributes,
+          [attrName]: currentValues.includes(value)
+            ? currentValues.filter((v) => v !== value)
+            : [...currentValues, value]
+        }
+      };
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("FINAL DATA 👉", formData);
+    console.log("FINAL PRODUCT DATA 👉", formData);
 
-    axios.post("http://localhost:8000/api/createProduct", formData)
+    axios.post("http://localhost:8000/api/createProduct", formData);
   };
 
   return (
-    <div className="bg-gray-100 flex items-center justify-center pt-4">
-      <div className="bg-white w-full max-w-2xl rounded-xl shadow-md p-6">
+    <div className="bg-gray-100  flex justify-center pt-10">
+      <div className="bg-white w-full max-w-3xl p-6 rounded-xl shadow">
 
-        <h2 className="text-2xl font-semibold mb-6 border-b pb-3 text-center">
+        <h2 className="text-2xl font-semibold mb-6 text-center">
           Add New Product
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
 
-          {/* Product Name */}
+          {/* Name */}
           <input
             type="text"
             placeholder="Product Name"
@@ -101,6 +108,7 @@ function CreateProductAdmin() {
           {/* Category */}
           <select
             className="w-full border rounded-lg px-4 py-2"
+            value={formData.category}
             onChange={handleCategoryChange}
           >
             <option value="">Select Category</option>
@@ -111,31 +119,43 @@ function CreateProductAdmin() {
             ))}
           </select>
 
-          {/* Dynamic Attributes */}
-          {Object.entries(activeAttributes).map(([attrName, values]) => (
-            <div key={attrName}>
-              <label className="block mb-1 font-medium capitalize">
-                {attrName}
-              </label>
-              <select
-                className="w-full border rounded-lg px-4 py-2"
-                onChange={(e) =>
-                  handleAttributeChange(attrName, e.target.value)
-                }
-              >
-                <option value="">Select {attrName}</option>
-                {values.map((val) => (
-                  <option key={val} value={val}>
-                    {val}
-                  </option>
-                ))}
-              </select>
+          {/* ATTRIBUTES */}
+          {Object.keys(activeAttributes).length > 0 && (
+            <div className="space-y-6 border-t pt-5">
+              {Object.entries(activeAttributes).map(([attrName, values]) => (
+                <div key={attrName}>
+                  <p className="font-medium capitalize mb-2">
+                    {attrName}
+                  </p>
+
+                  <div className="flex flex-wrap gap-4">
+                    {values.map((val) => (
+                      <label
+                        key={val}
+                        className="flex items-center gap-2 border px-3 py-1 rounded-lg"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={
+                            formData.attributes[attrName]?.includes(val) ||
+                            false
+                          }
+                          onChange={() =>
+                            handleAttributeChange(attrName, val)
+                          }
+                        />
+                        {val}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
 
           <button
-            className="w-full bg-blue-600 text-white py-2.5 rounded-lg"
             type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg"
           >
             Create Product
           </button>
