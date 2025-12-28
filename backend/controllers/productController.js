@@ -310,19 +310,7 @@ export const newlyAddedProducts=(req,res)=>{
 
 // api for frontend to show the categories in ui
 
-export const categories=(req,res)=>{
-    connection.query('select * from categories',(err,result)=>{
-      console.log(result)
-      if(err){
-        console.log("error in categories api")
-        return;
-      }
-      res.status(200).json({
-        success:true,
-        categories:result
-      })
-    })
-}
+
 
 
 export const attributes=(req,res)=>{
