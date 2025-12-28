@@ -313,34 +313,8 @@ export const newlyAddedProducts=(req,res)=>{
 
 
 
-export const attributes=(req,res)=>{
-    connection.query('select * from attributes ',(err,result)=>{
-      console.log(result)
-      if(err){
-        console.log("error in attributes api")
-        return;
-      }
-      res.status(200).json({
-        success:true,
-        attributes:result
-      })
-    })
-}
 
 
 
-export const attribute_values=(req,res)=>{
-    connection.query('select * from attribute_values ',(err,result)=>{
-      console.log(result)
-      if(err){
-        console.log("error in attribute_values api")
-        return;
-      }
-      res.status(200).json({
-        success:true,
-        attribute_values:result
-      })
-    })
-}
 
 
