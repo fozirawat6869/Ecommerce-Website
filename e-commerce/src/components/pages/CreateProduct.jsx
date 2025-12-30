@@ -20,7 +20,10 @@ function CreateProductAdmin() {
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/categories")
-      .then((res) => setCategories(res.data.categories))
+      .then((res) => {
+        console.log(res.data.categories)
+        setCategories(res.data.categories)
+      })
       .catch((err) => console.log(err));
   }, []);
 

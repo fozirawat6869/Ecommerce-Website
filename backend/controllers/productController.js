@@ -315,6 +315,18 @@ export const newlyAddedProducts=(req,res)=>{
 
 
 
-
+export const categories=(req,res)=>{
+   connection.query("select * from categories",(err,result)=>{
+     console.log(result)
+     if(err){
+      console.log("err in categories query",err)
+      return 
+     }
+     res.status(200).json({
+      success:true,
+      categories:result
+     })
+   })
+}
 
 
