@@ -67,7 +67,7 @@ function CreateProductAdmin() {
   };
 
   return (
-    <div className="bg-gray-100  flex justify-center pt-10">
+    <div className="bg-gray-100  flex justify-center pt-2">
       <div className="bg-white w-full max-w-3xl p-6 rounded-xl shadow">
 
         <h2 className="text-2xl font-semibold mb-6 text-center">
