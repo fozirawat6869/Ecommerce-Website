@@ -30,19 +30,30 @@ function CreateProductAdmin() {
 
   // Category change
   const handleCategoryChange = (e) => {
-    const category = e.target.value;
+  const category = e.target.value;
 
-    setFormData({
-      name: "",
-      description: "",
-      price: "",
-      quantity: "",
-      category,
-      attributes: {}
-    });
+  setFormData((prev) => ({
+    ...prev,
+    category,
+    attributes: {}
+  }));
 
-    setActiveAttributes(filterConfig[category] || {});
-  };
+  setActiveAttributes(filterConfig[category] || {});
+};
+  // const handleCategoryChange = (e) => {
+  //   const category = e.target.value;
+
+  //   setFormData({
+  //     name: "",
+  //     description: "",
+  //     price: "",
+  //     quantity: "",
+  //     category,
+  //     attributes: {}
+  //   });
+
+  //   setActiveAttributes(filterConfig[category] || {});
+  // };
 
   // SINGLE VALUE attribute handler (radio)
   const handleAttributeChange = (attrName, value) => {
@@ -64,9 +75,27 @@ function CreateProductAdmin() {
       quantity: Number(formData.quantity)
     };
 
-    console.log("FINAL PRODUCT DATA 👉", payload);
+    try{
+           console.log("FINAL PRODUCT DATA 👉", payload);
 
     axios.post("http://localhost:8000/api/createProduct", payload);
+
+    alert("Product created successfully!");
+    setFormData({
+      name: "",
+      description: "",
+      price: "",
+      quantity: "",
+      category: "",
+      attributes: {}
+    });
+    setActiveAttributes({});
+    }
+    catch(err){
+      console.log("Error creating product", err);
+      alert("Failed to create product. Please try again.");
+    }
+   
   };
 
   return (
