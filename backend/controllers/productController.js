@@ -283,6 +283,7 @@ export const productDetails=(req,res)=>{
 
 export const createProduct=(req,res)=>{
   console.log(req.body)
+  console.log(req.file)
   
 
 }

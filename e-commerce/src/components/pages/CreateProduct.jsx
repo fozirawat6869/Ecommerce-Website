@@ -86,6 +86,7 @@ function CreateProductAdmin() {
       description: "",
       price: "",
       quantity: "",
+      image:"",
       category: "",
       attributes: {}
     });
@@ -183,6 +184,8 @@ function CreateProductAdmin() {
   }}
   required
 />
+
+ 
 
 
           {/* Category */}
