@@ -157,6 +157,8 @@ export const verifyOTP = async (req, res) => {
 
 
 
+// All Products 
+
 export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
   console.log("all products ")
   console.log(req.query)
