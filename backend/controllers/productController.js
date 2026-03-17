@@ -6,7 +6,10 @@ import dotenv from 'dotenv';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
+
 dotenv.config({ path: './config/config.env' });
+
+
 
 
 // send OTP
@@ -282,13 +285,91 @@ export const productDetails=(req,res)=>{
 
 
 
+// Create Product
 
-export const createProduct=(req,res)=>{
-  console.log(req.body)
-  console.log(req.file)
+
+// export const createProduct = (req, res) => {
+//   try {
+//     console.log("REQ.BODY:", req.body);  // text fields
+//     console.log("REQ.FILE:", req.file);  // file info
+
+//     const { name, description, price, quantity, category, attributes } = req.body;
+
+//     // parse attributes
+//     let parsedAttributes = {};
+//     if (attributes) {
+//       parsedAttributes = JSON.parse(attributes);
+//     }
+
+//     const main_image = req.file ? req.file.filename : null;
+
+//     const query = `
+//       INSERT INTO products
+//         (name, description, price, quantity, category, subCategory, subCategoryValue, main_image)
+//       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+//     `;
+
+//     connection.query(
+//       query,
+//       [
+//         name,
+//         description,
+//         price,
+//         quantity,
+//         category,
+//         parsedAttributes.SubCategory || null,
+//         parsedAttributes.sizes || null,
+//         main_image
+//       ],
+//       (err, result) => {
+//         if (err) {
+//           console.log("Error in query:", err);
+//           return res.status(500).json({ success: false, message: "DB error" });
+//         }
+
+//         res.status(201).json({
+//           success: true,
+//           message: "Product created successfully",
+//           productId: result.insertId
+//         });
+//       }
+//     );
+//   } catch (err) {
+//     console.log("Error in createProduct:", err);
+//     res.status(500).json({ success: false, message: "Server error" });
+//   }
+// };
+
+// export const createProduct=(req,res)=>{
+//   console.log("create product api")
+//   console.log(req.body)
+//   console.log(req.file)
+
+//   let { name, description, price, quantity, category, subCategory, subCategoryValue } = req.body;
+
+//   const query ="insert into products(name,description,price,quantity,category,subCategory,subCategoryValue) values(?,?,?,?,?,?,?)"
   
+//   connection.query(query,[name,description,price,quantity,category,subCategory,subCategoryValue],(err,result)=>{
+//     console.log(result) 
+//     if(err){
+//       return console.log("err in query of create product",err)
+//     } 
+//     res.status(201).json({
+//       success:true, 
+//       message:"Product created successfully",
+//       productId:result
+//     })   
 
-}
+// })
+// }
+
+export const createProduct = (req, res) => {
+  console.log("req.body:", req.body); // should show name, description, etc.
+  console.log("req.file:", req.file); // should show uploaded image file
+  console.log("file path is : ", req.file.path)
+  console.log("file name is : ", req.file.filename)
+  res.json({ success: true, body: req.body, file: req.file });
+};
 
 // for show newly added product in home page in main
 

@@ -15,6 +15,7 @@ app.use(express.urlencoded({extended:true}))
 
 
 app.use('/api',product)
+app.use('/uploads',express.static('uploads')) // to serve static files from uploads folder
 
 app.use(errorHandleMiddleware)
 export default app;

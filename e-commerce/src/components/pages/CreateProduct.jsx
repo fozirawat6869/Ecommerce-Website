@@ -14,6 +14,7 @@ function CreateProductAdmin() {
     description: "",
     price: "",
     quantity: "",
+    image:"",
     category: "",
     attributes: {}
   });
@@ -66,38 +67,248 @@ function CreateProductAdmin() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
 
-    const payload = {
-      ...formData,
-      price: Number(formData.price),
-      quantity: Number(formData.quantity)
-    };
+    // const payload = {
+    //   ...formData,
+    //   price: Number(formData.price),
+    //   quantity: Number(formData.quantity)
+    // };
 
-    try{
-           console.log("FINAL PRODUCT DATA 👉", payload);
+    // try{
+    //        console.log("FINAL PRODUCT DATA 👉", payload);
 
-    axios.post("http://localhost:8000/api/createProduct", payload);
+    // axios.post("http://localhost:8000/api/createProduct", payload);
 
+    // alert("Product created successfully!");
+    // setFormData({
+    //   name: "",
+    //   description: "",
+    //   price: "",
+    //   quantity: "",
+    //   image:"",
+    //   category: "",
+    //   attributes: {}
+    // });
+    // setActiveAttributes({});
+    // }
+    // catch(err){
+    //   console.log("Error creating product", err);
+    //   alert("Failed to create product. Please try again.");
+    // }
+
+//     const handleSubmit = async (e) => {
+//   e.preventDefault();
+
+//   try {
+//     const data = new FormData();
+
+//     // normal fields
+//     data.append("name", formData.name);
+//     data.append("description", formData.description);
+//     data.append("price", formData.price); // send as string
+//     data.append("quantity", formData.quantity);
+//     data.append("category", formData.category);
+
+//     // ✅ match backend key
+//     data.append("main_image", formData.image);
+
+//     // ✅ send attributes individually
+//     if (formData.attributes.SubCategory) {
+//       data.append("subCategory", "SubCategory");
+//       data.append("subCategoryValue", formData.attributes.SubCategory);
+//     }
+
+//     if (formData.attributes.sizes) {
+//       data.append("sizes", formData.attributes.sizes);
+//     }
+
+//     if (formData.attributes.colors) {
+//       data.append("colors", formData.attributes.colors);
+//     }
+
+//     const res = await axios.post(
+//       "http://localhost:8000/api/createProduct",
+//       data,
+//       { headers: { "Content-Type": "multipart/form-data" } }
+//     );
+
+//     console.log(res.data);
+//     alert("Product created successfully!");
+
+//     setFormData({
+//       name: "",
+//       description: "",
+//       price: "",
+//       quantity: "",
+//       image: "",
+//       category: "",
+//       attributes: {}
+//     });
+
+//     setActiveAttributes({});
+
+//   } catch (err) {
+//     console.log("Error creating product", err.response?.data || err);
+//     alert("Failed to create product.");
+//   }
+// };
+
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+
+//   try {
+//     const data = new FormData();
+
+//     // Basic product fields
+//     data.append("name", formData.name);
+//     data.append("description", formData.description);
+//     data.append("price", Number(formData.price));
+//     data.append("quantity", Number(formData.quantity));
+//     data.append("category", formData.category);
+
+//     // Image file (optional)
+//     if (formData.image) {
+//       data.append("main_image", formData.image);
+//     }
+
+//     // Attributes as JSON
+//     if (formData.attributes && Object.keys(formData.attributes).length > 0) {
+//       data.append("attributes", JSON.stringify(formData.attributes));
+//     }
+
+//     data.forEach((value, key) => {
+//   console.log(key, value);
+// });
+//     console.log("data to be sent", data);
+
+//     // Send to backend
+//     const res = await axios.post(
+//       "http://localhost:8000/api/createProduct",
+//       data
+//     );
+
+//     console.log(res.data);
+//     alert("Product created successfully!");
+
+//     // Reset form
+//     setFormData({
+//       name: "",
+//       description: "",
+//       price: "",
+//       quantity: "",
+//       image: null,
+//       category: "",
+//       attributes: {}
+//     });
+//     setActiveAttributes({});
+//   } catch (err) {
+//     console.log("Error creating product", err.response?.data || err);
+//     alert("Failed to create product.");
+//   }
+// };
+   
+//    const handleSubmit = async (e) => {
+//   e.preventDefault();
+
+//   try {
+//     const data = new FormData();
+
+//     // append normal fields
+//     data.append("name", formData.name);
+//     data.append("description", formData.description);
+//     data.append("price", Number(formData.price));
+//     data.append("quantity", Number(formData.quantity));
+//     data.append("category", formData.category);
+
+//     // ✅ append image file
+//     data.append("image", formData.image);
+
+//     // ✅ send attributes as JSON string
+//     data.append("attributes", JSON.stringify(formData.attributes));
+
+//     console.log("SENDING FORM DATA...");
+//      data.forEach((value,key)=>{
+//       console.log(key,value)
+//     })
+
+//     console.log(data)
+
+//     const res = await axios.post(
+//       "http://localhost:8000/api/createProduct",
+//       data
+//     );
+
+//  console.log("res data after api call",res.data)
+
+//     alert("Product created successfully!");
+
+//     // reset
+//     setFormData({
+//       name: "",
+//       description: "",
+//       price: "",
+//       quantity: "",
+//       image: "",
+//       category: "",
+//       attributes: {}
+//     });
+
+//     setActiveAttributes({});
+
+//   } catch (err) {
+//     console.log("Error creating product", err);
+//     alert("Failed to create product.");
+//   }
+// };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const data = new FormData();
+
+    data.append("name", formData.name);
+    data.append("description", formData.description);
+    data.append("price", formData.price);       // send as string
+    data.append("quantity", formData.quantity);
+    data.append("category", formData.category);
+
+    if (formData.image) data.append("image", formData.image); // must match multer
+
+    // append attributes as individual fields (not JSON)
+    if (formData.attributes.brand) data.append("brand", formData.attributes.brand);
+    if (formData.attributes.type) data.append("type", formData.attributes.type);
+
+    // debug
+    for (let [key, value] of data.entries()) {
+      console.log(key, value);
+    }
+
+    const res = await axios.post(
+      "http://localhost:8000/api/createProduct",
+      data
+    );
+
+    console.log("res.data:", res.data);
     alert("Product created successfully!");
+
     setFormData({
       name: "",
       description: "",
       price: "",
       quantity: "",
-      image:"",
+      image: null,
       category: "",
       attributes: {}
     });
     setActiveAttributes({});
-    }
-    catch(err){
-      console.log("Error creating product", err);
-      alert("Failed to create product. Please try again.");
-    }
-   
-  };
+  } catch (err) {
+    console.log("Error creating product", err.response?.data || err);
+    alert("Failed to create product.");
+  }
+};
 
   return (
     <div className="bg-gray-100 flex justify-center pt-2">
@@ -111,6 +322,7 @@ function CreateProductAdmin() {
 
           {/* Product Name */}
           <input
+          name="name"
             type="text"
             placeholder="Product Name"
             className="w-full border rounded-lg px-4 py-2"
@@ -123,6 +335,7 @@ function CreateProductAdmin() {
 
           {/* Description */}
           <textarea
+          name="description"
             placeholder="Description"
             className="w-full border rounded-lg px-4 py-2"
             value={formData.description}
@@ -134,6 +347,7 @@ function CreateProductAdmin() {
           {/* Price */}
          
           <input
+          name="price"
   type="text"
   inputMode="numeric"
   pattern="[0-9]*"
@@ -162,6 +376,7 @@ function CreateProductAdmin() {
           {/* Quantity (MAX 1,000,000) */}
         
           <input
+          name="quantity"
   type="text"
   inputMode="numeric"
   pattern="[0-9]*"
@@ -185,11 +400,18 @@ function CreateProductAdmin() {
   required
 />
 
+<input type="file" name="image" id="" 
+ onChange={(e)=>{
+   setFormData({...formData,image:e.target.files[0]})
+ }}
+/>
+
  
 
 
           {/* Category */}
           <select
+
             className="w-full border rounded-lg px-4 py-2"
             value={formData.category}
             onChange={handleCategoryChange}

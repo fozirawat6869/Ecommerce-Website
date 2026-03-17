@@ -5,6 +5,7 @@ import {getAllProducts,createProduct,productDetails,newlyAddedProducts
       } from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
 
+
 const router=express.Router();
 
 router.route('/newlyAddedProducts').get(newlyAddedProducts)
@@ -33,7 +34,8 @@ router.route('/login').post(loginOTP)
 
 router.route('/categories').get(categories)
 
-router.route('/createProduct').post(createProduct)
-
+// router.route('/createProduct').post(upload.single("image"),createProduct)
+// or
+// router.post("/createProduct", upload.single("image"), createProduct);
 
 export default router
