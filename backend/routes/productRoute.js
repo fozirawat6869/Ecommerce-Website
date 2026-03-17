@@ -4,7 +4,7 @@ import {getAllProducts,createProduct,productDetails,newlyAddedProducts
       , categories
       } from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
-
+import upload from '../config/multer.js'
 
 const router=express.Router();
 
@@ -34,7 +34,7 @@ router.route('/login').post(loginOTP)
 
 router.route('/categories').get(categories)
 
-// router.route('/createProduct').post(upload.single("image"),createProduct)
+router.route('/createProduct').post(upload.single("image"),createProduct)
 // or
 // router.post("/createProduct", upload.single("image"), createProduct);
 
