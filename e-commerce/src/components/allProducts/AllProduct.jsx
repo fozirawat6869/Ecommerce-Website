@@ -290,7 +290,7 @@ const handlePrice = (e) => {
             data?.map((item)=>(
                 <Link to={`/product/${item.id}`} key={item.id}
                      className='  w-90 h-120 p-2  bg-gray-100 cursor-pointer '
-                >
+                > 
                     <div className='w-full h-[75%]'><img className=' w-full h-full' src={item.main_image} alt="jacket image" /></div>
                     <div className='w-full h-[25%] flex flex-col justify-center px-5  flex flex-col justify-center'>
                         <h2 className='text-gray-600 text-[18px]'>{item.name}</h2> 

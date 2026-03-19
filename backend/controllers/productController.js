@@ -363,12 +363,30 @@ export const productDetails=(req,res)=>{
 // })
 // }
 
+// export const createProduct = (req, res) => {
+//   console.log("req.body:", req.body); // should show name, description, etc.
+//   console.log("req.file:", req.files); // should show uploaded image file
+//   console.log("file path is : ", req.file.path)
+//   console.log("file name is : ", req.file.filename)
+//   res.json({ success: true, body: req.body, file: req.file });
+// };
+
 export const createProduct = (req, res) => {
-  console.log("req.body:", req.body); // should show name, description, etc.
-  console.log("req.file:", req.file); // should show uploaded image file
-  console.log("file path is : ", req.file.path)
-  console.log("file name is : ", req.file.filename)
-  res.json({ success: true, body: req.body, file: req.file });
+  console.log("req.body:", req.body);
+  console.log("req.files:", req.files); // ✅ correct
+
+  // loop through all images
+  const imagePaths = req.files.map(file => file.path);
+  const fileNames = req.files.map(file => file.filename);
+
+  console.log("image paths:", imagePaths);
+  console.log("file names:", fileNames);
+
+  res.json({
+    success: true,
+    body: req.body,
+    images: imagePaths
+  });
 };
 
 // for show newly added product in home page in main

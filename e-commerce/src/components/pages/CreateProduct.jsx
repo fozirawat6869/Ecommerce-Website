@@ -14,7 +14,7 @@ function CreateProductAdmin() {
     description: "",
     price: "",
     quantity: "",
-    image:"",
+    image:[],
     category: "",
     attributes: {}
   });
@@ -41,20 +41,7 @@ function CreateProductAdmin() {
 
   setActiveAttributes(filterConfig[category] || {});
 };
-  // const handleCategoryChange = (e) => {
-  //   const category = e.target.value;
 
-  //   setFormData({
-  //     name: "",
-  //     description: "",
-  //     price: "",
-  //     quantity: "",
-  //     category,
-  //     attributes: {}
-  //   });
-
-  //   setActiveAttributes(filterConfig[category] || {});
-  // };
 
   // SINGLE VALUE attribute handler (radio)
   const handleAttributeChange = (attrName, value) => {
@@ -67,201 +54,7 @@ function CreateProductAdmin() {
     }));
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-    // const payload = {
-    //   ...formData,
-    //   price: Number(formData.price),
-    //   quantity: Number(formData.quantity)
-    // };
-
-    // try{
-    //        console.log("FINAL PRODUCT DATA 👉", payload);
-
-    // axios.post("http://localhost:8000/api/createProduct", payload);
-
-    // alert("Product created successfully!");
-    // setFormData({
-    //   name: "",
-    //   description: "",
-    //   price: "",
-    //   quantity: "",
-    //   image:"",
-    //   category: "",
-    //   attributes: {}
-    // });
-    // setActiveAttributes({});
-    // }
-    // catch(err){
-    //   console.log("Error creating product", err);
-    //   alert("Failed to create product. Please try again.");
-    // }
-
-//     const handleSubmit = async (e) => {
-//   e.preventDefault();
-
-//   try {
-//     const data = new FormData();
-
-//     // normal fields
-//     data.append("name", formData.name);
-//     data.append("description", formData.description);
-//     data.append("price", formData.price); // send as string
-//     data.append("quantity", formData.quantity);
-//     data.append("category", formData.category);
-
-//     // ✅ match backend key
-//     data.append("main_image", formData.image);
-
-//     // ✅ send attributes individually
-//     if (formData.attributes.SubCategory) {
-//       data.append("subCategory", "SubCategory");
-//       data.append("subCategoryValue", formData.attributes.SubCategory);
-//     }
-
-//     if (formData.attributes.sizes) {
-//       data.append("sizes", formData.attributes.sizes);
-//     }
-
-//     if (formData.attributes.colors) {
-//       data.append("colors", formData.attributes.colors);
-//     }
-
-//     const res = await axios.post(
-//       "http://localhost:8000/api/createProduct",
-//       data,
-//       { headers: { "Content-Type": "multipart/form-data" } }
-//     );
-
-//     console.log(res.data);
-//     alert("Product created successfully!");
-
-//     setFormData({
-//       name: "",
-//       description: "",
-//       price: "",
-//       quantity: "",
-//       image: "",
-//       category: "",
-//       attributes: {}
-//     });
-
-//     setActiveAttributes({});
-
-//   } catch (err) {
-//     console.log("Error creating product", err.response?.data || err);
-//     alert("Failed to create product.");
-//   }
-// };
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-
-//   try {
-//     const data = new FormData();
-
-//     // Basic product fields
-//     data.append("name", formData.name);
-//     data.append("description", formData.description);
-//     data.append("price", Number(formData.price));
-//     data.append("quantity", Number(formData.quantity));
-//     data.append("category", formData.category);
-
-//     // Image file (optional)
-//     if (formData.image) {
-//       data.append("main_image", formData.image);
-//     }
-
-//     // Attributes as JSON
-//     if (formData.attributes && Object.keys(formData.attributes).length > 0) {
-//       data.append("attributes", JSON.stringify(formData.attributes));
-//     }
-
-//     data.forEach((value, key) => {
-//   console.log(key, value);
-// });
-//     console.log("data to be sent", data);
-
-//     // Send to backend
-//     const res = await axios.post(
-//       "http://localhost:8000/api/createProduct",
-//       data
-//     );
-
-//     console.log(res.data);
-//     alert("Product created successfully!");
-
-//     // Reset form
-//     setFormData({
-//       name: "",
-//       description: "",
-//       price: "",
-//       quantity: "",
-//       image: null,
-//       category: "",
-//       attributes: {}
-//     });
-//     setActiveAttributes({});
-//   } catch (err) {
-//     console.log("Error creating product", err.response?.data || err);
-//     alert("Failed to create product.");
-//   }
-// };
-   
-//    const handleSubmit = async (e) => {
-//   e.preventDefault();
-
-//   try {
-//     const data = new FormData();
-
-//     // append normal fields
-//     data.append("name", formData.name);
-//     data.append("description", formData.description);
-//     data.append("price", Number(formData.price));
-//     data.append("quantity", Number(formData.quantity));
-//     data.append("category", formData.category);
-
-//     // ✅ append image file
-//     data.append("image", formData.image);
-
-//     // ✅ send attributes as JSON string
-//     data.append("attributes", JSON.stringify(formData.attributes));
-
-//     console.log("SENDING FORM DATA...");
-//      data.forEach((value,key)=>{
-//       console.log(key,value)
-//     })
-
-//     console.log(data)
-
-//     const res = await axios.post(
-//       "http://localhost:8000/api/createProduct",
-//       data
-//     );
-
-//  console.log("res data after api call",res.data)
-
-//     alert("Product created successfully!");
-
-//     // reset
-//     setFormData({
-//       name: "",
-//       description: "",
-//       price: "",
-//       quantity: "",
-//       image: "",
-//       category: "",
-//       attributes: {}
-//     });
-
-//     setActiveAttributes({});
-
-//   } catch (err) {
-//     console.log("Error creating product", err);
-//     alert("Failed to create product.");
-//   }
-// };
+  
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -275,8 +68,10 @@ const handleSubmit = async (e) => {
     data.append("quantity", formData.quantity);
     data.append("category", formData.category);
 
-    if (formData.image) data.append("image", formData.image); // must match multer
-
+    // if (formData.image) data.append("image", formData.image); // must match multer
+    formData.image.forEach((file,index)=>{
+      data.append("images",file)
+    })
     // append attributes as individual fields (not JSON)
     if (formData.attributes.brand) data.append("brand", formData.attributes.brand);
     if (formData.attributes.type) data.append("type", formData.attributes.type);
@@ -299,7 +94,7 @@ const handleSubmit = async (e) => {
       description: "",
       price: "",
       quantity: "",
-      image: null,
+      image:[],
       category: "",
       attributes: {}
     });
@@ -400,11 +195,46 @@ const handleSubmit = async (e) => {
   required
 />
 
-<input type="file" name="image" id="" 
- onChange={(e)=>{
-   setFormData({...formData,image:e.target.files[0]})
- }}
+
+{/* Image Upload (max 4) */}
+<label className="block mb-1 text-gray-600">
+  You can upload up to 4 images
+</label>
+<input
+  type="file"
+  name="image"
+  multiple
+    className="w-full border rounded-lg px-4 py-2"
+     placeholder="Upload up to 4 images"
+  accept="image/*"
+  onChange={(e) => {
+    // Convert FileList to array and limit to 4 files
+    const files = Array.from(e.target.files);
+
+      // Check if total exceeds 4
+    if (formData.image.length + files.length > 4) {
+      alert("You can upload a maximum of 4 images only!");
+      return; // stop adding new files
+    }
+    const updatedFiles = [...formData.image,...files].slice(0, 4) // Combine with existing and limit to 4
+    setFormData({ ...formData, image: updatedFiles });
+  }}
 />
+
+{/* Previews */}
+{formData.image.length > 0 && (
+  <div className="flex gap-3 mt-0 flex-wrap">
+    {formData.image.map((file, index) => (
+      <div key={index} className="relative">
+        <img
+          src={URL.createObjectURL(file)}
+          alt={`preview-${index}`}
+          className="h-20 w-20 object-cover rounded border"
+        />
+      </div>
+    ))}
+  </div>
+)}
 
  
 

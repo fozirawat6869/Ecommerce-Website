@@ -34,7 +34,7 @@ router.route('/login').post(loginOTP)
 
 router.route('/categories').get(categories)
 
-router.route('/createProduct').post(upload.single("image"),createProduct)
+router.route('/createProduct').post(upload.array("images",4),createProduct)
 // or
 // router.post("/createProduct", upload.single("image"), createProduct);
 
