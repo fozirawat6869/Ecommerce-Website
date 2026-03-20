@@ -4,10 +4,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { filterConfig } from "../reuseCode/filterConfig";
+import { useRef } from "react";
 
 function CreateProductAdmin() {
   const [categories, setCategories] = useState([]);
   const [activeAttributes, setActiveAttributes] = useState({});
+ 
+  const inputRef=useRef(null)
 
   const [formData, setFormData] = useState({
     name: "",
@@ -86,6 +89,7 @@ const handleSubmit = async (e) => {
       data
     );
 
+    console.log("AFTER API CALL"); 
     console.log("res.data:", res.data);
     alert("Product created successfully!");
 
@@ -99,6 +103,10 @@ const handleSubmit = async (e) => {
       attributes: {}
     });
     setActiveAttributes({});
+
+    if(inputRef.current){
+      inputRef.current.value="" // clear file input
+    }
   } catch (err) {
     console.log("Error creating product", err.response?.data || err);
     alert("Failed to create product.");
@@ -203,6 +211,7 @@ const handleSubmit = async (e) => {
 <input
   type="file"
   name="image"
+  ref={inputRef}
   multiple
     className="w-full border rounded-lg px-4 py-2"
      placeholder="Upload up to 4 images"
@@ -210,6 +219,9 @@ const handleSubmit = async (e) => {
   onChange={(e) => {
     // Convert FileList to array and limit to 4 files
     const files = Array.from(e.target.files);
+//     Array.from(e.target.files) → turns the selected files into a real array
+// [...formData.image, ...newFiles] → merges with existing images
+// .slice(0, 4) → ensures max 4 images
 
       // Check if total exceeds 4
     if (formData.image.length + files.length > 4) {

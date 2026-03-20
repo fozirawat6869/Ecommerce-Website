@@ -382,6 +382,9 @@ export const createProduct = (req, res) => {
   console.log("image paths:", imagePaths);
   console.log("file names:", fileNames);
 
+
+  // const {name,description,price,quantity}
+
   res.json({
     success: true,
     body: req.body,
