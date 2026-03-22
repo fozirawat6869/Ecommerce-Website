@@ -287,92 +287,19 @@ export const productDetails=(req,res)=>{
 
 // Create Product
 
-
-// export const createProduct = (req, res) => {
-//   try {
-//     console.log("REQ.BODY:", req.body);  // text fields
-//     console.log("REQ.FILE:", req.file);  // file info
-
-//     const { name, description, price, quantity, category, attributes } = req.body;
-
-//     // parse attributes
-//     let parsedAttributes = {};
-//     if (attributes) {
-//       parsedAttributes = JSON.parse(attributes);
-//     }
-
-//     const main_image = req.file ? req.file.filename : null;
-
-//     const query = `
-//       INSERT INTO products
-//         (name, description, price, quantity, category, subCategory, subCategoryValue, main_image)
-//       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-//     `;
-
-//     connection.query(
-//       query,
-//       [
-//         name,
-//         description,
-//         price,
-//         quantity,
-//         category,
-//         parsedAttributes.SubCategory || null,
-//         parsedAttributes.sizes || null,
-//         main_image
-//       ],
-//       (err, result) => {
-//         if (err) {
-//           console.log("Error in query:", err);
-//           return res.status(500).json({ success: false, message: "DB error" });
-//         }
-
-//         res.status(201).json({
-//           success: true,
-//           message: "Product created successfully",
-//           productId: result.insertId
-//         });
-//       }
-//     );
-//   } catch (err) {
-//     console.log("Error in createProduct:", err);
-//     res.status(500).json({ success: false, message: "Server error" });
-//   }
-// };
-
-// export const createProduct=(req,res)=>{
-//   console.log("create product api")
-//   console.log(req.body)
-//   console.log(req.file)
-
-//   let { name, description, price, quantity, category, subCategory, subCategoryValue } = req.body;
-
-//   const query ="insert into products(name,description,price,quantity,category,subCategory,subCategoryValue) values(?,?,?,?,?,?,?)"
-  
-//   connection.query(query,[name,description,price,quantity,category,subCategory,subCategoryValue],(err,result)=>{
-//     console.log(result) 
-//     if(err){
-//       return console.log("err in query of create product",err)
-//     } 
-//     res.status(201).json({
-//       success:true, 
-//       message:"Product created successfully",
-//       productId:result
-//     })   
-
-// })
-// }
-
-// export const createProduct = (req, res) => {
-//   console.log("req.body:", req.body); // should show name, description, etc.
-//   console.log("req.file:", req.files); // should show uploaded image file
-//   console.log("file path is : ", req.file.path)
-//   console.log("file name is : ", req.file.filename)
-//   res.json({ success: true, body: req.body, file: req.file });
-// };
-
 export const createProduct = (req, res) => {
-  console.log("req.body:", req.body);
+
+  // What it does:
+// It pulls out the main fields (name, description, etc.) from req.body
+// Everything else that is left (brand, type) is stored in the variable attributes
+  let { name, description, price, quantity,category, ...attributes } = req.body;
+  category=Number(req.body.category)
+  console.log(attributes)
+
+  attributes=JSON.stringify(attributes) // convert attributes to JSON string for storing in DB
+
+  
+console.log("req.body:", req.body);
   console.log("req.files:", req.files); // ✅ correct
 
   // loop through all images
@@ -382,15 +309,21 @@ export const createProduct = (req, res) => {
   console.log("image paths:", imagePaths);
   console.log("file names:", fileNames);
 
-
-  // const {name,description,price,quantity}
+connection.query(`insert into product(product_name,product_description,product_price,product_quantity,product_category,product_attributes) values(?,?,?,?,?,?)`,
+[name,description,price,quantity,category,attributes],(err,result)=>{  
+  if(err){
+    console.log("Error in query:", err);
+    return res.status(500).json({ success: false, message: "DB error" });
+  }   
+  console.log(result) 
 
   res.json({
     success: true,
     body: req.body,
     images: imagePaths
   });
-};
+
+})}
 
 // for show newly added product in home page in main
 
@@ -421,7 +354,7 @@ export const newlyAddedProducts=(req,res)=>{
 
 
 export const categories=(req,res)=>{
-   connection.query("select * from categories",(err,result)=>{
+   connection.query("select * from category",(err,result)=>{
      console.log(result)
      if(err){
       console.log("err in categories query",err)

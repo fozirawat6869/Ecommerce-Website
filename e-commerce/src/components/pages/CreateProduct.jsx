@@ -1,6 +1,3 @@
-
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { filterConfig } from "../reuseCode/filterConfig";
@@ -34,15 +31,18 @@ function CreateProductAdmin() {
 
   // Category change
   const handleCategoryChange = (e) => {
-  const category = e.target.value;
+  const categoryID = e.target.value;
+  const categoryval=categories.find((cat)=>cat.id.toString()===categoryID)
 
   setFormData((prev) => ({
     ...prev,
-    category,
+    category:categoryID,
     attributes: {}
   }));
+   const categoryName = categoryval?.name || "";
+  setActiveAttributes(filterConfig[categoryName] || {}); 
 
-  setActiveAttributes(filterConfig[category] || {});
+  // setActiveAttributes(filterConfig[category] || {});
 };
 
 
@@ -70,14 +70,21 @@ const handleSubmit = async (e) => {
     data.append("price", formData.price);       // send as string
     data.append("quantity", formData.quantity);
     data.append("category", formData.category);
+      // append attributes as individual fields (not JSON)
+    // if (formData.attributes.brand) data.append("brand", formData.attributes.brand);
+    // if (formData.attributes.type) data.append("type", formData.attributes.type);
+// Append all attributes dynamically
+
+Object.entries(formData.attributes).forEach(([key, value]) => {
+  data.append(key, value); // key = attribute name, value = attribute value
+});
+
 
     // if (formData.image) data.append("image", formData.image); // must match multer
     formData.image.forEach((file,index)=>{
       data.append("images",file)
     })
-    // append attributes as individual fields (not JSON)
-    if (formData.attributes.brand) data.append("brand", formData.attributes.brand);
-    if (formData.attributes.type) data.append("type", formData.attributes.type);
+  
 
     // debug
     for (let [key, value] of data.entries()) {
@@ -261,7 +268,7 @@ const handleSubmit = async (e) => {
           >
             <option value="">Select Category</option>
             {categories.map((cat) => (
-              <option key={cat.id} value={cat.name}>
+              <option key={cat.id} value={cat.id}>
                 {cat.name}
               </option>
             ))}
