@@ -317,11 +317,24 @@ connection.query(`insert into product(product_name,product_description,product_p
   }   
   console.log(result) 
 
-  res.json({
-    success: true,
-    body: req.body,
-    images: imagePaths
-  });
+
+
+   const productId=result.insertId; // get the auto-generated product ID
+   const finalPath= imagePaths.map(path=>[productId,path])
+   console.log("final paths with product ID:", finalPath)
+
+   connection.query("insert into product_images(product_id,image_path) values ?",[finalPath],(err,result)=>{
+    if(err){
+      console.log("Error in inserting images:", err);
+      return res.status(500).json({ success: false, message: "DB error while saving images" });
+    }
+    console.log("Images inserted successfully:", result);
+    res.status(201).json({
+      success: true,
+      message: "Product created successfully with images"
+    });
+   }
+  )
 
 })}
 
