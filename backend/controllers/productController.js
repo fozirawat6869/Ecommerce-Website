@@ -174,19 +174,24 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
    let page = parseInt(req.query.page) || 1;   // if no page given, use 1
   let limit = parseInt(req.query.limit) ||2; // if no limit given, use 2
    let offset = (page - 1) * limit;
-   let query="select * from products where 1=1"
-  //   if category is there in query
+  //  let query="select * from product where 1=1"
+
+  let query = "select p.*,(select pi.image_path from product_images pi where pi.product_id = p.product_id limit 1) as image from product p";
+
+
+    // if category is there in query
       if(category==="Men" || category==="Women"){
-        query+=` and category = "${category}"`
+        query+=` join category c on p.product_category_id=c.id and c.name="${category}"`
       }
      if(price==="100" || price==="200" || price==="300" || price==="400" || price==="500" || price==="1000"  ){    
-          query+=` and price<=${price}`
+          query += ` where p.product_price <=${price}`;
        }
        if(price==="1000plus"){
-        query+=` and price>=1000 `
+        query+=` where p.product_price >= 1000 `
        }
   
     
+
       // pagination
         query += ` LIMIT ${limit} OFFSET ${offset}`;
     connection.query(query,(err,result)=>{
@@ -202,7 +207,6 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
   })
   
 })
-
 
 
 
@@ -271,7 +275,7 @@ export const productDetails=(req,res)=>{
  
   const {id}=req.params
   console.log(id)
-  connection.query("select * from products where product_id=?",[id],(err,result)=>{
+  connection.query("select * from product where product_id=?",[id],(err,result)=>{
     console.log(result)
     if(err){
       return console.log("err in query of details product",err)
@@ -303,13 +307,13 @@ console.log("req.body:", req.body);
   console.log("req.files:", req.files); // ✅ correct
 
   // loop through all images
-  const imagePaths = req.files.map(file => file.path);
+  const imagePaths = req.files.map(file => file.path.replace(/\\/g,"/"));
   const fileNames = req.files.map(file => file.filename);
 
   console.log("image paths:", imagePaths);
   console.log("file names:", fileNames);
 
-connection.query(`insert into product(product_name,product_description,product_price,product_quantity,product_category,product_attributes) values(?,?,?,?,?,?)`,
+connection.query(`insert into product(product_name,product_description,product_price,product_quantity,product_category_id,product_attributes) values(?,?,?,?,?,?)`,
 [name,description,price,quantity,category,attributes],(err,result)=>{  
   if(err){
     console.log("Error in query:", err);

@@ -28,10 +28,10 @@ function AllProducts() {
             const res=await axios.get(`http://localhost:8000/api/products?category=${categoryValue}&price=${price}&page=${page}&limit=${10}`)
             // setData(res.data.allProduct)
 
-            console.log(res)
+            console.log("response",res)
             // console.log(res.data.allProduct)
             const data=res.data.allProduct
-            return data
+            return data || []
         }
         catch{
             console.log("error in fetching products")
@@ -46,7 +46,7 @@ function AllProducts() {
         staleTime:1000*60*5
     })
 
-   
+   console.log(data)
 
     const handleCategory = (e) => {
   if (categoryValue === e.target.value) {
@@ -288,16 +288,20 @@ const handlePrice = (e) => {
         
         {
             data?.map((item)=>(
-                <Link to={`/product/${item.id}`} key={item.id}
+                <Link to={`/product/${item.product_id}`} key={item.product_id}
                      className='  w-90 h-120 p-2  bg-gray-100 cursor-pointer '
                 > 
-                    <div className='w-full h-[75%]'><img className=' w-full h-full' src={item.main_image} alt="jacket image" /></div>
+                    <div className='w-full h-[75%]'>
+                      <img className=' w-full h-full' 
+                      src={`http://localhost:8000/${item.image}`}  
+                      alt="jacket image" /></div>
                     <div className='w-full h-[25%] flex flex-col justify-center px-5  flex flex-col justify-center'>
-                        <h2 className='text-gray-600 text-[18px]'>{item.name}</h2> 
+                        <h2 className='text-gray-600 text-[18px]'>{item.product_name}</h2> 
                         {/* <p>{item.description}</p> */}
-                        <p>{item.description.length > 38 ? item.description.substring(0, 38) + "..." : item.description}</p>
+                        <p>{item.product_description.length > 38 ? item.description.substring(0, 38) + "..." : item.description}</p>
 
-                        <p className='font-bold text-[18px]'>₹{item.price}</p>
+
+                        <p className='font-bold text-[18px]'>₹{item.product_price}</p>
                        
                         <p>sfdgdfdfg</p>
                     </div>
