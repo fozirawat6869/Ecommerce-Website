@@ -1,12 +1,10 @@
-
-
-
 import React, { useEffect,useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import { useQuery } from '@tanstack/react-query';
+import { use } from 'react';
 
 function AllProducts() {
    const [showSection,setShowSection]=useState({
@@ -21,6 +19,7 @@ function AllProducts() {
 
   const [categoryValue,setCategoryValue]=useState("")
   const [price,setPrice]=useState("")
+
     
     const fetchProducts=async()=>{
       console.log("flo")
@@ -66,6 +65,8 @@ const handlePrice = (e) => {
   setPage(1);
 };
 
+
+
   return (
     <>
     <main className='flex  gap-5 bg-gray-100 px-8 py-4'>
@@ -106,10 +107,86 @@ const handlePrice = (e) => {
                   />
                  <label htmlFor="">Women</label>
                 </div>
-                {/* <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="Men" />
-                 <label htmlFor="">Men</label>
-                </div> */}
+                
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Mouse" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Mouse"}
+                  />
+                 <label htmlFor="">Mouse</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Camera" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Camera"}
+                  />
+                 <label htmlFor="">Camera</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Earphones" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Earphones"}
+                  />
+                 <label htmlFor="">Earphones</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Mobiles" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Mobiles"}
+                  />
+                 <label htmlFor="">Mobiles</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Speakers" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Speakers"}
+                  />
+                 <label htmlFor="">Speakers</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Televisions" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Televisions"}
+                  />
+                 <label htmlFor="">Televisions</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Trimmers" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Trimmers"}
+                  />
+                 <label htmlFor="">Trimmers</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Watches" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Watches"}
+                  />
+                 <label htmlFor="">Watches</label>
+                </div>
             </div>
         )}
        </div>
@@ -181,94 +258,7 @@ const handlePrice = (e) => {
         )}
        </div>
         
-{/*  Left Size section */}
-     
-     
-        <div className='border-b-1  border-gray-300 px-5 py-4'>
-          <div className='flex justify-between items-center  cursor-pointer  ' 
-          onClick={()=>setShowSection(prev=>({...prev,size:!prev.size}))}>
-          <h2>SIZE</h2>
-           {showSection.size===true?<IoIosArrowUp/>:<IoIosArrowDown/>}
-         
-           </div>
-           {showSection.size && (
-            <div className='flex flex-col pt-3 '>
-                <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="S" />
-                 <label htmlFor="">S</label>
-                </div>
-                <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="M" />
-                 <label htmlFor="">M</label>
-                </div>
-                <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="L" />
-                 <label htmlFor="">L</label>
-                </div>
-                 <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="XL" />
-                 <label htmlFor="">XL</label>
-                </div>
-                 <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="2XL" />
-                 <label htmlFor="">2XL</label>
-                </div>
-                 <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="3XL" />
-                 <label htmlFor="">3XL</label>
-                </div>
-                 {/* <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="1000" />
-                 <label htmlFor="">₹1000+</label>
-                </div> */}
-            </div>
-        )}
-       </div>
 
-
-          {/* Left Color Section */}
-
-   
-        <div className='border-b-1  border-gray-300 px-5 py-4'>
-          <div className='flex justify-between items-center  cursor-pointer  ' 
-          onClick={()=>setShowSection(prev=>({...prev,color:!prev.color}))}>
-          <h2>COLOR</h2>
-           {showSection.color===true?<IoIosArrowUp/>:<IoIosArrowDown/>}
-         
-           </div>
-           {showSection.color && (
-            <div className='flex flex-col pt-3 '>
-                <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="White" />
-                 <label htmlFor="">White</label>
-                </div>
-                <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="Black" />
-                 <label htmlFor="">Black</label>
-                </div>
-                <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="Green" />
-                 <label htmlFor="">Green</label>
-                </div>
-                 <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="Blue" />
-                 <label htmlFor="">Blue</label>
-                </div>
-                 <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="Gray" />
-                 <label htmlFor="">Gray</label>
-                </div>
-                 <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="Pink" />
-                 <label htmlFor="">Pink</label>
-                </div>
-                 <div className='flex gap-3'>
-                 <input type="checkbox" name="" id="" value="1000" />
-                 <label htmlFor="">₹1000+</label>
-                </div>
-            </div>
-        )}
-       </div>
     
 
         

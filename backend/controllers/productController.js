@@ -169,6 +169,7 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
   console.log(req.query)  //  get the page,limit form query
   let category=req.query.category;
   let price=req.query.price;
+  let size=req.query.size;
   // console.log(price)
   // console.log(category)
    let page = parseInt(req.query.page) || 1;   // if no page given, use 1
@@ -180,7 +181,7 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
 
 
     // if category is there in query
-      if(category==="Men" || category==="Women"){
+      if(category==="Men" || category==="Women" || category==="Mouse" || category==="Camera" || category==="Earphones" || category==="Mobiles" || category==="Speakers" || category==="Televisions" || category==="Trimmers" || category==="Watches"){
         query+=` join category c on p.product_category_id=c.id and c.name="${category}"`
       }
      if(price==="100" || price==="200" || price==="300" || price==="400" || price==="500" || price==="1000"  ){    
@@ -211,35 +212,67 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
 
 
 
+// Category filtered products
 
 export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
     try {
         console.log("Query params:", req.query);
 
-        const { category, categories, limit, page } = req.query;
+        const { category, SubCategory, sizes, colors, limit, page } = req.query;
 
         const limitNum = parseInt(limit) || 10;
         const pageNum = parseInt(page) || 1;
         const offset = (pageNum - 1) * limitNum;
 
-        let query = `SELECT * FROM products WHERE 1=1`;
+        let query = `
+          SELECT p.*,
+          (SELECT pi.image_path 
+           FROM product_images pi 
+           WHERE pi.product_id=p.product_id 
+           LIMIT 1) as image
+          FROM product p
+        `;
+
         let params = [];
 
-        // Filter by category if provided
+        // JOIN first
         if (category) {
-            query += ` AND category = ?`;
+            query += ` JOIN category c ON p.product_category_id = c.id`;
+        }
+
+        // ALWAYS start WHERE
+        query += ` WHERE 1=1`;
+
+        // Category filter
+        if (category) {
+            query += ` AND c.name = ?`;
             params.push(category);
         }
 
-        // Filter by sub_category if provided
-        if (categories) {
-            query += ` AND sub_category = ?`;
-            params.push(categories);
+        // SubCategory filter (FIXED)
+        if (SubCategory) {
+            query += ` AND JSON_EXTRACT(p.product_attributes, '$.SubCategory') = ?`;
+            params.push(SubCategory);
         }
 
-        // Add pagination
+        // Size filter
+        if (sizes) {
+            query += ` AND JSON_UNQUOTE(JSON_EXTRACT(p.product_attributes, '$.sizes')) = ?`;
+            params.push(sizes);
+        }
+
+        // Color filter
+        if (colors) {
+            query += ` AND JSON_UNQUOTE(JSON_EXTRACT(p.product_attributes, '$.colors')) = ?`;
+            params.push(colors);
+        }
+
+        // Pagination
         query += ` LIMIT ? OFFSET ?`;
         params.push(limitNum, offset);
+
+        console.log("FINAL QUERY:", query);
+        console.log("PARAMS:", params);
 
         connection.query(query, params, (err, result) => {
             if (err) {
@@ -247,17 +280,9 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
                 return next(new HandleError("Database query error", 400));
             }
 
-            if (result.length === 0) {
-                return res.status(200).json({
-                    success: false,
-                    message: "No products available for this category",
-                    products: []
-                });
-            }
-
             res.status(200).json({
                 success: true,
-                categoryProducts: result
+                categoryProducts: result || []
             });
         });
 
@@ -266,7 +291,6 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
         return next(new HandleError("Server error", 500));
     }
 });
-
 
 
 

@@ -119,12 +119,13 @@ console.log("hlo",showSection)
               className='w-90 h-120 p-2 bg-gray-100 cursor-pointer'
             >
               <div className='w-full h-[75%]'>
-                <img className='w-full h-full' src={item.main_image} alt={item.name} />
+                <img className='w-full h-full' 
+                src={`http://localhost:8000/${item.image}`} alt={item.product_namename} />
               </div>
               <div className='w-full h-[25%] flex flex-col justify-center px-5'>
-                <h2 className='text-gray-600 text-[18px]'>{item.name}</h2>
-                <p>{item.description.length > 38 ? item.description.substring(0, 38) + "..." : item.description}</p>
-                <p className='font-bold text-[18px]'>₹{item.price}</p>
+                <h2 className='text-gray-600 text-[18px]'>{item.product_name}</h2>
+                <p>{item.product_description.length > 38 ? item.product_description.substring(0, 38) + "..." : item.product_description}</p>
+                <p className='font-bold text-[18px]'>₹{item.product_price}</p>
               </div>
             </Link>
           ))   )}
