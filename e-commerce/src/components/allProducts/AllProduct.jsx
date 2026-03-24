@@ -257,19 +257,8 @@ const handlePrice = (e) => {
             </div>
         )}
        </div>
-        
-
-    
-
-        
+      
     </div>
-
-   
-
-    
-       
-   
-
 
     {/* right part  products */}
     <div className=' flex flex-col w-full  bg-white'>
