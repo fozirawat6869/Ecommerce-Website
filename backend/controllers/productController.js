@@ -310,7 +310,28 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
 export const productDetails=(req,res)=>{
 
  
- 
+  const {id}=req.params
+  console.log(id)
+  const queryProduct=`select * from product where product_id=?`;
+  connection.query(queryProduct,[id],(err,result)=>{
+    console.log(result)
+    if(err){
+      return console.log("err in query of details product",err)
+    }
+
+    connection.query(`select image_path from product_images where product_id=?`,[id],(err,images)=>{
+       console.log("images query result",images)
+      if(err){
+        return console.log("err in query of details product images",err)
+      }
+    res.status(201).json({
+      success:true,
+      productDetail:result[0],
+      images:images.map(img=>img.image_path) // extract image paths into an array
+    })
+  })
+}
+)
 }
 
 
