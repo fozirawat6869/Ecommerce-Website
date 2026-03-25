@@ -305,21 +305,12 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
 
 
 
+// Product Details
+
 export const productDetails=(req,res)=>{
 
  
-  const {id}=req.params
-  console.log(id)
-  connection.query("select * from product where product_id=?",[id],(err,result)=>{
-    console.log(result)
-    if(err){
-      return console.log("err in query of details product",err)
-    }
-    res.status(201).json({
-      success:true,
-      productDetail:result[0]
-    })
-  })
+ 
 }
 
 
