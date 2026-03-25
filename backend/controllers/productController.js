@@ -147,9 +147,14 @@ export const verifyOTP = async (req, res) => {
     const token=jwt.sign({ mobile:mobile },process.env.JWT_SECRET,{ expiresIn:'7d' })
     console.log("Generated JWT Token:", token);
     if (response.data.Status === "Success") {
-      return res.status(200).json({ success: true, message: "OTP verified successfully", token });
+      return res.status(200).json({ 
+        success: true, 
+        message: "OTP verified successfully", 
+        token });
     } else {
-      return res.status(400).json({ success: false, message: "Invalid OTP" });
+      return res.status(400).json({ 
+        success: false,
+         message: "Invalid OTP" });
     }
 
   } catch (err) {
@@ -316,8 +321,7 @@ export const productDetails=(req,res)=>{
   connection.query(queryProduct,[id],(err,result)=>{
     console.log(result)
     if(err){
-      return console.log("err in query of details product",err)
-    }
+   }
 
     connection.query(`select image_path from product_images where product_id=?`,[id],(err,images)=>{
        console.log("images query result",images)
@@ -432,3 +436,8 @@ export const categories=(req,res)=>{
 }
 
 
+export const userProfile=(req,res)=>{
+
+
+
+}

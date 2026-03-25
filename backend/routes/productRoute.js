@@ -1,10 +1,13 @@
 import express from 'express'
-import {getAllProducts,createProduct,productDetails,newlyAddedProducts
+import {getAllProducts,createProduct,productDetails
+  ,newlyAddedProducts
     ,categoryProducts,sendOTP,verifyOTP,loginOTP
-      , categories
+      , categories , userProfile
       } from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
 import upload from '../config/multer.js'
+import isAuthenticated from '../middleware/isAuthenticated.js'
+
 
 const router=express.Router();
 
@@ -38,4 +41,7 @@ router.route('/createProduct').post(upload.array("images",4),createProduct)
 // or
 // router.post("/createProduct", upload.single("image"), createProduct);
 
+
+// user profile
+router.route('/userProfile').get(isAuthenticated,userProfile)
 export default router
