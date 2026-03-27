@@ -2,7 +2,7 @@ import express from 'express'
 import {getAllProducts,createProduct,productDetails
   ,newlyAddedProducts
     ,categoryProducts,sendOTP,verifyOTP,loginOTP
-      , categories , userProfile
+      , categories , userProfile,updateUserProfile
       } from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
 import upload from '../config/multer.js'
@@ -43,5 +43,9 @@ router.route('/createProduct').post(upload.array("images",4),createProduct)
 
 
 // user profile
-router.route('/userProfile').get(isAuthenticated,userProfile)
+router.route('/userProfile').get(isAuthenticated,userProfile).post(isAuthenticated,updateUserProfile)
+
+// router.route('/updateUserProfile').post(updateUserProfile)
+// update user profile
+
 export default router

@@ -438,6 +438,51 @@ export const categories=(req,res)=>{
 
 export const userProfile=(req,res)=>{
 
+const mobile=req.user.mobile;
 
+connection.query(`select * from users where mobile=?`,[mobile],(err,result)=>{
 
+  if(err){
+    console.log("err in user profile query",err)
+    return res.status(500).json({ success: false, message: "DB error" });
+  }
+  console.log("user profile query result",result)
+  res.status(200).json({
+    success:true,
+    user:result[0]
+  })
+})
 }
+
+
+export const updateUserProfile=(req,res)=>{
+  
+  console.log("update user profile api", req.body);
+
+  const{ first_name,last_name,email}=req.body;
+  const mobile=req.user.mobile;
+
+  connection.query("update users set first_name=?, last_name=?, email=? where mobile=?",
+  [first_name,last_name,email,mobile],(err,result)=>{
+    if(err){
+      console.log("err in update user profile query",err)
+      return res.status(500).json({ success: false, message: "DB error" });
+    }
+     
+    connection.query(`select * from users where mobile=?`,[mobile],(err,userdata)=>{
+        
+      console.log("user profile query result after update",userdata)
+      if(err){
+        console.log("err in user profile query after update",err)
+        return res.status(500).json({ success: false, message: "DB error" });
+      }
+
+  
+    res.status(200).json({
+      success:true,
+      message:"User profile updated successfully",
+      data:userdata
+    })
+  })
+}
+  )}
