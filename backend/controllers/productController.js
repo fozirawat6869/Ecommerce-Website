@@ -486,3 +486,43 @@ export const updateUserProfile=(req,res)=>{
   })
 }
   )}
+
+  export const reUpdateProfile=(req,res)=>{
+     console.log("reUpdate data",req.body)
+     console.log("authenticate profile", req.user)
+     const {first_name,last_name,email}=req.body
+     let mobile=req.user.mobile
+     let query="update users set "
+     let values=[]
+     if(first_name){
+       query +=` first_name=?`
+       values.push(first_name)
+     }
+     if(last_name){
+      query += ` last_name=?`
+      values.push(last_name)
+     }
+     if(email){
+      query += ` email=?`
+      values.push(email)
+     }
+     
+      query +=` where mobile=?`
+       values.push(mobile)
+     connection.query(query,values,(err,result)=>{
+      if(err){
+        console.log("err in backend with query", err)
+        res.send(500).json({
+          success:false,
+          message:"failed re update the profile"
+        })
+      }
+      console.log("reupdata the result",result)
+      res.status(201).json({
+        success:true,
+        message:"re update user profile successfuly",
+        data:result,
+
+      })
+     })
+  }
