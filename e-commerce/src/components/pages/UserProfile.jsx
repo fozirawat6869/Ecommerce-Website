@@ -8,12 +8,16 @@ import { FaUserCircle } from "react-icons/fa";
 
 function UserProfile() {
 
-  const [editButton,setEditButton]=useState(false)
+  const [editButton,setEditButton]=useState({
+     forName:false,
+     forEmail:false,
+  })
 
   const [editFormData, setEditFormData] = useState({
   first_name: "",
   last_name: "",
   email: ""
+
 });
 
   const [formData,setFormData]=useState({
@@ -53,6 +57,7 @@ function UserProfile() {
   })
 
    console.log(data)
+   if(!data) return <h1 className="p-5">Loading....</h1>
    
 
 console.log(formData)
@@ -82,8 +87,33 @@ catch(err){
 
 const handleReUpdate=async ()=>{
       try{
+
+   
+
+       const updatedFormData={}
+
+       if(data.first_name !== editFormData.first_name){
+           updatedFormData.first_name=editFormData.first_name
+       }
+        if(data.last_name !== editFormData.last_name){
+           updatedFormData.last_name=editFormData.last_name
+       }
+        if(data.email !== editFormData.email){
+           updatedFormData.email=editFormData.email
+       }
+       
+      
+       
+      
+      
+       
+            if (Object.keys(updatedFormData).length === 0) {
+  alert("Nothing to updated")
+  return
+}
+
         console.log("edit form data",editFormData)
-        const res=await axios.post(`http://localhost:8000/api/reUpdateProfile`,editFormData,{
+        const res=await axios.post(`http://localhost:8000/api/reUpdateProfile`,updatedFormData,{
           headers:{
             "Authorization":`Bearer ${token}`
           }
@@ -172,36 +202,45 @@ return (
                 <h2 className="text-lg font-semibold text-gray-700">Personal Information</h2>
                 <button
                  onClick={()=>{
-                  setEditButton(!editButton)
+                  setEditButton(
+                    {
+                      ...editButton,forName:!editButton.forName
+                    }
+                  )
                   setEditFormData({
+                    ...editFormData,
                     first_name:data?.first_name,
                     last_name:data?.last_name,
-                    email:data?.email
+                    
                   })
                 }
                  }
-                className="text-blue-600 text-sm font-medium hover:underline">{editButton?"cancel":"edit"}</button>
+                className="text-blue-600 text-sm font-medium hover:underline">
+                  {editButton.forName?"cancel":"edit"}
+                  </button>
               </div>
 
               <div className="flex flex-col md:flex-row gap-4">
                 <input
                   type="text"
-                  value={editButton?editFormData.first_name:data?.first_name}
+                  value={editButton.forName?editFormData.first_name:data?.first_name }
                   onChange={(e)=>setEditFormData({...editFormData,first_name:e.target.value})}
-                  disabled={!editButton}
+                  disabled={!editButton.forName}
                   className="border px-3 py-2 rounded-md w-full bg-gray-50"
                 />
                 <input
                   type="text"
-                  value={editButton?editFormData.last_name:data?.last_name}
-                  disabled={!editButton}
+                  value={editButton.forName?editFormData.last_name:data?.last_name || ""}
+                  disabled={
+                    !editButton.forName
+                  }
                   onChange={(e)=>setEditFormData({...editFormData,last_name:e.target.value})} 
                   className="border px-3 py-2 rounded-md w-full bg-gray-50"
                 />
-                {editButton && (
+                {editButton.forName && (
                   <button 
                   onClick={handleReUpdate}
-                  className="bg-blue-500 text-white px-3 py-1">Save</button>
+                  className="bg-blue-500 text-white px-4 py-2">Save</button>
                 )}
               </div>
             </div>
@@ -222,32 +261,72 @@ return (
             </div> */}
 
             {/* EMAIL */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
+            <div >
+              <div className="flex items-center gap-5 mb-2">
                 <h2 className="font-semibold text-gray-700">Email Address</h2>
-                <button className="text-blue-600 text-sm hover:underline">Edit</button>
+                <button 
+                  onClick={()=>{
+                  setEditButton({
+                    ...editButton,forEmail:!editButton.forMobile
+                  })
+                  setEditFormData({
+                    ...editFormData,
+                    email:data?.email
+                  })
+                }
+                 }
+                className="text-blue-600 text-sm hover:underline">
+                  {editButton.forEmail?"Cancel":"Edit"}
+                </button>
               </div>
               <input
                 type="email"
-                value={data?.email}
-                disabled
+                 value={editButton.forEmail?editFormData.email:data?.email || ""}
+                  onChange={(e)=>setEditFormData({...editFormData,email:e.target.value})}
+                  disabled={!editButton.forEmail}
                 className="border px-3 py-2 rounded-md w-full md:w-[60%] bg-gray-50"
               />
+              
+                 {editButton.forEmail && (
+                  <button 
+                  onClick={handleReUpdate}
+                  className="bg-blue-500 text-white px-4 py-2 mx-3 ">Save</button>
+                )}
+              
             </div>
 
             {/* MOBILE */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
+            {/* <div>
+              <div className="flex items-center gap-5 mb-2">
                 <h2 className="font-semibold text-gray-700">Mobile Number</h2>
-                <button className="text-blue-600 text-sm hover:underline">Edit</button>
+                <button 
+                onClick={()=>{
+                  setEditButton({
+                    ...editButton,forMobile:!editButton.forMobile
+                  })
+                  setEditFormData({
+                    ...editFormData,
+                    mobile:data?.mobile
+                  })
+                }
+                 }
+                className="text-blue-600 text-sm hover:underline">{editButton.forMobile?"Cancel":"Edit"}</button>
               </div>
               <input
                 type="text"
-                value="+91 9876543210"
-                disabled
+             
+                 value={editButton.forMobile?editFormData.mobile:data?.mobile}
+                  onChange={(e)=>setEditFormData({...editFormData,mobile:e.target.value})}
+                  disabled={!editButton.forMobile}
                 className="border px-3 py-2 rounded-md w-full md:w-[60%] bg-gray-50"
               />
-            </div>
+
+                {editButton.forMobile && (
+                  <button 
+                  onClick={handleReUpdate}
+                  className="bg-blue-500 text-white px-4 py-2 mx-3 ">Save</button>
+                )}
+            </div> */}
 
           </div>
         </div>
