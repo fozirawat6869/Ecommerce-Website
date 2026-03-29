@@ -10,16 +10,17 @@ function Main() {
     fetch("http://localhost:8000/api/newlyAddedProducts")
       .then(res => res.json())
       .then(data => {
-        console.log("newly home data",data.newlyAddedProducts)
+        console.log("newly home data",data)
         setNewlyProduct(data.newlyAddedProducts)
       })
       .catch(err => {
-        console.log(err)
+        console.log("error in fetching newly added products:", err)
         return []
       })
   }, [])
 
   return (
+
     <>
       <div className='bg-gray-100 p-3 sm:px-5 md:px-10'>
         <div className='flex flex-col bg-white'>
@@ -41,14 +42,15 @@ function Main() {
                   className='w-[90%] sm:w-64 md:w-80 h-auto p-2 bg-gray-100 cursor-pointer rounded-lg shadow-sm hover:shadow-md transition'
                 >
                   <div className=' h-56 sm:h-64 md:h-72'>
-                    <img className='w-full h-full  rounded-md' src={item.main_image} alt="product" />
+                    <img className='w-full h-full  rounded-md' 
+                    src={`http://localhost:8000/${item.main_image}`} alt="product" />
                   </div>
                   <div className='mt-3 px-3 flex flex-col justify-center'>
-                    <h2 className='text-gray-700 text-[15px] font-medium truncate'>{item.name}</h2>
+                    <h2 className='text-gray-700 text-[15px] font-medium truncate'>{item.product_name}</h2>
                     <p className='text-gray-600 text-sm'>
-                      {item.description.length > 38 ? item.description.substring(0, 38) + "..." : item.description}
+                      {item.product_description.length > 38 ? item.product_description.substring(0, 38) + "..." : item.description}
                     </p>
-                    <p className='font-bold text-[15px] mt-1'>₹{item.price}</p>
+                    <p className='font-bold text-[15px] mt-1'>₹{item.product_price}</p>
                   </div>
                 </Link>
               ))
@@ -56,7 +58,7 @@ function Main() {
           </div>
         </div>
       </div>
-    </>
+     </>
   )
 }
 

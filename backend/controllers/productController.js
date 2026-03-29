@@ -395,23 +395,38 @@ connection.query(`insert into product(product_name,product_description,product_p
 
 // for show newly added product in home page in main
 
-export const newlyAddedProducts=(req,res)=>{
+export const newlyAddedProducts=(req,res,next)=>{
   
-  // console.log(req.query) get the page and limit from query
-  // let {page,limit}=req.query;
-  // page=Number(page)||1
-  // limit=Number(limit)||8
-  // let offset=(page-1)*limit
-  //   connection.query(`select * from products where created_at >= DATE_SUB(NOW(),INTERVAL 15 DAY) order by created_at desc limit ${limit} offset ${offset}`,(err,result)=>{
-  //     console.log(result)
-  //     if(err){
-  //     return next(new HandleError("error in query of newly added products",400))
-  //   }
-  //   res.status(200).json({
-  //     success:true,
-  //     newlyAddedProducts:result
-  //   }) 
-  // })
+  console.log(req.query) // get the page and limit from query
+  let {page,limit}=req.query;
+  page=Number(page)||1
+  limit=Number(limit)||8
+  let offset=(page-1)*limit
+  let query = `
+SELECT p.*,
+(
+  SELECT i.image_path 
+  FROM product_images i 
+  WHERE i.product_id = p.product_id 
+  LIMIT 1
+) AS main_image
+
+FROM product p
+WHERE p.created_at >= DATE_SUB(NOW(), INTERVAL 15 DAY)
+ORDER BY p.created_at DESC
+LIMIT ${limit} OFFSET ${offset}
+`
+  
+     connection.query(query, (err,result)=>{
+      console.log("newly added products result:", result);
+      if(err){
+      return next(new HandleError("error in query of newly added products",400))
+    }
+    res.status(200).json({
+      success:true,
+      newlyAddedProducts:result
+    }) 
+  })
 }
 
 // api for frontend to show the categories in ui

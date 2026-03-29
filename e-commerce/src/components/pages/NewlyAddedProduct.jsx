@@ -17,7 +17,7 @@ function NewlyAddedProduct() {
                 console.log(data.newlyAddedProducts)
                  setNewlyProduct(data.newlyAddedProducts)
             })
-             .catch(err=>console.log(err))
+             .catch(err=>console.log("Error fetching newly added products:", err))
              
         },[page])
   return (
