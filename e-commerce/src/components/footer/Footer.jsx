@@ -58,7 +58,7 @@ function Footer() {
 
     {/* Facebook */}
     <a 
-      href="https://www.facebook.com/" 
+      href="https://www.instagram.com/mayur_rawat__" 
       target="_blank" 
       rel="noopener noreferrer"
       className="hover:text-blue-700"

@@ -267,7 +267,7 @@ return (
                 <button 
                   onClick={()=>{
                   setEditButton({
-                    ...editButton,forEmail:!editButton.forMobile
+                    ...editButton,forEmail:!editButton.forEmail
                   })
                   setEditFormData({
                     ...editFormData,
@@ -296,37 +296,17 @@ return (
             </div>
 
             {/* MOBILE */}
-            {/* <div>
+            <div>
               <div className="flex items-center gap-5 mb-2">
                 <h2 className="font-semibold text-gray-700">Mobile Number</h2>
-                <button 
-                onClick={()=>{
-                  setEditButton({
-                    ...editButton,forMobile:!editButton.forMobile
-                  })
-                  setEditFormData({
-                    ...editFormData,
-                    mobile:data?.mobile
-                  })
-                }
-                 }
-                className="text-blue-600 text-sm hover:underline">{editButton.forMobile?"Cancel":"Edit"}</button>
-              </div>
+                  </div>
               <input
                 type="text"
-             
-                 value={editButton.forMobile?editFormData.mobile:data?.mobile}
-                  onChange={(e)=>setEditFormData({...editFormData,mobile:e.target.value})}
+                 value={data?.mobile}
                   disabled={!editButton.forMobile}
                 className="border px-3 py-2 rounded-md w-full md:w-[60%] bg-gray-50"
               />
-
-                {editButton.forMobile && (
-                  <button 
-                  onClick={handleReUpdate}
-                  className="bg-blue-500 text-white px-4 py-2 mx-3 ">Save</button>
-                )}
-            </div> */}
+            </div>
 
           </div>
         </div>
