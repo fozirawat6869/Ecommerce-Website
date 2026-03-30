@@ -551,3 +551,11 @@ export const updateUserProfile=(req,res)=>{
   }
 
 
+ export const reviews=async(req,res)=>{
+    console.log("review api called",req.body)
+    console.log("authenticated user in review api",req.user)
+    
+    
+    
+  }
+

@@ -69,7 +69,7 @@ const handlePrice = (e) => {
 
   return (
     <>
-    <main className='flex  gap-5 bg-gray-100 px-8 py-4'>
+    <main className='flex  gap-5 bg-gray-100 px-10 py-2'>
 
     {/* left part customize */}
     <div className='flex flex-col bg-white h-auto w-1/4  '>

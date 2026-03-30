@@ -7,10 +7,10 @@ import { FaInstagramSquare } from "react-icons/fa";
 
 function ContactPage() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 py-2 px-10">
 
       {/* Top Heading Section */}
-      <div className="bg-gray-800 text-white py-12 sm:py-16 text-center px-4">
+      <div className="bg-gray-800 rounded-2xl text-white py-12 sm:py-16 text-center px-4">
         <h1 className="text-3xl sm:text-4xl font-bold">Contact Us</h1>
         <p className="mt-3 text-gray-300 text-sm sm:text-base">
           Have any questions? We would love to hear from you.
@@ -87,7 +87,7 @@ function ContactPage() {
       </div>
 
       {/* Bottom Section */}
-      <div className="px-4 sm:px-10">
+      <div className="px-4 ">
         <div className="bg-white py-8 sm:py-10 text-center rounded-2xl shadow">
           <h2 className="text-xl sm:text-2xl font-semibold">
             We usually reply within 24 hours

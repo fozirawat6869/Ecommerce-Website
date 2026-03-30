@@ -8,6 +8,8 @@ import { useQuery } from "@tanstack/react-query";
 function ProductDetails() {
   const { id } = useParams();
   const [selectedImage, setSelectedImage] = useState("");
+  const [reviewText, setReviewText] = useState("");
+  const [rating, setRating] = useState(0);
 
   const fetchProduct = async () => {
     const res = await axios.get(`http://localhost:8000/api/products/${id}`);
@@ -32,8 +34,37 @@ function ProductDetails() {
 
   if (!selectedImage && images.length) setSelectedImage(images[0]);
 
+    const handleReview=async ()=>{
+     
+       try{
+         const res=await axios.post(`http://localhost:8000/api/review`,{
+            productId:id,
+            review:reviewText
+        },{
+          headers:{
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        })
+
+        console.log("res of review from API",res)
+       }catch{
+        console.log("Failed to submit review")
+       }
+    }
+
+    const getRatingText=()=>{
+      // if(rating===0) return "No rating"
+      if(rating===1) return "Very Bad"
+      if(rating===2) return "Bad"
+      if(rating===3) return "Good"
+      if(rating===4) return "Very Good"
+      if(rating===5) return "Excellent"
+    }
+
+  
+
   return (
-    <div className="bg-gray-200 pl-30 pr-30 pt-2 pb-5">
+    <div className="bg-gray-100 pl-30 pr-30 pt-2 pb-5">
       <div className="flex flex-col lg:flex-row gap-5">
         {/* LEFT SIDE - Images */}
         <div className="bg-white w-full lg:w-1/2 pl-20 pr-20 pt-5 pb-5 flex flex-col items-center gap-5">
@@ -82,11 +113,19 @@ function ProductDetails() {
   </div>
 )}
           <div className="flex items-center gap-2">
-            <span className="text-yellow-400">★★★★★</span>
+            {/* <span className="text-yellow-400">★★★★★</span> */}
+            {[1,2,3,4,5].map((star)=>(
+              <span key={star}
+               onClick={()=>setRating(star)}
+               className={star<=rating ? "text-yellow-400 cursor-pointer text-2xl" : "text-gray-300 cursor-pointer text-2xl"}
+              >
+                ★
+              </span>
+            ))}
             <span className="text-gray-600">(0 Reviews)</span>
           </div>
           {product.product_quantity>0 ? 
-          (<p className="text-green-600 font-semibold">In Stock</p>)
+          (<p className="text-green-600 font-semibold">In Stock ({product.product_quantity} left)</p>)
           :(<p className="text-green-600 font-semibold">Not in stock</p>)}
 
           <div className="flex items-center gap-4 mt-3">
@@ -100,13 +139,20 @@ function ProductDetails() {
           </button>
 
           <div className="mt-6">
-            <h2 className="text-xl font-semibold mb-2">Write a Review</h2>
-            <div className="flex text-yellow-400 text-2xl mb-2">★★★★★</div>
+           
+            <div className="flex gap-5 items-center">
+               {/* <div className="flex text-yellow-400 text-2xl mb-2">★★★★★</div> */}
+            
+            </div>
+              <h2 className="text-xl font-semibold mb-2 mt-5">Review this product</h2>
             <textarea
               className="border w-full p-3 h-32 rounded"
               placeholder="Write your review here..."
+              onChange={(e)=>setReviewText(e.target.value)}
             ></textarea>
-            <button className="bg-black text-white px-6 py-2 rounded mt-3">
+            <button 
+             onClick={handleReview}
+            className="bg-black text-white px-6 py-2 rounded mt-3">
               Submit Review
             </button>
           </div>

@@ -3,7 +3,7 @@ import {getAllProducts,createProduct,productDetails
   ,newlyAddedProducts
     ,categoryProducts,sendOTP,verifyOTP,loginOTP
       , categories , userProfile,updateUserProfile,
-      reUpdateProfile
+      reUpdateProfile ,reviews
       } from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
 import upload from '../config/multer.js'
@@ -49,4 +49,8 @@ router.route('/userProfile').get(isAuthenticated,userProfile).post(isAuthenticat
 // router.route('/updateUserProfile').post(updateUserProfile)
 // update user profile
 router.post('/reUpdateProfile', isAuthenticated, reUpdateProfile);
+
+router.route('/review').post(isAuthenticated,reviews)
+
+
 export default router
