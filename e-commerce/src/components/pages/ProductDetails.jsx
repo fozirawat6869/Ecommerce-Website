@@ -61,7 +61,25 @@ function ProductDetails() {
       if(rating===5) return "Excellent"
     }
 
-  
+     const handleRating=async (star)=>{
+setRating(star)
+
+ try{
+const res=await axios.post(`http://localhost:8000/api/review`,{
+productId:id,
+rating:star,
+ review:""
+ },{
+ headers:{
+ Authorization: `Bearer ${localStorage.getItem("token")}`
+ }
+}) 
+console.log("res of rating from API rating",res)
+}catch{
+console.log("Failed to submit rating")
+}
+
+}
 
   return (
     <div className="bg-gray-100 pl-30 pr-30 pt-2 pb-5">
@@ -139,10 +157,23 @@ function ProductDetails() {
           </button>
 
           <div className="mt-6">
-           
+           <h2 className="text-xl font-semibold mb-2">Rate this product</h2>
             <div className="flex gap-5 items-center">
                {/* <div className="flex text-yellow-400 text-2xl mb-2">★★★★★</div> */}
-            
+                <div >
+{[1,2,3,4,5].map((star)=>(
+ <span key={star}
+onClick={()=>handleRating(star)}
+className={ star<=rating ? "text-yellow-400 cursor-pointer text-2xl " : "text-gray-300 cursor-pointer text-2xl"}
+>
+★
+ </span>
+
+))}
+</div>
+<span className={rating<=2?"text-red-500 font-semibold":"text-green-500 font-semibold"}>
+{getRatingText()}
+</span>
             </div>
               <h2 className="text-xl font-semibold mb-2 mt-5">Review this product</h2>
             <textarea
