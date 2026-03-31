@@ -1,7 +1,7 @@
 
 
 import axios from "axios";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
@@ -11,15 +11,22 @@ function ProductDetails() {
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
 
+  
+  // 2 reviews at once 
+  const [reviewPage,setReviewPage]=useState(1);
+  
+
   const fetchProduct = async () => {
-    const res = await axios.get(`http://localhost:8000/api/products/${id}`);
+    const res = await axios.get(`http://localhost:8000/api/products/${id}?reviewPage=${reviewPage}&reviewLimit=2`);
     const productData = res.data.productDetail;
     const imgData = res.data.images;
-    return { product: productData, images: imgData };
+    const review = res.data.reviews;
+
+    return { product: productData, images: imgData, reviews: review };
   };
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["product", id],
+  const { data, isLoading, isError ,refetch } = useQuery({
+    queryKey: ["product", id, rating, reviewPage], // include reviewText and rating in the query key
     queryFn: fetchProduct,
     cacheTime: 5 * 60 * 1000,
     staleTime: 5 * 60 * 1000,
@@ -28,9 +35,10 @@ function ProductDetails() {
   if (isLoading) return <p className="text-center py-10">Loading...</p>;
   if (isError) return <p className="text-center py-10 text-red-500">Failed to load product details</p>;
 
-  const { product, images } = data;
+  const { product, images , reviews} = data;
   console.log("Product Data:", product);
   console.log("Images Data:", images);
+  console.log("Reviews Data:", reviews);
 
   if (!selectedImage && images.length) setSelectedImage(images[0]);
 
@@ -39,6 +47,7 @@ function ProductDetails() {
        try{
          const res=await axios.post(`http://localhost:8000/api/review`,{
             productId:id,
+            rating:"",
             review:reviewText
         },{
           headers:{
@@ -47,6 +56,22 @@ function ProductDetails() {
         })
 
         console.log("res of review from API",res)
+         
+        if(res.data.success===true && res.data.message==="Review submitted successfully"){
+          alert("Review inserted successfully")
+          setReviewText("")
+          refetch() // refetch product details to get the updated reviews
+          return
+        }
+        if(res.data.success===true && res.data.message==="Review updated successfully"){
+            alert("Review updated successfully")
+            setReviewText("")
+            refetch() // refetch product details to get the updated reviews
+            return
+          }
+        
+
+
        }catch{
         console.log("Failed to submit review")
        }
@@ -130,18 +155,8 @@ console.log("Failed to submit rating")
     ))}
   </div>
 )}
-          <div className="flex items-center gap-2">
-            {/* <span className="text-yellow-400">★★★★★</span> */}
-            {[1,2,3,4,5].map((star)=>(
-              <span key={star}
-               onClick={()=>setRating(star)}
-               className={star<=rating ? "text-yellow-400 cursor-pointer text-2xl" : "text-gray-300 cursor-pointer text-2xl"}
-              >
-                ★
-              </span>
-            ))}
-            <span className="text-gray-600">(0 Reviews)</span>
-          </div>
+          
+    
           {product.product_quantity>0 ? 
           (<p className="text-green-600 font-semibold">In Stock ({product.product_quantity} left)</p>)
           :(<p className="text-green-600 font-semibold">Not in stock</p>)}
@@ -179,6 +194,7 @@ className={ star<=rating ? "text-yellow-400 cursor-pointer text-2xl " : "text-gr
             <textarea
               className="border w-full p-3 h-32 rounded"
               placeholder="Write your review here..."
+              value={reviewText}
               onChange={(e)=>setReviewText(e.target.value)}
             ></textarea>
             <button 

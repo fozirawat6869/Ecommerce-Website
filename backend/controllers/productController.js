@@ -314,8 +314,14 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
 
 export const productDetails=(req,res)=>{
 
- 
-  const {id}=req.params
+ console.log("page query data",req.query.reviewPage) // get the reviewPage and reviewLimit from query
+  console.log("page query data",req.query.reviewLimit)
+  
+  const reviewPage = parseInt(req.query.reviewPage) || 1;
+  const reviewLimit = parseInt(req.query.reviewLimit) || 2;
+  const reviewOffset = (reviewPage - 1) * reviewLimit;
+
+ const {id}=req.params
   console.log(id)
   const queryProduct=`select * from product where product_id=?`;
   connection.query(queryProduct,[id],(err,result)=>{
@@ -328,15 +334,27 @@ export const productDetails=(req,res)=>{
       if(err){
         return console.log("err in query of details product images",err)
       }
-    res.status(201).json({
+
+        connection.query(`select rating,review_text,u.first_name,u.last_name from reviews r join users u on r.user_id=u.id where r.product_id=? LIMIT ? OFFSET ?`,[id, reviewLimit, reviewOffset],(err,reviewsResult)=>{ 
+      
+         if(err){
+          return console.log("err in query of reviews in details product",err)  
+         }
+          
+          res.status(201).json({
       success:true,
       productDetail:result[0],
       images:images.map(img=>img.image_path) // extract image paths into an array
+      , reviews:reviewsResult
     })
+
+        })
+   
   })
 }
 )
 }
+
 
 
 
@@ -551,11 +569,171 @@ export const updateUserProfile=(req,res)=>{
   }
 
 
- export const reviews=async(req,res)=>{
-    console.log("review api called",req.body)
-    console.log("authenticated user in review api",req.user)
-    
-    
-    
+  // Reviews and Ratings 
+
+export const reviews = async (req, res) => {
+
+  console.log("review api called", req.body);
+  console.log("authenticated user in review api", req.user);
+
+  const { productId, rating, review } = req.body;
+  const userMobile = req.user.mobile;
+
+  if (!productId) {
+    return res.status(400).json({
+      success: false,
+      message: "Product id is required"
+    });
   }
 
+  // 1. Get user id using mobile
+  connection.query(
+    `SELECT id FROM users WHERE mobile = ?`,
+    [userMobile],
+    (err, userResult) => {
+
+      if (err) {
+        console.log("Error while getting user id", err);
+        return res.status(500).json({ success: false, message: "DB error" });
+      }
+
+      if (userResult.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "No user found for this user"
+        });
+      }
+
+      const user_id = userResult[0].id;
+
+      // 2. Check if review already exists
+      connection.query(
+        `SELECT id FROM reviews WHERE product_id = ? AND user_id = ?`,
+        [productId, user_id],
+        (err, reviewResult) => {
+
+          if (err) {
+            console.log("Error while checking existing review", err);
+            return res.status(500).json({ success: false, message: "DB error" });
+          }
+
+          console.log("review query result", reviewResult);
+
+          // ================= UPDATE =================
+          if (reviewResult.length > 0) {
+
+            // Update review text only
+            if (rating === "") {
+              connection.query(
+                `UPDATE reviews 
+                 SET review_text = ? 
+                 WHERE product_id = ? AND user_id = ?`,
+                [review, productId, user_id],
+                (err, updateResult) => {
+
+                  if (err) {
+                    console.log("Error while updating review", err);
+                    return res.status(500).json({ success: false, message: "DB error" });
+                  }
+
+                  console.log("update result", updateResult);
+
+                  return res.status(201).json({
+                    success: true,
+                    message: "Review updated successfully",
+                    data: updateResult
+                  });
+                }
+              );
+
+              return;
+            }
+
+            // Update rating only
+            connection.query(
+              `UPDATE reviews 
+               SET rating = ? 
+               WHERE product_id = ? AND user_id = ?`,
+              [rating, productId, user_id],
+              (err, updateResult) => {
+
+                if (err) {
+                  console.log("Error while updating rating", err);
+                  return res.status(500).json({ success: false, message: "DB error" });
+                }
+
+                console.log("update result", updateResult);
+
+                return res.status(201).json({
+                  success: true,
+                  message: "Rating updated successfully",
+                  data: updateResult
+                });
+              }
+            );
+
+            return;
+          }
+
+          // ================= INSERT =================
+          if (rating === "") {
+
+            // Insert review only
+            connection.query(
+              `INSERT INTO reviews (product_id, user_id, review_text) 
+               VALUES (?, ?, ?)`,
+              [productId, user_id, review],
+              (err, insertResultReview) => {
+
+                if (err) {
+                  console.log("Error while inserting review", err);
+                  return res.status(500).json({
+                    success: false,
+                    message: "DB error while saving review"
+                  });
+                }
+
+                console.log("insert review result", insertResultReview);
+
+                return res.status(201).json({
+                  success: true,
+                  message: "Review submitted successfully",
+                  data: insertResultReview
+                });
+              }
+            );
+
+            return;
+          }
+
+          // Insert rating only
+          connection.query(
+            `INSERT INTO reviews (product_id, user_id, rating) 
+             VALUES (?, ?, ?)`,
+            [productId, user_id, rating],
+            (err, insertResultRating) => {
+
+              if (err) {
+                console.log("Error while inserting rating", err);
+                return res.status(500).json({
+                  success: false,
+                  message: "DB error while saving rating"
+                });
+              }
+
+              console.log("insert rating result", insertResultRating);
+
+              return res.status(201).json({
+                success: true,
+                message: "Rating submitted successfully",
+                data: insertResultRating
+              });
+            }
+          );
+
+        }
+      );
+
+    }
+  );
+};
