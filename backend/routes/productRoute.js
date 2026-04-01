@@ -3,7 +3,7 @@ import {getAllProducts,createProduct,productDetails
   ,newlyAddedProducts
     ,categoryProducts,sendOTP,verifyOTP,loginOTP
       , categories , userProfile,updateUserProfile,
-      reUpdateProfile ,reviews ,addToCart
+      reUpdateProfile ,reviews ,addToCart , cartCount
       } from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
 import upload from '../config/multer.js'
@@ -53,6 +53,9 @@ router.post('/reUpdateProfile', isAuthenticated, reUpdateProfile);
 router.route('/review').post(isAuthenticated,reviews)
 
 router.route('/addToCart').post(isAuthenticated,addToCart)
+
+// cart count
+router.route('/cartCount').get(isAuthenticated,cartCount)
 
 
 export default router

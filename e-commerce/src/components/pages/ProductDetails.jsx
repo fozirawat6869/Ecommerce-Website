@@ -5,8 +5,13 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 function ProductDetails() {
+
+  const queryClient=useQueryClient()
+
+
    
   const token = localStorage.getItem("token");
 
@@ -40,7 +45,7 @@ function ProductDetails() {
   };
 
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["product", id, rating, reviewPage],
+    queryKey: ["product", id,reviewPage],
     queryFn: fetchProduct,
     cacheTime: 5 * 60 * 1000,
     staleTime: 5 * 60 * 1000,
@@ -140,16 +145,13 @@ function ProductDetails() {
         console.log("res of add to cart API", res)
         if(res.data.success===true){
           alert("Product added to cart successfully");
+           queryClient.invalidateQueries(["cartCount"]);
           refetch();
         }
         
       }catch(err){
         console.error("Error adding product to cart:", err);
-        if(err.response.data.success===false && err.response.data.message==="Product already in cart"){
-            console.log("already cart error res",err.response.data.message)
-          alert("Product already in cart");
-          refetch()
-        }
+       
       }
 
   }

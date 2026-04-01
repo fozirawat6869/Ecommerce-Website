@@ -1,13 +1,14 @@
 
-
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoSearch, IoCart } from "react-icons/io5";
 import { IoMdPersonAdd } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
+import axios from "axios";
+import { use } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,14 +17,47 @@ function Nav() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const navigate = useNavigate();
 
- 
+  const token = localStorage.getItem("token");
+
+  const handleCartCount=async()=>{
+    try{
+      const res= await axios.get("http://localhost:8000/api/cartCount",{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
+      console.log("cart count res",res.data.cartCount)
+      return res.data.cartCount
+    }catch(err){
+      console.log("error in fetching cart count",err)
+      return 0
+    }
+  }
+
+
+  const{data,isLoading}=useQuery({
+    queryKey:["cartCount"],
+    queryFn: handleCartCount
+      // const res= axios.get("http://localhost:8000/api/cartCount",{
+      //   headers:{
+      //     Authorization: `Bearer ${token}`
+      //   }
+      // })
+      // console.log("cart count res",res)
+      // return res.data.cartCount
+    }
+  )
+
+   if(isLoading){
+    return <div className='bg-gray-100 px-10 py-2 '><h1 className=' bg-white text-center p-5 text-black text-6xl'>⏳ Loading...</h1></div>
+   }
 
 
   return (
     <>
       <nav className="flex items-center justify-between px-3 md:px-20 py-3 bg-white sticky top-0 border-b border-gray-200 z-50">
-
-        {/* Left: Logo */}
+        
+        {/* Logo */}
         <Link
           to="/"
           className="text-2xl md:text-3xl font-bold text-blue-500 whitespace-nowrap"
@@ -31,7 +65,7 @@ function Nav() {
           ShopEasy
         </Link>
 
-        {/* Center: Links */}
+        {/* Center Links */}
         <ul
           className={`${
             isMenuOpen
@@ -40,20 +74,31 @@ function Nav() {
           } lg:flex lg:flex-row lg:static lg:w-auto lg:shadow-none lg:gap-8 items-center transition-all duration-300`}
         >
           <li>
-            <Link to="/" className="block px-4 py-2 hover:text-blue-600 text-center" onClick={() => setIsMenuOpen(false)}>Home</Link>
+            <Link to="/" className="block px-4 py-2 hover:text-blue-600" onClick={() => setIsMenuOpen(false)}>
+              Home
+            </Link>
           </li>
+
           <li>
-            <Link to="/AllProducts" className="block px-4 py-2 hover:text-blue-600 text-center" onClick={() => setIsMenuOpen(false)}>Products</Link>
+            <Link to="/AllProducts" className="block px-4 py-2 hover:text-blue-600" onClick={() => setIsMenuOpen(false)}>
+              Products
+            </Link>
           </li>
+
           <li>
-            <Link to="/about" className="block px-4 py-2 hover:text-blue-600 text-center" onClick={() => setIsMenuOpen(false)}>About Us</Link>
+            <Link to="/about" className="block px-4 py-2 hover:text-blue-600" onClick={() => setIsMenuOpen(false)}>
+              About Us
+            </Link>
           </li>
+
           <li>
-            <Link to="/contact" className="block px-4 py-2 hover:text-blue-600 text-center" onClick={() => setIsMenuOpen(false)}>Contact Us</Link>
+            <Link to="/contact" className="block px-4 py-2 hover:text-blue-600" onClick={() => setIsMenuOpen(false)}>
+              Contact Us
+            </Link>
           </li>
         </ul>
 
-        {/* Right side */}
+        {/* Right Side */}
         <div className="flex items-center gap-4">
 
           {/* Search */}
@@ -68,77 +113,76 @@ function Nav() {
             </form>
           </div>
 
+          {/* Login / Profile */}
+          <div className="relative group">
+            <div
+              onClick={() => {
+                if (!token) navigate("/login");
+              }}
+              className="flex items-center gap-1 hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer"
+            >
+              {token ? (
+                <CgProfile className="text-2xl" />
+              ) : (
+                <IoMdPersonAdd className="text-2xl" />
+              )}
+              <p className="hidden lg:block">
+                {token ? "Profile" : "Login"}
+              </p>
+            </div>
 
+            {/* Dropdown */}
+            {token && (
+              <ul className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50">
+                
+                <li
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => navigate("/profile")}
+                >
+                  Profile
+                </li>
 
+                <li
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => navigate("/orders")}
+                >
+                  Orders
+                </li>
 
-{/* Login / Profile */}
-<div className="relative group">
-  <div
-    onClick={() => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/login"); // go to login if not logged in
-      }
-    }}
-    className="flex items-center gap-1 hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer"
-  >
-    {localStorage.getItem("token") ? (
-      <CgProfile className="text-2xl" />
-    ) : (
-      <IoMdPersonAdd className="text-2xl" />
-    )}
-    <p className="hidden lg:block">
-      {localStorage.getItem("token") ? "Profile" : "Login"}
-    </p>
-  </div>
+                <li
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    window.location.reload();
+                  }}
+                >
+                  Logout
+                </li>
 
-  {/* Hover Dropdown */}
-  {localStorage.getItem("token") && (
-    <ul className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50">
-      <li
-        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-        onClick={() => navigate("/profile")}
-      >
-        Profile
-      </li>
-      <li
-        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-        onClick={() => navigate("/orders")
-        }
-      >
-        Orders
-      </li>
-       <li
-        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-        onClick={() => {
-          localStorage.removeItem("token"); // remove token
-          // don't navigate, user clicks login manually
-          window.location.reload(); // optional: to update the icon
-        }}
-      >
-        Logout
-      </li>
-    </ul>
-  )}
-</div>
-
-
-
-
+              </ul>
+            )}
+          </div>
 
           {/* Cart */}
           <Link to="/cart" className="relative flex items-center gap-1">
             <IoCart className="text-2xl" />
+
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              36
+              {data}
             </span>
+
             <p className="hidden lg:block">Cart</p>
           </Link>
 
           {/* Hamburger */}
           <div className="lg:hidden cursor-pointer" onClick={toggleMenu}>
-            {isMenuOpen ? <RxCross2 className="text-2xl" /> : <GiHamburgerMenu className="text-2xl" />}
+            {isMenuOpen ? (
+              <RxCross2 className="text-2xl" />
+            ) : (
+              <GiHamburgerMenu className="text-2xl" />
+            )}
           </div>
+
         </div>
       </nav>
     </>
@@ -146,5 +190,3 @@ function Nav() {
 }
 
 export default Nav;
-
-

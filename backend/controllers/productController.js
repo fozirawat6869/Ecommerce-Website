@@ -371,7 +371,9 @@ export const productDetails = (req, res) => {
               (err, cartResult) => {
                 if (err) {
                   console.log("Error while checking cart", err);
-                  return res.status(500).json({ success: false, message: "DB error while checking cart" });
+                  return res.status(500).json({
+                     success: false, 
+                     message: "DB error while checking cart" });
                 }
 
                 const inCart = cartResult.length > 0;
@@ -819,21 +821,7 @@ export const addToCart=(req,res)=>{
         const user_id = userResult[0].id; // user id from users table
         
         // 2. Check if product already in cart
-        connection.query(
-          `SELECT id FROM cart WHERE product_id = ? AND user_id = ?`,
-          [productId, user_id],
-          (err, cartResult) => {
-            console.log("Cart query result:", cartResult);
-            if (err) {
-              console.log("Error while checking cart", err);
-              return res.status(500).json({ success: false, message: "DB error" });
-            }
-            if (cartResult.length > 0) {
-              return res.status(400).json({
-                success: false,
-                message: "Product already in cart"
-              });
-            }
+               // i have done this in productDetails api
 
             // 3. Insert into cart
             connection.query(
@@ -856,6 +844,8 @@ export const addToCart=(req,res)=>{
         );
         
 
-     })
+    
 
 }
+
+
