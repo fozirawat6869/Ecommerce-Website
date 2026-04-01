@@ -880,3 +880,51 @@ connection.query(`SELECT id FROM users WHERE mobile = ?`,[userMobile],(err,userR
 
 }
 )}
+
+
+// get cart products for cart page
+
+export const cartProducts=(req,res)=>{
+  const userMobile=req.user.mobile;
+  connection.query(`SELECT id FROM users WHERE mobile = ?`,[userMobile],(err,userResult)=>{
+    if(err){
+      console.log("Error while getting user id for cart products", err);
+      return res.status(500).json({ success: false, message: "DB error" });
+    }
+    if(userResult.length===0){
+      return res.status(400).json({
+        success:false,
+        message:"No user found for this user"
+      })
+    }
+    const user_id=userResult[0].id;
+
+    // let query=`select p.*,(select i.image_path from product_images i where i.product_id=p.product_id limit 1) as image from product p join cart c on p.product_id=c.product_id and c.user_id=?` 
+    
+    let query=`SELECT 
+c.id AS cart_id,
+p.*,
+(
+  SELECT i.image_path 
+  FROM product_images i 
+  WHERE i.product_id = p.product_id 
+  LIMIT 1
+) AS image
+FROM cart c
+JOIN product p ON c.product_id = p.product_id
+WHERE c.user_id = ?`
+    connection.query(query,[user_id],(err,cartProductsResult)=>{
+      if(err){
+        console.log("Error while getting cart products", err);
+        return res.status(500).json({ success: false, message: "DB error" });
+      }
+      res.status(200).json({
+        success:true,
+        data:cartProductsResult
+      })
+    })
+  }
+
+)}
+
+

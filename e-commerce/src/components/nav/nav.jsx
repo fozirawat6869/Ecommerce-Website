@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoSearch, IoCart } from "react-icons/io5";
 import { IoMdPersonAdd } from "react-icons/io";
