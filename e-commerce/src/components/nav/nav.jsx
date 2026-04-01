@@ -7,7 +7,7 @@ import { RxCross2 } from "react-icons/rx";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
 import axios from "axios";
-import { use } from "react";
+
 import { useQuery } from "@tanstack/react-query";
 
 function Nav() {

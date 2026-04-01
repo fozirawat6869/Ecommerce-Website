@@ -849,3 +849,34 @@ export const addToCart=(req,res)=>{
 }
 
 
+// Cart Count
+
+export const cartCount=(req,res)=>{
+  const userMobile=req.user.mobile;
+connection.query(`SELECT id FROM users WHERE mobile = ?`,[userMobile],(err,userResult)=>{
+  if(err){
+    console.log("Error while getting user id for cart count", err);
+    return res.status(500).json({ success: false, message: "DB error" });
+  }
+  if(userResult.length===0){
+    return res.status(400).json({
+      success:false,
+      message:"No user found for this user"
+    })
+  }
+  const user_id=userResult[0].id;
+  connection.query(`SELECT COUNT(*) as count FROM cart WHERE user_id=?`,[user_id],(err,countResult)=>{
+    if(err){
+      console.log("Error while getting cart count", err);
+      return res.status(500).json({ success: false, message: "DB error" });
+    }
+    console.log("Cart count result", countResult);
+    res.status(200).json({
+      success:true,
+      cartCount:countResult[0].count
+    })
+  }
+   )
+
+}
+)}
