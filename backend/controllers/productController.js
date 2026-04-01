@@ -310,50 +310,94 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
 
 
 
-// Product Details
+// // Product Details
 
-export const productDetails=(req,res)=>{
+export const productDetails = (req, res) => {
 
- console.log("page query data",req.query.reviewPage) // get the reviewPage and reviewLimit from query
-  console.log("page query data",req.query.reviewLimit)
-  
   const reviewPage = parseInt(req.query.reviewPage) || 1;
   const reviewLimit = parseInt(req.query.reviewLimit) || 2;
   const reviewOffset = (reviewPage - 1) * reviewLimit;
 
- const {id}=req.params
-  console.log(id)
-  const queryProduct=`select * from product where product_id=?`;
-  connection.query(queryProduct,[id],(err,result)=>{
-    console.log(result)
-    if(err){
-   }
+  const { id } = req.params;
+  const userMobile = req.user.mobile;
 
-    connection.query(`select image_path from product_images where product_id=?`,[id],(err,images)=>{
-       console.log("images query result",images)
-      if(err){
-        return console.log("err in query of details product images",err)
+  // 1. Get product
+  connection.query(`select * from product where product_id=?`, [id], (err, result) => {
+
+    if (err) {
+      return res.status(500).json({ success: false, message: "Error in product query" });
+    }
+
+    // 2. Get images
+    connection.query(`select image_path from product_images where product_id=?`, [id], (err, images) => {
+
+      if (err) {
+        return res.status(500).json({ success: false, message: "Error in images query" });
       }
 
-        connection.query(`select rating,review_text,u.first_name,u.last_name from reviews r join users u on r.user_id=u.id where r.product_id=? LIMIT ? OFFSET ?`,[id, reviewLimit, reviewOffset],(err,reviewsResult)=>{ 
-      
-         if(err){
-          return console.log("err in query of reviews in details product",err)  
-         }
-          
-          res.status(201).json({
-      success:true,
-      productDetail:result[0],
-      images:images.map(img=>img.image_path) // extract image paths into an array
-      , reviews:reviewsResult
-    })
+      // 3. Get reviews
+      connection.query(
+        `select rating,review_text,u.first_name,u.last_name 
+         from reviews r 
+         join users u on r.user_id=u.id 
+         where r.product_id=? 
+         LIMIT ? OFFSET ?`,
+        [id, reviewLimit, reviewOffset],
+        (err, reviewsResult) => {
 
-        })
-   
-  })
-}
-)
-}
+          if (err) {
+            return res.status(500).json({ success: false, message: "Error in reviews query" });
+          }
+
+          // 4. Get user id
+          connection.query(`SELECT id FROM users WHERE mobile = ?`, [userMobile], (err, userResult) => {
+
+            if (err || userResult.length === 0) {
+              return res.status(200).json({
+                success: true,
+                productDetail: result[0],
+                images: images.map(img => img.image_path),
+                reviews: reviewsResult,
+                inCart: false
+              });
+            }
+
+            const user_id = userResult[0].id;
+
+            // 5. Check cart
+            connection.query(
+              `SELECT id FROM cart WHERE product_id = ? AND user_id = ?`,
+              [id, user_id],
+              (err, cartResult) => {
+                if (err) {
+                  console.log("Error while checking cart", err);
+                  return res.status(500).json({ success: false, message: "DB error while checking cart" });
+                }
+
+                const inCart = cartResult.length > 0;
+
+                res.status(200).json({
+                  success: true,
+                  productDetail: result[0],
+                  images: images.map(img => img.image_path),
+                  reviews: reviewsResult,
+                  inCart: inCart   
+                });
+
+              }
+            );
+
+          });
+
+        }
+      );
+
+    });
+
+  });
+};
+
+
 
 
 
@@ -737,3 +781,81 @@ export const reviews = async (req, res) => {
     }
   );
 };
+
+
+
+// add to cart
+
+export const addToCart=(req,res)=>{
+    console.log("add to cart api", req.body);
+    console.log("authenticated user in add to cart api", req.user);
+
+    const productId=req.body.productId;
+    const userMobile=req.user.mobile;
+
+    if(!productId){
+      return res.status(400).json({
+        success:false,
+        message:"Product id is required"
+      })
+    }
+    
+    // 1. Get user id using mobile
+    connection.query(
+      `SELECT id FROM users WHERE mobile = ?`,
+      [userMobile],
+      (err, userResult) => {
+        console.log("User query result in add to cart:", userResult);
+        if (err) {
+          console.log("Error while getting user id", err);
+          return res.status(500).json({ success: false, message: "DB error" });
+        }
+        if (userResult.length === 0) {
+          return res.status(400).json({
+            success: false,
+            message: "No user found for this user"
+          });
+        }
+        const user_id = userResult[0].id; // user id from users table
+        
+        // 2. Check if product already in cart
+        connection.query(
+          `SELECT id FROM cart WHERE product_id = ? AND user_id = ?`,
+          [productId, user_id],
+          (err, cartResult) => {
+            console.log("Cart query result:", cartResult);
+            if (err) {
+              console.log("Error while checking cart", err);
+              return res.status(500).json({ success: false, message: "DB error" });
+            }
+            if (cartResult.length > 0) {
+              return res.status(400).json({
+                success: false,
+                message: "Product already in cart"
+              });
+            }
+
+            // 3. Insert into cart
+            connection.query(
+              `INSERT INTO cart (user_id, product_id) VALUES (?, ?)`,
+              [user_id, productId],
+              (err, insertResult) => {
+                if (err) {
+                  console.log("Error while adding to cart", err);
+                  return res.status(500).json({ success: false, message: "DB error while adding to cart" });
+                }
+                console.log("Add to cart result", insertResult);
+                return res.status(201).json({
+                  success: true,
+                  message: "Product added to cart successfully",
+                  data: insertResult
+                });
+              }
+            );
+          }
+        );
+        
+
+     })
+
+}
