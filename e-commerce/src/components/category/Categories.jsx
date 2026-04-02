@@ -35,35 +35,10 @@ const Categories = () => {
   const [selectedCategoryItem, setSelectedCategoryItem] = useState(null);
 
   useEffect(() => {
-    if (selectedCategoryItem === "Men") {
-      navigate(`/Category/${selectedCategoryItem}`);
-    }
-    if(selectedCategoryItem === "Women"){
-      console.log("Women selected")
-      navigate(`/Category/${selectedCategoryItem}`)
-    }
-    if(selectedCategoryItem === "Mouse"){
-      navigate(`/Category/${selectedCategoryItem}`) 
-    }
-    if(selectedCategoryItem === "Camera"){
-      navigate(`/Category/${selectedCategoryItem}`) 
-    }
-    if(selectedCategoryItem === "Earphones"){ 
-      navigate(`/Category/${selectedCategoryItem}`)
-    }
-    if(selectedCategoryItem === "Mobiles"){
-      navigate(`/Category/${selectedCategoryItem}`)
-    }
-    if(selectedCategoryItem === "Speakers"){
-      navigate(`/Category/${selectedCategoryItem}`)
-    }
-    if(selectedCategoryItem === "Televisions"){
-      navigate(`/Category/${selectedCategoryItem}`)
-    }
-    if(selectedCategoryItem === "Trimmers"){
-      navigate(`/Category/${selectedCategoryItem}`)
-    }
-  }, [selectedCategoryItem]);
+  if (selectedCategoryItem) {
+    navigate(`/Category/${selectedCategoryItem}`);
+  }
+}, [selectedCategoryItem, navigate]);
 
   return (
     <div className="w-full bg-gray-100 py-2">
