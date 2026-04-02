@@ -898,11 +898,9 @@ export const cartProducts=(req,res)=>{
       })
     }
     const user_id=userResult[0].id;
-
-    // let query=`select p.*,(select i.image_path from product_images i where i.product_id=p.product_id limit 1) as image from product p join cart c on p.product_id=c.product_id and c.user_id=?` 
     
     let query=`SELECT 
-c.id AS cart_id,
+c.id AS cart_id,c.quantity as cart_quantity,
 p.*,
 (
   SELECT i.image_path 
@@ -926,5 +924,4 @@ WHERE c.user_id = ?`
   }
 
 )}
-
 
