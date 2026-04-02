@@ -693,8 +693,8 @@ export const reviews = async (req, res) => {
               );
 
               return;
-            }
-
+            } else{
+              
             // Update rating only
             connection.query(
               `UPDATE reviews 
@@ -720,6 +720,8 @@ export const reviews = async (req, res) => {
 
             return;
           }
+            }
+
 
           // ================= INSERT =================
           if (rating === "") {
@@ -750,8 +752,8 @@ export const reviews = async (req, res) => {
             );
 
             return;
-          }
-
+          }else{
+            
           // Insert rating only
           connection.query(
             `INSERT INTO reviews (product_id, user_id, rating) 
@@ -776,6 +778,8 @@ export const reviews = async (req, res) => {
               });
             }
           );
+          }
+
 
         }
       );
@@ -793,6 +797,7 @@ export const addToCart=(req,res)=>{
     console.log("authenticated user in add to cart api", req.user);
 
     const productId=req.body.productId;
+    const quantity=req.body.quantity;
     const userMobile=req.user.mobile;
 
     if(!productId){
@@ -825,8 +830,8 @@ export const addToCart=(req,res)=>{
 
             // 3. Insert into cart
             connection.query(
-              `INSERT INTO cart (user_id, product_id) VALUES (?, ?)`,
-              [user_id, productId],
+              `INSERT INTO cart (user_id, product_id, product_quantity) VALUES (?, ?, ?)`,
+              [user_id, productId, quantity],
               (err, insertResult) => {
                 if (err) {
                   console.log("Error while adding to cart", err);
@@ -900,7 +905,7 @@ export const cartProducts=(req,res)=>{
     const user_id=userResult[0].id;
     
     let query=`SELECT 
-c.id AS cart_id,c.quantity as cart_quantity,
+c.id AS cart_id,c.product_quantity as cart_quantity,
 p.*,
 (
   SELECT i.image_path 

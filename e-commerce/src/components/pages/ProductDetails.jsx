@@ -6,6 +6,12 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { FiPlusSquare } from "react-icons/fi";
+import { FiMinusSquare } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
+import { FiMinus } from "react-icons/fi";
+
+
 
 function ProductDetails() {
 
@@ -24,6 +30,8 @@ function ProductDetails() {
 
   // 2 reviews at once
   const [reviewPage, setReviewPage] = useState(1);
+
+  const [productQuantityForCart,setProductQuantityForCart]=useState(1)
 
   const fetchProduct = async () => {
     const res = await axios.get(
@@ -128,6 +136,7 @@ function ProductDetails() {
           },
         }
       );
+      refetch();
     } catch {
       console.log("Failed to submit rating");
     }
@@ -136,7 +145,8 @@ function ProductDetails() {
   const handleAddToCart=async ()=>{
       try{
            const res=await axios.post(`http://localhost:8000/api/addToCart`, {
-        productId: id
+        productId: id,
+        quantity: productQuantityForCart
        }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -155,6 +165,8 @@ function ProductDetails() {
       }
 
   }
+
+  
 
   return (
     <div className="bg-gray-100 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-28 pt-2 pb-5">
@@ -293,6 +305,53 @@ function ProductDetails() {
             <p className="text-red-500 font-semibold">Not in stock</p>
           )}
 
+
+          {/* how many quantity you want */}
+       
+       
+           <div className="">
+      {/* LABEL */}
+      <p className="text-lg text-gray-700 mb-2 font-medium">
+        Select the Quantity you want
+      </p>
+
+      {/* QUANTITY BOX */}
+      <div 
+      className="flex  items-center w-fit border rounded-xl overflow-hidden shadow-sm">
+        
+        {/* MINUS */}
+        <button
+          onClick={()=>{
+            if(productQuantityForCart===1) return;
+            setProductQuantityForCart(productQuantityForCart-1)
+          }}
+          className="px-4 py-2 hover:bg-gray-100 cursor-pointer transition disabled:opacity-40"
+          disabled={productQuantityForCart === 1}
+        >
+          <FiMinus className="text-lg" />
+        </button>
+
+        {/* VALUE */}
+        <span className="px-2 py-2 text-lg font-semibold bg-gray-50">
+          {productQuantityForCart}
+        </span>
+
+        {/* PLUS */}
+        <button
+          disabled={productQuantityForCart === product.product_quantity}
+          onClick={()=>{
+            if(productQuantityForCart===product.product_quantity) return;
+            setProductQuantityForCart(productQuantityForCart+1)
+          }}
+        
+          className="px-4 py-2 hover:bg-gray-100 cursor-pointer transition disabled:opacity-40"
+        >
+          <FiPlus className="text-lg" />
+        </button>
+      </div>
+    </div>
+
+
           {/* Add to Cart */}
          <div className="flex justify-center gap-5  w-full ">
         
@@ -313,7 +372,7 @@ function ProductDetails() {
             <button 
            className="cursor-pointer w-1/2 bg-yellow-400 font-semibold  px-5  py-3 rounded text-lg  w-full "
           >
-            Buy at ₹ {product.product_price}
+            Buy at ₹ {product.product_price*productQuantityForCart}
           </button>
          </div>
 
