@@ -926,6 +926,38 @@ WHERE c.user_id = ?`
 )}
 
 
+// remove from cart
+export const removeFromCart=(req,res)=>{
+  const userMobile=req.user.mobile;
+  const {cartId}=req.body;
+  
 
+     connection.query(`select id from users where mobile=?`,[userMobile],(err,userResult)=>{
+      if(err){
+        console.log("Error while getting user id for remove from cart", err);
+        return res.status(500).json({ success: false, message: "DB error" });
+      }
+      if(userResult.length===0){
+        return res.status(400).json({
+          success:false,
+          message:"No user found for this user"
+        })
+      }
+      const user_id=userResult[0].id;
+     
+      connection.query(`delete from cart where id=? and user_id=?`,[cartId,user_id],(err,deleteResult)=>{
+        if(err){
+          console.log("Error while removing from cart", err);
+          return res.status(500).json({ success: false, message: "DB error" });
+        }
+        res.status(200).json({
+          success:true,
+          message:"Product removed from cart successfully"
+        })
+      }
+        )
+      
+})
+}
 
 
