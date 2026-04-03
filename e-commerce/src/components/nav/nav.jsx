@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoSearch, IoCart } from "react-icons/io5";
 import { IoMdPersonAdd } from "react-icons/io";
@@ -7,11 +7,51 @@ import { RxCross2 } from "react-icons/rx";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
 import axios from "axios";
+import debounce from "../reuseCode/debouncingFunc";
 
 import { useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 
 function Nav() {
+  const [InputValue, setInputValue] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+
+   const handleInput=(e)=>{
+
+
+    // if(!token){
+    //   navigate("/login")
+    // }
+     e.preventDefault();
+     setInputValue(e.target.value)
+     debounceSearch(e.target.value)
+  
+     
+   }
+
+ const handleSearch=useCallback((value)=>{
+    console.log("searching for",value)
+
+   },[])
+   
+
+   const debounceSearch=useMemo(()=>
+      debounce(handleSearch,5000)
+   ,[handleSearch])
+
+   
+
+  
+
+
+   const handleKeyDown=(e)=>{
+    if(e.key==="Enter"){
+      e.preventDefault();
+      handleSearch(InputValue)
+    }
+   }
+
 
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -38,19 +78,17 @@ function Nav() {
   const{data,isLoading}=useQuery({
     queryKey:["cartCount"],
     queryFn: handleCartCount
-      // const res= axios.get("http://localhost:8000/api/cartCount",{
-      //   headers:{
-      //     Authorization: `Bearer ${token}`
-      //   }
-      // })
-      // console.log("cart count res",res)
-      // return res.data.cartCount
+    
     }
   )
 
    if(isLoading){
     return <div className='bg-gray-100 px-10 py-2 '><h1 className=' bg-white text-center p-5 text-black text-6xl'>⏳ Loading...</h1></div>
    }
+
+  
+    
+   
 
 
   return (
@@ -105,6 +143,8 @@ function Nav() {
           <div className="hidden lg:block">
             <form className="relative">
               <input
+                  onChange={handleInput}
+                  onKeyDown={handleKeyDown}
                 type="text"
                 placeholder="Search ..."
                 className="bg-gray-100 px-8 py-2 rounded-xl outline-none w-52 lg:w-72"
