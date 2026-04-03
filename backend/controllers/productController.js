@@ -223,8 +223,8 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
     try {
         console.log("Query params:", req.query);
 
-        const { category, SubCategory, sizes, colors, limit, page, price } = req.query;
-       
+        const { category, limit, page, price, ...dynamicFilters } = req.query;
+
         const limitNum = parseInt(limit) || 10;
         const pageNum = parseInt(page) || 1;
         const offset = (pageNum - 1) * limitNum;
@@ -240,12 +240,11 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
 
         let params = [];
 
-        // JOIN first
+        // JOIN
         if (category) {
             query += ` JOIN category c ON p.product_category_id = c.id`;
         }
 
-        // ALWAYS start WHERE
         query += ` WHERE 1=1`;
 
         // Category filter
@@ -254,33 +253,25 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
             params.push(category);
         }
 
-        // SubCategory filter (FIXED)
-        if (SubCategory) {
-            query += ` AND JSON_EXTRACT(p.product_attributes, '$.SubCategory') = ?`;
-            params.push(SubCategory);
-        }
+        // ✅ DYNAMIC FILTERS
+        Object.keys(dynamicFilters).forEach((key) => {
+            const value = dynamicFilters[key];
 
-        // Size filter
-        if (sizes) {
-            query += ` AND JSON_UNQUOTE(JSON_EXTRACT(p.product_attributes, '$.sizes')) = ?`;
-            params.push(sizes);
-        }
+            if (value) {
+                query += ` AND JSON_UNQUOTE(JSON_EXTRACT(p.product_attributes, '$.${key}')) = ?`;
+                params.push(value);
+            }
+        });
 
-        // Color filter
-        if (colors) {
-            query += ` AND JSON_UNQUOTE(JSON_EXTRACT(p.product_attributes, '$.colors')) = ?`;
-            params.push(colors);
-        }
-
-        if(price){
-          if(price==="100" || price==="200" || price==="300" || price==="400" || price==="500" || price==="1000"){
-            query += ` AND p.product_price <= ?`;
-            params.push(price);
-          }
-        }
-        if(price==="1000plus"){
-          query+=` AND p.product_price >= ?`
-          params.push(1000)
+        // Price filter
+        if (price) {
+            if (["100","200","300","400","500","1000"].includes(price)) {
+                query += ` AND p.product_price <= ?`;
+                params.push(price);
+            } else if (price === "1000plus") {
+                query += ` AND p.product_price >= ?`;
+                params.push(1000);
+            }
         }
 
         // Pagination

@@ -3,20 +3,23 @@ import React from "react";
 
 function AboutUs() {
   return (
-    <div className="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+    <div className="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen py-2 px-4 sm:px-6 lg:px-10">
 
-      <div className="max-w-6xl mx-auto">
 
-        {/* Heading */}
-        <div className="text-center mb-10 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800">
+      {/* Heading */}
+        <div className="bg-gray-800 rounded-2xl text-white py-12 sm:py-16 text-center px-10 mb-5">
+          <h1 className="text-3xl sm:text-4xl font-bold">
             About Me
           </h1>
 
-          <p className="text-gray-600 mt-3 sm:mt-4 text-base sm:text-lg">
+          <p className="mt-3 text-gray-300 text-sm sm:text-base">
             Full Stack Web Developer | React | Node.js | MySQL | MongoDB
           </p>
         </div>
+
+      <div className="max-w-6xl mx-auto">
+
+      
 
         {/* Main Card */}
         <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 lg:p-10">
