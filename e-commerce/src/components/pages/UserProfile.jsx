@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
+import api from "../../utils/api"; // ✅ added
 
 function UserProfile() {
 
@@ -33,7 +34,7 @@ function UserProfile() {
   const fetchUserData =async () => {
 
     try{
-        const res = await axios.get('http://localhost:8000/api/userProfile', {
+        const res = await api.get('/api/userProfile', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -66,7 +67,7 @@ const handleSubmit=async (e)=>{
     e.preventDefault();
 
     try{
-       const res=await axios.post('http://localhost:8000/api/userProfile',formData,{
+       const res=await api.post('/api/userProfile',formData,{
             headers:{
                 'Authorization': `Bearer ${token}`
             }
@@ -113,7 +114,7 @@ const handleReUpdate=async ()=>{
 }
 
         console.log("edit form data",editFormData)
-        const res=await axios.post(`http://localhost:8000/api/reUpdateProfile`,updatedFormData,{
+        const res=await api.post('/api/reUpdateProfile',updatedFormData,{
           headers:{
             "Authorization":`Bearer ${token}`
           }
