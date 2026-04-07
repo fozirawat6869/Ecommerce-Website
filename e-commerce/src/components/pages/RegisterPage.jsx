@@ -1,7 +1,5 @@
-
-
 import React, { useState } from 'react'
-import api from "../../utils/api"; // ✅ only change
+import api from "../../utils/api";
 import { Link, useNavigate } from 'react-router-dom';
 
 function RegisterPage() {
@@ -35,7 +33,6 @@ function RegisterPage() {
         }
     };
 
-    // ✅ axios → api
     const handleGenerateOtp = async (e) => {
         e.preventDefault();
 
@@ -48,8 +45,6 @@ function RegisterPage() {
             const res = await api.post("/api/registerr", {
                 mobile: mobile
             });
-
-            console.log("OTP Sent Response:", res.data);
 
             if (res.data.success) {
                 if (res.data.message === "Mobile number already registered. Please login.") {
@@ -64,12 +59,10 @@ function RegisterPage() {
             }
 
         } catch (error) {
-            console.log(error);
-            setMobileError("Fail otp sending");
+            setMobileError("Fail otp sending", error.response?.data?.message || "Something went wrong");
         }
     };
 
-    // ✅ axios → api
     const handleSubmitOtp = async (e) => {
         e.preventDefault();
 
@@ -85,8 +78,6 @@ function RegisterPage() {
                 session_id:session_id
             });
 
-            console.log("OTP Verification Response:", res.data);
-
             if (res.data.success) {
                 localStorage.setItem('token',res.data.token);
                 navigate('/')
@@ -100,91 +91,101 @@ function RegisterPage() {
             setOtp("");
 
         } catch (error) {
-            console.log(error);
-            setOtpError("Invalid OTP. Try again.");
+            setOtpError("Invalid OTP. Try again.", error.response?.data?.message || "Something went wrong");
         }
     };
 
     return (
-        <>
-            <div className='bg-gray-100 px-10 pt-2 '>
-                <div className='bg-white p-28 flex justify-center items-center'>
-                    <div className="bg-white outline-5 outline-gray-100 p-6 w-120 h-80 rounded-xl shadow-lg ">
+        <div className='bg-gray-100 pt-2 flex items-center justify-center px-4 sm:px-6 md:px-10'>
+            
+            <div className='bg-white w-full max-w-md sm:max-w-lg md:max-w-xl p-6 sm:p-8 md:p-10 rounded-xl shadow-lg'>
+                
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6 text-blue-500">
+                    User Register
+                </h2>
 
-                        <h2 className="text-2xl font-bold text-center mb-6 text-blue-500 font-bold">User Register</h2>
+                {step === 1 && (
+                    <form onSubmit={handleGenerateOtp}>
+                        
+                        <label className="block font-medium mb-1 pl-1 sm:pl-2 text-sm sm:text-base">
+                            Mobile Number
+                        </label>
 
-                        {step === 1 && (
-                            <form onSubmit={handleGenerateOtp}>
-                                <label className="block font-medium mb-1 pl-2">Mobile Number</label>
-                                <input
-                                    type="tel"
-                                    value={mobile}
-                                    onChange={handleMobileChange}
-                                    placeholder="Enter your mobile number"
-                                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-1 focus:ring-1
-                                    ${mobileError ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"}`}
-                                    maxLength={10}
-                                    required
-                                />
+                        <input
+                            type="tel"
+                            value={mobile}
+                            onChange={handleMobileChange}
+                            placeholder="Enter your mobile number"
+                            className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-1 text-sm sm:text-base
+                            ${mobileError 
+                              ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
+                              : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"}`}
+                            maxLength={10}
+                            required
+                        />
 
-                                <p className="text-red-500 pt-[0.5px] text-sm mb-2 h-5">
-                                    {mobileError ? mobileError : " "}
-                                </p>
+                        <p className="text-red-500 text-xs sm:text-sm mb-2 h-5">
+                            {mobileError ? mobileError : " "}
+                        </p>
 
-                                <button
-                                    type="submit"
-                                    className="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-gray-800 transition"
-                                >
-                                    Generate OTP
-                                </button>
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-500 text-white font-semibold py-2 sm:py-3 rounded-lg hover:bg-gray-800 transition text-sm sm:text-base"
+                        >
+                            Generate OTP
+                        </button>
 
-                                <Link to={'/login'} className='flex justify-center items-center'>
-                                    <h1 className='mt-5 text-center text-[16px] hover:text-blue-500 cursor-pointer'>
-                                        Existing user ? Login
-                                    </h1>
-                                </Link>
-                            </form>
-                        )}
+                        <Link to={'/login'} className='flex justify-center items-center'>
+                            <h1 className='mt-4 sm:mt-5 text-center text-sm sm:text-base hover:text-blue-500 cursor-pointer'>
+                                Existing user ? Login
+                            </h1>
+                        </Link>
+                    </form>
+                )}
 
-                        {step === 2 && (
-                            <form onSubmit={handleSubmitOtp}>
-                                <p className="mb-4 text-gray-700">
-                                    Enter OTP sent to <strong>{mobile}</strong>
-                                </p>
+                {step === 2 && (
+                    <form onSubmit={handleSubmitOtp}>
+                        
+                        <p className="mb-4 text-gray-700 text-sm sm:text-base text-center sm:text-left">
+                            Enter OTP sent to <strong>{mobile}</strong>
+                        </p>
 
-                                <input
-                                    type="text"
-                                    value={otp}
-                                    onChange={handleOtpChange}
-                                    placeholder="Enter OTP"
-                                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-4
-                                    ${otpError ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"}`}
-                                    maxLength={6}
-                                    required
-                                />
+                        <input
+                            type="text"
+                            value={otp}
+                            onChange={handleOtpChange}
+                            placeholder="Enter OTP"
+                            className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-4 text-sm sm:text-base
+                            ${otpError 
+                              ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500" 
+                              : "border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"}`}
+                            maxLength={6}
+                            required
+                        />
 
-                                <p className="text-red-500 text-sm mb-2 h-5">{otpError ? otpError : " "}</p>
+                        <p className="text-red-500 text-xs sm:text-sm mb-2 h-5">
+                            {otpError ? otpError : " "}
+                        </p>
 
-                                <button
-                                    type="submit"
-                                    className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
-                                >
-                                    Submit
-                                </button>
+                        <button
+                            type="submit"
+                            className="w-full bg-black text-white py-2 sm:py-3 rounded-lg hover:bg-gray-800 transition text-sm sm:text-base"
+                        >
+                            Submit
+                        </button>
 
-                                <button
-                                    type="button"
-                                    className="mt-2 w-full text-sm text-blue-600 hover:underline"
-                                    onClick={() => setStep(1)}
-                                >
-                                    Edit mobile number
-                                </button>
-                            </form>
-                        )}
-                    </div>
-                </div>
+                        <button
+                            type="button"
+                            className="mt-2 w-full text-xs sm:text-sm text-blue-600 hover:underline"
+                            onClick={() => setStep(1)}
+                        >
+                            Edit mobile number
+                        </button>
+                    </form>
+                )}
+
             </div>
-        </>
+        </div>
     )
 }
 

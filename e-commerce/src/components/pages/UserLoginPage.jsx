@@ -90,7 +90,7 @@ function UserLoginPage() {
     };
 
     return (
-        <div className='bg-gray-100 min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-10'>
+        <div className='bg-gray-100 pt-2 flex items-center justify-center px-4 sm:px-6 md:px-10'>
             
             <div className='bg-white w-full max-w-md sm:max-w-lg md:max-w-xl p-6 sm:p-8 md:p-10 rounded-xl shadow-lg'>
                 
