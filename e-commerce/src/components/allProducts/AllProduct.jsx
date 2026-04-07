@@ -340,7 +340,7 @@ function AllProducts() {
 
     
     const fetchProducts=async()=>{
-      console.log("flo")
+     
         try{
             // ✅ changed axios → api
             const res=await api.get(`/api/products?category=${categoryValue}&price=${price}&page=${page}&limit=${10}`)
