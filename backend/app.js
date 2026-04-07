@@ -6,16 +6,11 @@ import cors from 'cors'
 
 const app=express();
  
-// app.use(cors({
-//      origin: process.env.CORS_ORIGIN
-// }))
-
 app.use(cors({
-  origin: process.env.CORS_ORIGIN?.replace(/\/$/, ''), // remove trailing slash if any
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],  // ← needed for JWT token
-  credentials: true,
-}));
+     origin: process.env.CORS_ORIGIN
+}))
+
+
 
 app.options("*", cors()); // ← handles preflight requests
 
