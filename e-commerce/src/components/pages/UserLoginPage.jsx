@@ -1,7 +1,5 @@
-
-
 import React, { useState } from 'react'
-import api from "../../utils/api";   // ✅ changed
+import api from "../../utils/api";
 import { Link, useNavigate } from 'react-router-dom';
 
 function UserLoginPage() {
@@ -15,7 +13,6 @@ function UserLoginPage() {
 
     const navigate = useNavigate();
 
-    // Handle mobile input
     const handleMobileChange = (e) => {
         const value = e.target.value;
         if (/^\d*$/.test(value) && value.length <= 10) {
@@ -26,7 +23,6 @@ function UserLoginPage() {
         }
     };
 
-    // Handle OTP input
     const handleOtpChange = (e) => {
         const value = e.target.value;
         if (/^\d*$/.test(value) && value.length <= 6) {
@@ -37,7 +33,6 @@ function UserLoginPage() {
         }
     };
 
-    // Generate OTP API
     const handleGenerateOtp = async (e) => {
         e.preventDefault();
 
@@ -47,7 +42,7 @@ function UserLoginPage() {
         }
 
         try {
-            const res = await api.post(   // ✅ changed
+            const res = await api.post(
                 "/api/login",
                 { mobile },
                 { headers: { "Content-Type": "application/json" } }
@@ -59,11 +54,9 @@ function UserLoginPage() {
             } 
         } catch (error) {
             setMobileError(error.response?.data?.message || "Something went wrong");
-            console.log("Error from backend:", error.response?.data);
         }
     };
 
-    // Submit OTP API
     const handleSubmitOtp = async (e) => {
         e.preventDefault();
 
@@ -73,13 +66,11 @@ function UserLoginPage() {
         }
 
         try {
-            const res = await api.post(   // ✅ changed
+            const res = await api.post(
                 "/api/verifyOTP",
                 { mobile: mobile, otp: otp ,session_id:session_id },
                 { headers: { "Content-Type": "application/json" } }
             );
-
-            console.log("OTP Verification Response:", res.data);
 
             if (res.data.success) {
                 localStorage.setItem('token',res.data.token);   
@@ -94,90 +85,102 @@ function UserLoginPage() {
             setOtp("");
 
         } catch (error) {
-            console.log(error);
             setOtpError(error.response?.data?.message || "Invalid OTP. Try again.");
         }
     };
 
     return (
-        <div className='bg-gray-100 px-10 pt-2 '>
-            <div className='bg-white p-28 flex justify-center items-center'>
-                <div className="bg-white outline-5 outline-gray-100 p-6 w-120 h-80 rounded-xl shadow-lg ">
-                    <h2 className="text-2xl font-bold text-center mb-6 text-blue-500 font-bold">User Login</h2>
+        <div className='bg-gray-100 min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-10'>
+            
+            <div className='bg-white w-full max-w-md sm:max-w-lg md:max-w-xl p-6 sm:p-8 md:p-10 rounded-xl shadow-lg'>
+                
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6 text-blue-500">
+                    User Login
+                </h2>
 
-                    {step === 1 && (
-                        <form onSubmit={handleGenerateOtp}>
-                            <label className="block font-medium mb-1 pl-2">Mobile Number</label>
-                            <input
-                                type="tel"
-                                value={mobile}
-                                onChange={handleMobileChange}
-                                placeholder="Enter your mobile number"
-                                className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-1 focus:ring-1
-                                ${mobileError ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"}`}
-                                maxLength={10}
-                                required
-                            />
+                {step === 1 && (
+                    <form onSubmit={handleGenerateOtp}>
+                        
+                        <label className="block font-medium mb-1 pl-1 sm:pl-2 text-sm sm:text-base">
+                            Mobile Number
+                        </label>
 
-                            <p className="text-red-500 pt-[0.5px] text-sm mb-2 h-5">
-                                {mobileError ? mobileError : " "}
-                            </p>
+                        <input
+                            type="tel"
+                            value={mobile}
+                            onChange={handleMobileChange}
+                            placeholder="Enter your mobile number"
+                            className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-1 text-sm sm:text-base
+                            ${mobileError 
+                              ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
+                              : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"}`}
+                            maxLength={10}
+                            required
+                        />
 
-                            <button
-                                type="submit"
-                                className="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-gray-800 transition"
-                            >
-                                Generate OTP
-                            </button>
+                        <p className="text-red-500 text-xs sm:text-sm mb-2 h-5">
+                            {mobileError ? mobileError : " "}
+                        </p>
 
-                            <Link to={'/register'}>
-                                <h1 className='mt-5 text-center text-[16px] hover:text-blue-500 cursor-pointer'>
-                                    Create an account ?
-                                </h1>
-                            </Link>
-                        </form>
-                    )}
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-500 text-white font-semibold py-2 sm:py-3 rounded-lg hover:bg-gray-800 transition text-sm sm:text-base"
+                        >
+                            Generate OTP
+                        </button>
 
-                    {step === 2 && (
-                        <form onSubmit={handleSubmitOtp}>
-                            <p className="mb-4 text-gray-700">
-                                Enter OTP sent to <strong>{mobile}</strong>
-                            </p>
+                        <Link to={'/register'}>
+                            <h1 className='mt-4 sm:mt-5 text-center text-sm sm:text-base hover:text-blue-500 cursor-pointer'>
+                                Create an account ?
+                            </h1>
+                        </Link>
+                    </form>
+                )}
 
-                            <input
-                                type="text"
-                                value={otp}
-                                onChange={handleOtpChange}
-                                placeholder="Enter OTP"
-                                className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-4
-                                ${otpError ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"}`}
-                                maxLength={6}
-                                required
-                            />
+                {step === 2 && (
+                    <form onSubmit={handleSubmitOtp}>
+                        
+                        <p className="mb-4 text-gray-700 text-sm sm:text-base text-center sm:text-left">
+                            Enter OTP sent to <strong>{mobile}</strong>
+                        </p>
 
-                            <p className="text-red-500 text-sm mb-2 h-5">{otpError ? otpError : " "}</p>
+                        <input
+                            type="text"
+                            value={otp}
+                            onChange={handleOtpChange}
+                            placeholder="Enter OTP"
+                            className={`w-full px-3 py-2 border rounded-lg focus:outline-none mb-4 text-sm sm:text-base
+                            ${otpError 
+                              ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500" 
+                              : "border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"}`}
+                            maxLength={6}
+                            required
+                        />
 
-                            <button
-                                type="submit"
-                                className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
-                            >
-                                Submit
-                            </button>
+                        <p className="text-red-500 text-xs sm:text-sm mb-2 h-5">
+                            {otpError ? otpError : " "}
+                        </p>
 
-                            <button
-                                type="button"
-                                className="mt-2 w-full text-sm text-blue-600 hover:underline"
-                                onClick={() => setStep(1)}
-                            >
-                                Edit mobile number
-                            </button>
-                        </form>
-                    )}
-                </div>
+                        <button
+                            type="submit"
+                            className="w-full bg-black text-white py-2 sm:py-3 rounded-lg hover:bg-gray-800 transition text-sm sm:text-base"
+                        >
+                            Submit
+                        </button>
+
+                        <button
+                            type="button"
+                            className="mt-2 w-full text-xs sm:text-sm text-blue-600 hover:underline"
+                            onClick={() => setStep(1)}
+                        >
+                            Edit mobile number
+                        </button>
+                    </form>
+                )}
+
             </div>
         </div>
     )
 }
 
 export default UserLoginPage;
-
