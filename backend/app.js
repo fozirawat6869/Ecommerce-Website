@@ -12,7 +12,7 @@ app.use(cors({
 
 
 
-app.options("*", cors()); // ← handles preflight requests
+// app.options("*", cors()); // ← handles preflight requests
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
