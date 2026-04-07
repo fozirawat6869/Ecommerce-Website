@@ -128,11 +128,11 @@ function AllProducts() {
               <Link
                 to={`/product/${item.product_id}`}
                 key={item.product_id}
-                className='w-90 h-120 p-2 bg-gray-100 cursor-pointer flex flex-col'
+                className='w-[260px] h-[360px] p-2 bg-gray-100 cursor-pointer flex flex-col'
               >
 
                 {/* IMAGE */}
-                <div className='w-full h-[75%]'>
+                <div className='w-full h-[70%]'>
                   <img
                     className='w-full h-full object-cover'
                     src={`${BASE_URL}/${item.image}`}
@@ -141,14 +141,16 @@ function AllProducts() {
                 </div>
 
                 {/* DETAILS */}
-                <div className='w-full h-[25%] flex flex-col justify-between px-3 py-2'>
+                <div className='w-full h-[30%] flex flex-col justify-between px-3 py-2'>
 
-                  <h2 className='text-gray-600 text-[16px] font-medium line-clamp-1'>
+                  <h2 className='text-gray-600 text-[15px] font-medium'>
                     {item.product_name}
                   </h2>
 
-                  <p className='text-sm text-gray-500 line-clamp-2'>
-                    {item.product_description}
+                  <p className='text-sm text-gray-500'>
+                    {item.product_description?.length > 38
+                      ? item.product_description.substring(0, 38) + "..."
+                      : item.product_description}
                   </p>
 
                   <p className='font-bold text-[16px]'>
