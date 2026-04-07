@@ -448,10 +448,12 @@ connection.query(`insert into product(product_name,product_description,product_p
 
 })}
 
+
+
+
+
+
 // for show newly added product in home page in main
-
-
-
 
 export const newlyAddedProducts=(req,res,next)=>{
   

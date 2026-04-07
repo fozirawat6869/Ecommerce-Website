@@ -1,153 +1,97 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
-import { useState,useEffect } from 'react';
-import api,{BASE_URL} from "../../utils/api"; // ✅ added
+import api, { BASE_URL } from "../../utils/api";
 
 function NewlyAddedProduct() {
-     
-    const [page,setPage]=useState(1)
-     let limit =12;
 
-      const [newlyProduct,setNewlyProduct]=useState([])
-        // const [page,setPage]
-        useEffect(()=>{
-             api.get(`/api/newlyAddedProducts?page=${page}&limit=12`)
-             .then(res=>res.json())
-             .then(data=>{
-                console.log("newly added product data",data)
-                console.log(data.newlyAddedProducts)
-                 setNewlyProduct(data.newlyAddedProducts)
-            })
-             .catch(err=>console.log("Error fetching newly added products:", err))
-             
-        },[page])
+  const [page, setPage] = useState(1);
+  const limit = 12;
+
+  const [newlyProduct, setNewlyProduct] = useState([]);
+
+  useEffect(() => {
+    api.get(`/api/newlyAddedProducts?page=${page}&limit=${limit}`)
+      .then(res => {
+        console.log("newly added product data", res.data);
+        setNewlyProduct(res.data.newlyAddedProducts);
+      })
+      .catch(err => console.log("Error fetching newly added products:", err));
+
+  }, [page]);
+
   return (
-  <>
-     <div className='bg-gray-100 p-3 px-10'>
-        {/* <h1 className='text-3xl bg-white text-center px-10'>Newly Added Products</h1> */}
-           <div className=' flex flex-col  bg-white'>
-       
-         <h1 className='text-center p-5 font-bold text-2xl '>Newly Added Products</h1>
-        
-     <div className='flex gap-5 flex-wrap justify-center  bg-white  pb-4'>
-        
-        {
-            newlyProduct.map((item)=>(
-                <Link to={`/product/${item.product_id}`} key={item.product_id}
-                     className='  w-90 h-120 p-2  bg-gray-100 cursor-pointer '
-                >
-                    <div className='w-full h-[75%]'><img className=' w-full h-full' src={item.main_image} alt="jacket image" /></div>
-                    <div className='w-full h-[25%] flex flex-col justify-center px-5  flex flex-col justify-center'>
-                        <h2 className='text-gray-600 text-[18px]'>{item.name}</h2> 
-                        {/* <p>{item.description}</p> */}
-                        <p>{item.description.length > 38 ? item.description.substring(0, 38) + "..." : item.description}</p>
+    <div className='bg-gray-100 px-4 sm:px-6 md:px-10 py-4'>
 
-                        <p className='font-bold text-[18px]'>₹{item.price}</p>
-                       
-                        <p>sfdgdfdfg</p>
-                    </div>
-                </Link>
-            ))
-        }
-     </div>
-        {/* Pagination */}
-     <div className='pt-3 bg-gray-100 '>
-       <div className='flex justify-center bg-white gap-5 p-5 '>
-           <button
-           disabled={page===1}
-            onClick={()=>setPage(page-1)}
-            className=' bg-red-500 px-4 py-2 rounded-xl text-white text-[16px] cursor-pointer'>Previous</button>
-            <button 
-            disabled={newlyProduct.length<limit}
-            onClick={()=>setPage(page+1)}
-            className=' bg-green-500 px-4 py-2 rounded-xl text-white text-[16px] cursor-pointer'>Next</button>
+      <div className='bg-white rounded-xl shadow-md'>
+
+        {/* TITLE */}
+        <h1 className='text-center py-5 font-bold text-xl sm:text-2xl md:text-3xl'>
+          Newly Added Products
+        </h1>
+
+        {/* PRODUCTS GRID */}
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 px-4 pb-6'>
+
+          {newlyProduct.map((item) => (
+            <Link
+              to={`/product/${item.product_id}`}
+              key={item.product_id}
+              className='bg-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition'
+            >
+              {/* IMAGE */}
+              <div className='w-full h-48 sm:h-56 md:h-60 lg:h-64'>
+                <img
+                  className='w-full h-full object-cover'
+                  src={`${BASE_URL}/${item.main_image}`}   // ✅ FIXED
+                  alt="product"
+                />
+              </div>
+
+              {/* DETAILS */}
+              <div className='p-3 flex flex-col gap-1'>
+                <h2 className='text-gray-700 font-semibold text-sm sm:text-base'>
+                  {item.name}
+                </h2>
+
+                <p className='text-xs sm:text-sm text-gray-500'>
+                  {item.description?.length > 40
+                    ? item.description.substring(0, 40) + "..."
+                    : item.description}
+                </p>
+
+                <p className='font-bold text-sm sm:text-lg'>
+                  ₹{item.price}
+                </p>
+              </div>
+            </Link>
+          ))}
+
         </div>
-     </div>
-    </div>
+
+        {/* PAGINATION */}
+        <div className='flex justify-center gap-4 pb-6'>
+
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className='bg-red-500 px-4 py-2 rounded-lg text-white disabled:opacity-40'
+          >
+            Previous
+          </button>
+
+          <button
+            disabled={newlyProduct.length < limit}
+            onClick={() => setPage(page + 1)}
+            className='bg-green-500 px-4 py-2 rounded-lg text-white disabled:opacity-40'
+          >
+            Next
+          </button>
+
+        </div>
+
       </div>
-  </>
+    </div>
   )
 }
 
-export default NewlyAddedProduct
-
-
-// import React from 'react'
-// import { Link } from "react-router-dom";
-// import { useState,useEffect } from 'react';
-// import api from "../../utils/api"; // ✅ added
-
-// function NewlyAddedProduct() {
-     
-//     const [page,setPage]=useState(1)
-//     let limit =12;
-
-//     const [newlyProduct,setNewlyProduct]=useState([])
-
-//     useEffect(()=>{
-//         api.get(`/api/newlyAddedProducts?page=${page}&limit=12`) // ✅ changed
-//         .then(res=>{
-//             console.log("newly added product data",res.data)
-//             console.log(res.data.newlyAddedProducts)
-//             setNewlyProduct(res.data.newlyAddedProducts)
-//         })
-//         .catch(err=>console.log("Error fetching newly added products:", err))
-        
-//     },[page])
-
-//   return (
-//   <>
-//      <div className='bg-gray-100 p-3 px-10'>
-//            <div className=' flex flex-col  bg-white'>
-       
-//          <h1 className='text-center p-5 font-bold text-2xl '>Newly Added Products</h1>
-        
-//      <div className='flex gap-5 flex-wrap justify-center  bg-white  pb-4'>
-        
-//         {
-//             newlyProduct.map((item)=>(
-//                 <Link to={`/product/${item.product_id}`} key={item.product_id}
-//                      className='  w-90 h-120 p-2  bg-gray-100 cursor-pointer '
-//                 >
-//                     <div className='w-full h-[75%]'>
-//                       <img className=' w-full h-full' src={item.main_image} alt="jacket image" />
-//                     </div>
-//                     <div className='w-full h-[25%] flex flex-col justify-center px-5  flex flex-col justify-center'>
-//                         <h2 className='text-gray-600 text-[18px]'>{item.name}</h2> 
-//                         <p>{item.description.length > 38 ? item.description.substring(0, 38) + "..." : item.description}</p>
-
-//                         <p className='font-bold text-[18px]'>₹{item.price}</p>
-                       
-//                         <p>sfdgdfdfg</p>
-//                     </div>
-//                 </Link>
-//             ))
-//         }
-//      </div>
-
-//      {/* Pagination */}
-//      <div className='pt-3 bg-gray-100 '>
-//        <div className='flex justify-center bg-white gap-5 p-5 '>
-//            <button
-//            disabled={page===1}
-//             onClick={()=>setPage(page-1)}
-//             className=' bg-red-500 px-4 py-2 rounded-xl text-white text-[16px] cursor-pointer'>
-//             Previous
-//            </button>
-
-//             <button 
-//             disabled={newlyProduct.length<limit}
-//             onClick={()=>setPage(page+1)}
-//             className=' bg-green-500 px-4 py-2 rounded-xl text-white text-[16px] cursor-pointer'>
-//             Next
-//             </button>
-//         </div>
-//      </div>
-
-//     </div>
-//   </div>
-//   </>
-//   )
-// }
-
-// export default NewlyAddedProduct
+export default NewlyAddedProduct;
