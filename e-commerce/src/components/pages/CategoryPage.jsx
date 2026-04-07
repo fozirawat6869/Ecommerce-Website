@@ -1,14 +1,8 @@
-
-
 import React, { useState } from 'react'
-
-
 import { Link, useParams } from 'react-router-dom'
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { useQuery } from '@tanstack/react-query'
 import { filterConfig } from '../reuseCode/filterConfig'
-
-// ✅ add this
 import api, { BASE_URL } from '../../utils/api'
 
 function CategoryPage() {
@@ -23,7 +17,6 @@ function CategoryPage() {
     setPrice(prev => prev === value ? "" : value)
   }
 
-  // Fetch products
   const fetchProducts = async () => {
     try {
       const queryParams = new URLSearchParams({
@@ -34,14 +27,9 @@ function CategoryPage() {
         limit: 10
       }).toString()
 
-      // ✅ axios → api
       const res = await api.get(`/api/productsCategory?${queryParams}`)
-
-      console.log("all data for backend", queryParams)
-      console.log(res.data.categoryProducts)
       return res.data.categoryProducts || []
     } catch {
-      console.log("error in fetching category products")
       return []
     }
   }
@@ -68,13 +56,15 @@ function CategoryPage() {
   const currentFilterConfig = filterConfig[category] || {}
 
   return (
-    <main className='flex gap-5 bg-gray-100 px-8 py-4'>
+    <main className='flex flex-col lg:flex-row gap-5 bg-gray-100 px-3 sm:px-6 md:px-8 py-4'>
 
-      <div className='flex flex-col bg-white h-auto w-1/4'>
-        <h1 className='text-center text-xl py-4'>Filter</h1>
+      {/* FILTER */}
+      <div className='w-full lg:w-1/4 bg-white rounded-lg shadow'>
+
+        <h1 className='text-center text-lg sm:text-xl py-4 font-semibold'>Filter</h1>
 
         {Object.keys(currentFilterConfig).map((filterKey) => (
-          <div key={filterKey} className='border-b-1 border-gray-300 px-5 py-4'>
+          <div key={filterKey} className='border-b border-gray-300 px-4 py-3'>
             <div
               className='flex justify-between items-center cursor-pointer'
               onClick={() =>
@@ -84,21 +74,21 @@ function CategoryPage() {
                 }))
               }
             >
-              <h2>{filterKey.toUpperCase()}</h2>
+              <h2 className='text-sm sm:text-base'>{filterKey.toUpperCase()}</h2>
               {showSection[filterKey] ? <IoIosArrowUp /> : <IoIosArrowDown />}
             </div>
 
             {showSection[filterKey] && (
-              <div className='flex flex-col pt-3'>
+              <div className='flex flex-col pt-2'>
                 {currentFilterConfig[filterKey].map((value) => (
-                  <div className='flex gap-3' key={value}>
+                  <div className='flex gap-2 items-center' key={value}>
                     <input
                       type="checkbox"
                       value={value}
                       checked={filters[filterKey] === value}
                       onChange={() => handleFilterChange(filterKey, value)}
                     />
-                    <label>{value}</label>
+                    <label className='text-sm'>{value}</label>
                   </div>
                 ))}
               </div>
@@ -107,87 +97,75 @@ function CategoryPage() {
         ))}
 
         {/* PRICE */}
-        <div className='border-b-1 border-gray-300 px-5 py-4'>
-          <div 
-            className='flex justify-between items-center cursor-pointe'
+        <div className='border-b border-gray-300 px-4 py-3'>
+          <div
+            className='flex justify-between items-center cursor-pointer'
             onClick={() => setShowSection(prev => ({ ...prev, price: !prev.price }))}
           >
-            <h2>Price</h2>
+            <h2 className='text-sm sm:text-base'>Price</h2>
             {showSection.price ? <IoIosArrowUp /> : <IoIosArrowDown />}
           </div>
 
           {showSection.price && (
-            <div className='flex flex-col pt-3 '>
-              <div className='flex gap-3'>
-                <input type="checkbox" value="100" checked={price==="100"} onChange={handlePrice} />
-                <label>₹100</label>
-              </div>
-
-              <div className='flex gap-3'>
-                <input type="checkbox" value="200" checked={price==="200"} onChange={handlePrice} />
-                <label>₹200</label>
-              </div>
-
-              <div className='flex gap-3'>
-                <input type="checkbox" value="300" checked={price==="300"} onChange={handlePrice} />
-                <label>₹300</label>
-              </div>
-
-              <div className='flex gap-3'>
-                <input type="checkbox" value="400" checked={price==="400"} onChange={handlePrice} />
-                <label>₹400</label>
-              </div>
-
-              <div className='flex gap-3'>
-                <input type="checkbox" value="500" checked={price==="500"} onChange={handlePrice} />
-                <label>₹500</label>
-              </div>
-
-              <div className='flex gap-3'>
-                <input type="checkbox" value="1000" checked={price==="1000"} onChange={handlePrice} />
-                <label>₹1000</label>
-              </div>
-
-              <div className='flex gap-3'>
-                <input type="checkbox" value="1000plus" checked={price==="1000plus"} onChange={handlePrice} />
-                <label>₹1000+</label>
-              </div>
+            <div className='flex flex-col pt-2'>
+              {["100","200","300","400","500","1000","1000plus"].map(val => (
+                <div key={val} className='flex gap-2 items-center'>
+                  <input
+                    type="checkbox"
+                    value={val}
+                    checked={price === val}
+                    onChange={handlePrice}
+                  />
+                  <label className='text-sm'>
+                    ₹{val === "1000plus" ? "1000+" : val}
+                  </label>
+                </div>
+              ))}
             </div>
           )}
         </div>
       </div>
 
-      {/* RIGHT */}
-      <div className='flex flex-col w-full bg-white'>
-        <h1 className='text-center font-bold text-2xl py-5'>{category} Products</h1>
+      {/* PRODUCTS */}
+      <div className='w-full bg-white rounded-lg shadow'>
+        <h1 className='text-center font-bold text-xl sm:text-2xl py-4'>
+          {category} Products
+        </h1>
 
-        <div className='flex gap-5 flex-wrap justify-center pb-4 '>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-3 pb-4'>
           {data?.length === 0 ? (
-            <div className='bg-gray-100 pt-3 w-full'>
-              <h2 className="text-lg font-semibold text-gray-600 bg-white text-center pt-4 ">
-                No products available
-              </h2>
+            <div className='col-span-full text-center text-gray-500 py-10'>
+              No products available
             </div>
           ) : (
             data?.map((item) => (
               <Link
                 to={`/product/${item.product_id}`}
                 key={item.product_id}
-                className='w-90 h-120 p-2 bg-gray-100 cursor-pointer'
+                className='bg-gray-100 rounded-lg overflow-hidden hover:shadow-lg transition'
               >
-                <div className='w-full h-[75%]'>
-                  {/* ✅ image fixed */}
-                  <img 
-                    className='w-full h-full' 
-                    src={`${BASE_URL}/${item.image}`} 
-                    alt={item.product_name} 
+                <div className='h-40 sm:h-48 md:h-52'>
+                  <img
+                    className='w-full h-full object-cover'
+                    src={`${BASE_URL}/${item.image}`}
+                    alt={item.product_name}
                   />
                 </div>
 
-                <div className='w-full h-[25%] flex flex-col justify-center px-5'>
-                  <h2 className='text-gray-600 text-[18px]'>{item.product_name}</h2>
-                  <p>{item.product_description.length > 38 ? item.product_description.substring(0, 38) + "..." : item.product_description}</p>
-                  <p className='font-bold text-[18px]'>₹{item.product_price}</p>
+                <div className='p-3 flex flex-col gap-1'>
+                  <h2 className='text-sm sm:text-base text-gray-700 font-semibold'>
+                    {item.product_name}
+                  </h2>
+
+                  <p className='text-xs sm:text-sm text-gray-500'>
+                    {item.product_description.length > 40
+                      ? item.product_description.substring(0, 40) + "..."
+                      : item.product_description}
+                  </p>
+
+                  <p className='font-bold text-sm sm:text-base'>
+                    ₹{item.product_price}
+                  </p>
                 </div>
               </Link>
             ))
@@ -195,24 +173,22 @@ function CategoryPage() {
         </div>
 
         {/* Pagination */}
-        <div className='pt-3 bg-gray-100'>
-          <div className='flex justify-center bg-white gap-5 p-5'>
-            <button
-              disabled={page === 1}
-              onClick={() => setPage(page - 1)}
-              className='bg-red-500 px-4 py-2 rounded-xl text-white text-[16px] cursor-pointer'
-            >
-              Previous
-            </button>
+        <div className='flex justify-center gap-3 py-4'>
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className='bg-red-500 px-3 sm:px-4 py-2 rounded text-white text-sm sm:text-base disabled:opacity-50'
+          >
+            Previous
+          </button>
 
-            <button
-              disabled={data?.length < page * 10}
-              onClick={() => setPage(page + 1)}
-              className='bg-green-500 px-4 py-2 rounded-xl text-white text-[16px] cursor-pointer'
-            >
-              Next
-            </button>
-          </div>
+          <button
+            disabled={data?.length < 10}
+            onClick={() => setPage(page + 1)}
+            className='bg-green-500 px-3 sm:px-4 py-2 rounded text-white text-sm sm:text-base disabled:opacity-50'
+          >
+            Next
+          </button>
         </div>
       </div>
     </main>

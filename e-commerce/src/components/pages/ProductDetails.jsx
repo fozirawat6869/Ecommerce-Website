@@ -485,7 +485,9 @@ function ProductDetails() {
     staleTime: 5 * 60 * 1000,
   });
 
-  if (isLoading) return <p className="text-center py-10">Loading...</p>;
+ if(isLoading){
+    return <div className='bg-gray-100 px-10 py-2 '><h1 className=' bg-white text-center p-5 text-black text-6xl'>⏳ Loading...</h1></div>
+   }
   if (isError)
     return (
       <p className="text-center py-10 text-red-500">
