@@ -60,7 +60,6 @@ function CategoryPage() {
 
       {/* FILTER */}
       <div className='w-full lg:w-1/4 bg-white rounded-lg shadow'>
-
         <h1 className='text-center text-lg sm:text-xl py-4 font-semibold'>Filter</h1>
 
         {Object.keys(currentFilterConfig).map((filterKey) => (
@@ -132,7 +131,9 @@ function CategoryPage() {
           {category} Products
         </h1>
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-3 pb-4'>
+        {/* ✅ CENTER FIX HERE */}
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-3 pb-4 justify-items-center'>
+          
           {data?.length === 0 ? (
             <div className='col-span-full text-center text-gray-500 py-10'>
               No products available
@@ -142,7 +143,7 @@ function CategoryPage() {
               <Link
                 to={`/product/${item.product_id}`}
                 key={item.product_id}
-                className='bg-gray-100 rounded-lg overflow-hidden hover:shadow-lg transition'
+                className='bg-gray-100 rounded-lg overflow-hidden w-full max-w-[250px] mx-auto hover:shadow-lg transition'
               >
                 <div className='h-40 sm:h-48 md:h-52'>
                   <img
