@@ -474,6 +474,7 @@ LIMIT ${limit} OFFSET ${offset}
   
      connection.query(query, (err,result)=>{
       console.log("newly added products result:", result);
+      console.log("newly added products query:", query);
       if(err){
       return next(new HandleError("error in query of newly added products",400))
     }

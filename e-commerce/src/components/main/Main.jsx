@@ -81,6 +81,7 @@ function Main() {
 
     // ✅ use api
     api.get("/api/newlyAddedProducts")
+    
       .then(res => {
         console.log("newly home data", res.data)
         setNewlyProduct(res.data.newlyAddedProducts)
