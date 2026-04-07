@@ -103,10 +103,14 @@ const Categories = () => {
   }, [selectedCategoryItem, navigate]);
 
   return (
-    <div className="w-full bg-gray-100 py-2">
+  <div className="w-full bg-gray-100 py-2">
+
+    {/* CENTER WRAPPER (IMPORTANT) */}
+    <div className="max-w-6xl mx-auto">
 
       {/* SCROLL CONTAINER */}
-      <div className="flex gap-4 px-3 sm:px-6 lg:px-10 bg-white py-3 overflow-x-auto scroll-smooth whitespace-nowrap">
+      <div className="flex gap-4 px-3 sm:px-6 bg-white py-3 
+                      overflow-x-auto scroll-smooth whitespace-nowrap">
 
         {categories.map((item, index) => (
           <div
@@ -115,7 +119,6 @@ const Categories = () => {
             className="flex flex-col items-center cursor-pointer flex-shrink-0 min-w-[70px] sm:min-w-[90px]"
           >
 
-            {/* ICON BOX */}
             <div className="bg-gray-200 hover:bg-gray-300 transition 
                             rounded-full flex items-center justify-center
                             w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
@@ -123,10 +126,8 @@ const Categories = () => {
               <span className="text-gray-700 text-lg sm:text-xl md:text-2xl">
                 {item.icon}
               </span>
-
             </div>
 
-            {/* TEXT */}
             <p className="text-xs sm:text-sm text-gray-800 mt-2 text-center font-medium">
               {item.name}
             </p>
@@ -135,8 +136,10 @@ const Categories = () => {
         ))}
 
       </div>
+
     </div>
-  );
+  </div>
+)
 };
 
 export default Categories;
