@@ -398,7 +398,106 @@ const handlePrice = (e) => {
 
            {showSection.category && (
             <div className='flex flex-col pt-3 '>
-                {/* unchanged */}
+                 <div className='flex gap-3'>
+                 <input
+                  type="checkbox"
+                  value="Men" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Men"}
+                  
+                  />
+
+                 <label htmlFor="">Men</label>
+                </div>
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Women" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Women"}
+                  />
+                 <label htmlFor="">Women</label>
+                </div>
+                
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Mouse" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Mouse"}
+                  />
+                 <label htmlFor="">Mouse</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Camera" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Camera"}
+                  />
+                 <label htmlFor="">Camera</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Earphones" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Earphones"}
+                  />
+                 <label htmlFor="">Earphones</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Mobiles" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Mobiles"}
+                  />
+                 <label htmlFor="">Mobiles</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Speakers" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Speakers"}
+                  />
+                 <label htmlFor="">Speakers</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Televisions" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Televisions"}
+                  />
+                 <label htmlFor="">Televisions</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Trimmers" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Trimmers"}
+                  />
+                 <label htmlFor="">Trimmers</label>
+                </div>
+
+                <div className='flex gap-3'>
+                 <input 
+                 type="checkbox"
+                  value="Watches" 
+                  onChange={handleCategory} 
+                  checked={categoryValue==="Watches"}
+                  />
+                 <label htmlFor="">Watches</label>
+                </div>
             </div>
         )}
        </div>
@@ -412,7 +511,57 @@ const handlePrice = (e) => {
 
            {showSection.price && (
             <div className='flex flex-col pt-3 '>
-                {/* unchanged */}
+                 <div className='flex gap-3'>
+                 <input type="checkbox" name="" id="" value="100"
+                 checked={price==="100"}
+                    onChange={handlePrice} 
+                    />
+                 <label htmlFor="">₹100</label>
+                </div>
+                <div className='flex gap-3'>
+                 <input type="checkbox" name="" id="" value="200" 
+                 checked={price==="200"}
+                    onChange={handlePrice} 
+                   
+                 />
+                 <label htmlFor="">₹200</label>
+                </div>
+                <div className='flex gap-3'>
+                 <input type="checkbox" name="" id="" value="300"
+                    onChange={handlePrice} 
+                    checked={price==="300"}
+                 />
+                 <label htmlFor="">₹300</label>
+                </div>
+                 <div className='flex gap-3'>
+                 <input type="checkbox" name="" id="" value="400"
+                    onChange={handlePrice} 
+                   checked={price==="400"}
+                 />
+
+                 <label htmlFor="">₹400</label>
+                </div>
+                 <div className='flex gap-3'>
+                 <input type="checkbox" name="" id="" value="500" 
+                 checked={price==="500"}
+                   onChange={handlePrice} 
+                 />
+                 <label htmlFor="">₹500</label>
+                </div>
+                 <div className='flex gap-3'>
+                 <input type="checkbox" name="" id="" value="1000" 
+                 checked={price==="1000"}              
+                    onChange={handlePrice}
+                  />
+                 <label htmlFor="">₹1000</label>
+                </div>
+                 <div className='flex gap-3'>
+                 <input type="checkbox" name="" id="" value="1000plus"
+                    onChange={handlePrice} 
+                     checked={price==="1000plus"}
+                  />
+                 <label htmlFor="">₹1000+</label>
+                </div>
             </div>
         )}
        </div>
