@@ -450,31 +450,55 @@ connection.query(`insert into product(product_name,product_description,product_p
 
 // for show newly added product in home page in main
 
-const query = `
-SELECT p.*,
-(
-  SELECT i.image_path 
-  FROM product_images i 
-  WHERE i.product_id = p.product_id 
-  LIMIT 1
-) AS main_image
-FROM product p
-WHERE p.created_at >= DATE_SUB(NOW(), INTERVAL 15 DAY)
-ORDER BY p.created_at DESC
-LIMIT ? OFFSET ?
-`;
 
-connection.query(query, [limit, offset], (err, result) => {
-  if (err) {
-    console.log("Error:", err);
-    return next(new HandleError("error in query of newly added products", 400));
+export const newlyAddedProducts = (req, res, next) => {
+  try {
+    // Get page and limit from query params
+    let { page, limit } = req.query;
+    page = Number(page) || 1;
+    limit = Number(limit) || 8;
+    let offset = (page - 1) * limit;
+
+    // Debug: Check tables in DB (optional, remove in production)
+    connection.query("SHOW TABLES", (err, tables) => {
+      if (err) console.log("Error fetching tables:", err);
+      else console.log("Tables in DB:", tables);
+    });
+
+    // Query for newly added products in the last 15 days
+    const query = `
+      SELECT p.*,
+      (
+        SELECT pi.image_path 
+        FROM product_images pi 
+        WHERE pi.product_id = p.product_id 
+        LIMIT 1
+      ) AS main_image
+      FROM product p
+      WHERE p.created_at >= DATE_SUB(NOW(), INTERVAL 15 DAY)
+      ORDER BY p.created_at DESC
+      LIMIT ? OFFSET ?;
+    `;
+
+    // Execute parameterized query
+    connection.query(query, [limit, offset], (err, result) => {
+      if (err) {
+        console.log("Error in newlyAddedProducts query:", err);
+        return next(new HandleError("Error fetching newly added products", 400));
+      }
+
+      console.log("Newly added products result:", result);
+
+      res.status(200).json({
+        success: true,
+        newlyAddedProducts: result,
+      });
+    });
+  } catch (error) {
+    console.log("Unexpected error:", error);
+    next(new HandleError("Server error", 500));
   }
-  console.log("newly added products result:", result);
-  res.status(200).json({
-    success: true,
-    newlyAddedProducts: result,
-  });
-});
+};
 
 // export const newlyAddedProducts=(req,res,next)=>{
   
