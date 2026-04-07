@@ -7,7 +7,7 @@ import cors from 'cors'
 const app=express();
  
 app.use(cors({
-    origin:"ecommerce-website-khpyq541c-mayur-rawats-projects.vercel.app"
+    origin:"ecommerce-website-two-rose.vercel.app"
 }))
 
 app.use(express.json())
