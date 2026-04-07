@@ -435,7 +435,7 @@
 
 
 
-import  api, {BASE_URL} from "../../utils/api"; // ✅ only change
+import  api from "../../utils/api"; // ✅ only change
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
