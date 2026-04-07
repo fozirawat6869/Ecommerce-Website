@@ -12,15 +12,14 @@ function NewlyAddedProduct() {
   useEffect(() => {
     api.get(`/api/newlyAddedProducts?page=${page}&limit=${limit}`)
       .then(res => {
-        console.log("newly added product data", res.data);
+        console.log("DATA:", res.data);
         setNewlyProduct(res.data.newlyAddedProducts);
       })
       .catch(err => console.log("Error fetching newly added products:", err));
-
   }, [page]);
 
   return (
-    <div className='bg-gray-100 px-4 sm:px-6 md:px-10 py-4'>
+    <div className='bg-gray-100 px-4 sm:px-6 md:px-10 py-6'>
 
       <div className='bg-white rounded-xl shadow-md'>
 
@@ -29,47 +28,53 @@ function NewlyAddedProduct() {
           Newly Added Products
         </h1>
 
-        {/* PRODUCTS GRID */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 px-4 pb-6'>
+        {/* CENTER CONTAINER */}
+        <div className='flex justify-center'>
+          <div className='flex flex-wrap justify-center gap-6 max-w-6xl'>
 
-          {newlyProduct.map((item) => (
-            <Link
-              to={`/product/${item.product_id}`}
-              key={item.product_id}
-              className='bg-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition'
-            >
-              {/* IMAGE */}
-              <div className='w-full h-48 sm:h-56 md:h-60 lg:h-64'>
-                <img
-                  className='w-full h-full object-cover'
-                  src={`${BASE_URL}/${item.main_image}`}   // ✅ FIXED
-                  alt="product"
-                />
-              </div>
+            {newlyProduct.map((item) => (
+              <Link
+                to={`/product/${item.product_id}`}
+                key={item.product_id}
+                className='w-[260px] bg-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition'
+              >
 
-              {/* DETAILS */}
-              <div className='p-3 flex flex-col gap-1'>
-                <h2 className='text-gray-700 font-semibold text-sm sm:text-base'>
-                  {item.name}
-                </h2>
+                {/* IMAGE */}
+                <div className='w-full h-52'>
+                  <img
+                    className='w-full h-full object-cover'
+                    src={`${BASE_URL}/${item.main_image}`}
+                    alt="product"
+                  />
+                </div>
 
-                <p className='text-xs sm:text-sm text-gray-500'>
-                  {item.description?.length > 40
-                    ? item.description.substring(0, 40) + "..."
-                    : item.description}
-                </p>
+                {/* DETAILS */}
+                <div className='p-3 flex flex-col gap-1'>
 
-                <p className='font-bold text-sm sm:text-lg'>
-                  ₹{item.price}
-                </p>
-              </div>
-            </Link>
-          ))}
+                  {/* NAME */}
+                  <h2 className='text-gray-800 font-semibold text-base line-clamp-1'>
+                    {item.product_name}
+                  </h2>
 
+                  {/* DESCRIPTION */}
+                  <p className='text-sm text-gray-500 line-clamp-2'>
+                    {item.product_description}
+                  </p>
+
+                  {/* PRICE */}
+                  <p className='font-bold text-lg text-black mt-1'>
+                    ₹{item.product_price}
+                  </p>
+
+                </div>
+              </Link>
+            ))}
+
+          </div>
         </div>
 
         {/* PAGINATION */}
-        <div className='flex justify-center gap-4 pb-6'>
+        <div className='flex justify-center gap-4 py-6'>
 
           <button
             disabled={page === 1}
