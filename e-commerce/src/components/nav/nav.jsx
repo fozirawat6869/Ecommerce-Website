@@ -6,6 +6,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
+import Skeleton from 'react-loading-skeleton'
 
 
 import debounce from "../reuseCode/debouncingFunc";
@@ -67,7 +68,12 @@ function Nav() {
   })
 
    if(isLoading){
-    return <div className='bg-gray-100 px-10 py-2 '><h1 className=' bg-white text-center p-5 text-black text-6xl'>⏳ Loading...</h1></div>
+    return <div className='bg-gray-100 px-10 py-2 '>
+      {/* <h1 className=' bg-white text-center p-5 text-black text-6xl'>
+        ⏳ Loading...
+        </h1> */}
+        <Skeleton count={5} height={50} width={100} className="mx-auto" />
+        </div>
    }
 
   return (
