@@ -463,19 +463,18 @@ export const newlyAddedProducts=(req,res,next)=>{
   limit=Number(limit)||8
   let offset=(page-1)*limit
   let query = `
-SELECT p.*,
+SELECT p.*, 
 (
   SELECT i.image_path 
   FROM product_images i 
   WHERE i.product_id = p.product_id 
   LIMIT 1
 ) AS main_image
-
 FROM product p
 WHERE p.created_at >= DATE_SUB(NOW(), INTERVAL 15 DAY)
 ORDER BY p.created_at DESC
-LIMIT ${limit} OFFSET ${offset}
-`
+LIMIT ? OFFSET ?
+`;
   
      connection.query(query, (err,result)=>{
       console.log("newly added products result:", result);
