@@ -455,39 +455,57 @@ connection.query(`insert into product(product_name,product_description,product_p
 
 // for show newly added product in home page in main
 
-export const newlyAddedProducts=(req,res,next)=>{
-  
-  console.log(req.query) // get the page and limit from query
-  let {page,limit}=req.query;
-  page=Number(page)||1
-  limit=Number(limit)||8
-  let offset=(page-1)*limit
-  let query = `
-SELECT p.*, 
-(
-  SELECT i.image_path 
-  FROM product_images i 
-  WHERE i.product_id = p.product_id 
-  LIMIT 1
-) AS main_image
-FROM product p
-WHERE p.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-ORDER BY p.created_at DESC
-LIMIT ? OFFSET ?
-`;
-  
-     connection.query(query, (err,result)=>{
-      console.log("newly added products result:", result);
-      console.log("newly added products query:", query);
-      if(err){
-      return next(new HandleError("error in query of newly added products",400))
-    }
-    res.status(200).json({
-      success:true,
-      newlyAddedProducts:result
-    }) 
-  })
-}
+export const newlyAddedProducts = (req, res, next) => {
+
+  try {
+    console.log("QUERY PARAMS:", req.query);
+
+    let { page, limit } = req.query;
+
+    // ✅ convert safely
+    page = Number(page) || 1;
+    limit = Number(limit) || 8;
+
+    const offset = (page - 1) * limit;
+
+    const query = `
+      SELECT p.*,
+      (
+        SELECT i.image_path 
+        FROM product_images i 
+        WHERE i.product_id = p.product_id 
+        LIMIT 1
+      ) AS main_image
+      FROM product p
+      WHERE p.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+      ORDER BY p.created_at DESC
+      LIMIT ? OFFSET ?
+    `;
+
+    connection.query(query, [limit, offset], (err, result) => {
+
+      console.log("Newly Added Products Query Result:", result);
+
+      // ❌ DB error → send to error middleware
+      if (err) {
+        console.log("DB ERROR:", err);
+        return next(new HandleError("Error in newly added products query", 500));
+      }
+
+      // ✅ success
+      res.status(200).json({
+        success: true,
+        newlyAddedProducts: result || []
+      });
+
+    });
+
+  } catch (error) {
+    // ❌ unexpected error
+    console.log("SERVER ERROR:", error);
+    return next(new HandleError("Server error", 500));
+  }
+};
 
 // api for frontend to show the categories in ui
 

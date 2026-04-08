@@ -1,42 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
-import { useQuery } from "@tanstack/react-query";
 import api, { BASE_URL } from "../../utils/api";
 
 function Main() {
 
-  // ✅ Fetch function (matches backend)
-  const fetchNewProducts = async () => {
-    const res = await api.get("/api/newlyAddedProducts", {
+  const [newlyProduct, setNewlyProduct] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    api.get("/api/newlyAddedProducts", {
       params: {
         page: 1,
         limit: 4,
       },
+    })
+    .then((res) => {
+      setNewlyProduct(res.data.newlyAddedProducts || []);
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.log(err);
+      setError("Error fetching products");
+      setLoading(false);
     });
+  }, []);
 
-    return res.data.newlyAddedProducts || [];
-  };
-
-  // ✅ React Query (caching enabled)
-  const {
-    data: newlyProduct = [],
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["newProducts", 1], // 🔥 cache key with page
-    queryFn: fetchNewProducts,
-    staleTime: 1000 * 60 * 5, // 5 min cache
-  });
-
-  // ✅ Loading UI
-  if (isLoading) {
+  // ✅ Loading
+  if (loading) {
     return <h1 className="text-center py-10">Loading...</h1>;
   }
 
-  // ✅ Error UI
-  if (isError) {
-    return <h1 className="text-center text-red-500">Error fetching products</h1>;
+  // ✅ Error
+  if (error) {
+    return <h1 className="text-center text-red-500">{error}</h1>;
   }
 
   return (
@@ -56,6 +54,13 @@ function Main() {
             <IoIosArrowForward className="text-2xl text-white" />
           </Link>
         </div>
+
+        {/* EMPTY STATE */}
+        {newlyProduct.length === 0 && (
+          <p className="text-center py-10 text-gray-500">
+            No products found
+          </p>
+        )}
 
         {/* PRODUCTS GRID */}
         <div className="mx-auto max-w-6xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 pb-5">
