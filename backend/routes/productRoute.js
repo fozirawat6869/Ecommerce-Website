@@ -21,7 +21,7 @@ router.route('/products').get(getAllProducts).post(createProduct)
 // router.route('/test').get(test)
 
 // updateProduct and delete product
- router.route('/products/:id').get(productDetails)
+ router.route('/products/:id').get(isAuthenticated,productDetails)
  // .put(updateProduct).delete(deleteProduct).get(getSingleProduct)
 
 
