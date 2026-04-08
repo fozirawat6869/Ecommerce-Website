@@ -27,23 +27,21 @@ function Main() {
     });
   }, []);
 
-  // ✅ Loading
   if (loading) {
     return <h1 className="text-center py-10">Loading...</h1>;
   }
 
-  // ✅ Error
   if (error) {
     return <h1 className="text-center text-red-500">{error}</h1>;
   }
 
   return (
-    <div className="bg-gray-100 p-3 sm:px-5 md:px-10">
-      <div className="bg-white">
+    <div className="bg-gray-100 px-2 sm:px-5 md:px-10 py-4">
+      <div className="bg-white rounded-lg">
 
         {/* HEADER */}
-        <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-10 items-center p-4 sm:p-5">
-          <h1 className="font-bold text-xl sm:text-2xl text-center">
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-6 md:gap-10 items-center p-3 sm:p-5">
+          <h1 className="font-bold text-lg sm:text-xl md:text-2xl text-center">
             Newly Added Products
           </h1>
 
@@ -51,7 +49,7 @@ function Main() {
             to="/newlyAddedProducts"
             className="bg-blue-500 rounded-full w-6 h-6 flex items-center justify-center"
           >
-            <IoIosArrowForward className="text-2xl text-white" />
+            <IoIosArrowForward className="text-lg sm:text-xl text-white" />
           </Link>
         </div>
 
@@ -63,17 +61,17 @@ function Main() {
         )}
 
         {/* PRODUCTS GRID */}
-        <div className="mx-auto max-w-6xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 pb-5">
+        <div className="mx-auto max-w-6xl grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 pb-5 px-2">
 
           {newlyProduct.map((item) => (
             <Link
               to={`/product/${item.product_id}`}
               key={item.product_id}
-              className="bg-gray-100 p-2 rounded-lg shadow-sm hover:shadow-md hover:scale-105 transition duration-200"
+              className="bg-gray-100 p-2 sm:p-3 rounded-lg shadow-sm hover:shadow-md hover:scale-105 transition duration-200"
             >
 
               {/* IMAGE */}
-              <div className="h-56">
+              <div className="h-36 sm:h-44 md:h-56">
                 <img
                   className="w-full h-full object-cover rounded-md"
                   src={
@@ -86,19 +84,19 @@ function Main() {
               </div>
 
               {/* DETAILS */}
-              <div className="mt-3 px-2 flex flex-col">
+              <div className="mt-2 sm:mt-3 px-1 sm:px-2 flex flex-col">
 
-                <h2 className="text-gray-700 text-sm font-medium truncate">
+                <h2 className="text-gray-700 text-xs sm:text-sm font-medium truncate">
                   {item.product_name}
                 </h2>
 
-                <p className="text-gray-600 text-sm">
-                  {item.product_description?.length > 38
-                    ? item.product_description.substring(0, 38) + "..."
+                <p className="text-gray-600 text-xs sm:text-sm">
+                  {item.product_description?.length > 40
+                    ? item.product_description.substring(0, 40) + "..."
                     : item.product_description}
                 </p>
 
-                <p className="font-bold text-[15px] mt-1">
+                <p className="font-bold text-sm sm:text-[15px] mt-1">
                   ₹{item.product_price}
                 </p>
 
