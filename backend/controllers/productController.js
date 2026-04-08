@@ -471,7 +471,7 @@ SELECT p.*,
   LIMIT 1
 ) AS main_image
 FROM product p
-WHERE p.created_at >= DATE_SUB(NOW(), INTERVAL 15 DAY)
+WHERE p.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
 ORDER BY p.created_at DESC
 LIMIT ? OFFSET ?
 `;
