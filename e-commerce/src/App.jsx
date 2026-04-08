@@ -25,6 +25,7 @@ const AddToCart=lazy(()=>import('./components/pages/AddToCart'))
 
 import Layout from "./components/layout/Layout";
 import Skeleton from 'react-loading-skeleton'
+import { SkeletonTheme } from "react-loading-skeleton";
 
 
 
@@ -47,8 +48,10 @@ function App() {
       // <div className='bg-gray-100 px-10 py-2 '>
       //   <h1 className=' bg-white text-center p-5 text-black text-6xl'>
       //     ⏳ Loading...</h1></div>
-        <Skeleton count={5} height={50} width={100} className="mx-auto" />
-        }>
+        // <Skeleton count={5} height={50} width={100} className="mx-auto" />
+       
+        <SkeletonTheme baseColor="#bfdbfe" highlightColor="#3b82f6"/>
+       }>
     <Routes>
       <Route element={<Layout/>}>
       <Route path='/' element={<Home/>}/>
