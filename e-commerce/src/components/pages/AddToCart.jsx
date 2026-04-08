@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api, { BASE_URL } from "../../utils/api";
+import AddToCartLoader from "../../Loaders/ForAddToCart";
 
 function AddToCart() {
   const queryClient = useQueryClient();
@@ -13,6 +14,8 @@ function AddToCart() {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    // await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate 2 sec delay
     return res.data.data;
   };
 
@@ -58,13 +61,14 @@ function AddToCart() {
   );
 
   // ✅ LOADING
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <h2 className="text-xl text-gray-600">Loading cart...</h2>
-      </div>
-    );
-  }
+
+  
+ if (isLoading) {
+  return(
+    <AddToCartLoader />
+  )
+
+}
 
   // ✅ ERROR
   if (isError) {
@@ -87,7 +91,7 @@ function AddToCart() {
   }
 
   return (
-    <div className="bg-gray-100 p-4 sm:p-6 min-h-screen">
+    <div className="bg-gray-100 p-4 sm:p-6 ">
       <h1 className="text-2xl sm:text-3xl text-center text-gray-700 font-bold mb-6">
         Your Cart
       </h1>

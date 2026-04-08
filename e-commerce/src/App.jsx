@@ -24,13 +24,6 @@ const AboutUs=lazy(()=>import('./components/pages/AboutUs'))
 const AddToCart=lazy(()=>import('./components/pages/AddToCart'))
 
 import Layout from "./components/layout/Layout";
-import Skeleton from 'react-loading-skeleton'
-import { SkeletonTheme } from "react-loading-skeleton";
-
-
-
-
-
 
 
 function App() {
@@ -45,12 +38,10 @@ function App() {
   {/* <Nav/> */}
   
     <Suspense fallback={
-      // <div className='bg-gray-100 px-10 py-2 '>
-      //   <h1 className=' bg-white text-center p-5 text-black text-6xl'>
-      //     ⏳ Loading...</h1></div>
-        // <Skeleton count={5} height={50} width={100} className="mx-auto" />
+      <div className='bg-gray-100 px-10 py-10 text-center min-h-screen'>
+        <h1 className=' bg-white text-center px-10 py-10 font-semibold rounder-2xl text-black text-6xl'>
+          ⏳ Page Loading...</h1></div>
        
-        <SkeletonTheme baseColor="#bfdbfe" highlightColor="#3b82f6"/>
        }>
     <Routes>
       <Route element={<Layout/>}>

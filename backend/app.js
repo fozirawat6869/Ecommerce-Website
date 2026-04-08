@@ -2,17 +2,18 @@ import express from 'express'
 import product from './routes/productRoute.js'
 import errorHandleMiddleware from './middleware/error.js'
 import cors from 'cors'
-// import isAuthenticated from './middleware/auth.js'
+
 
 const app=express();
  
 app.use(cors({
-     origin: process.env.CORS_ORIGIN
+     // origin: process.env.CORS_ORIGIN
+     origin: "http://localhost:5173"
 }))
 
 
 
-// app.options("*", cors()); // ← handles preflight requests
+
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
