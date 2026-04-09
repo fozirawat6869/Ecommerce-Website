@@ -985,6 +985,67 @@ export const removeFromCart=(req,res)=>{
 // admin login with email and password
 
 
+export const adminLogin=(req,res)=>{
 
+  console.log("admin login api", req.body);
+
+const {email,password}=req.body;
+
+// bcrypt.hash(password,10,(err,hash)=>{
+//   if(err){
+//     console.log("Error while hashing password", err);
+//     return res.status(500).json({ success: false, message: "Error while hashing password" });
+//   }
+//   console.log("Hashed password:", hash);
+  
+
+// })
+
+
+// })
+
+connection.query(`select * from admin where email=?`,[email],(err,result)=>{
+  if(err){
+    console.log("Error while querying admin", err);
+    return res.status(500).json({ success: false, message: "DB error" });
+  }
+  if(result.length===0){
+    return res.status(400).json({
+      success:false,
+      message:"Wrong email"
+    })
+  }
+  console.log("Admin query result", result);
+  const hash=result[0].password;
+
+  // compare password with hash password using bcrypt
+  bcrypt.compare(password, hash, (err, result) => {
+    if (err) {
+      console.log("Error while comparing password", err);
+      return res.status(500).json({ success: false, message: "Error while comparing password" });
+    }
+    console.log("Password comparison result:", result);
+    if(result===true){
+      const token=jwt.sign({email:email,role:"admin"},process.env.JWT_SECRET,{ expiresIn:'7d' })
+      res.status(200).json({
+        success:true,
+        message:"Admin logged in successfully",
+        token:token
+      })
+    }else{
+      res.status(400).json({
+        success:false,
+        message:"Wrong password"
+      })
+    }
+})
+
+
+})
+
+
+
+
+}
 
 
