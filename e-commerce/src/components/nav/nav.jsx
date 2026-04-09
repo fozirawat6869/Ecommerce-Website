@@ -7,7 +7,8 @@ import { RxCross2 } from "react-icons/rx";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
 import Skeleton from 'react-loading-skeleton'
-
+import 'react-loading-skeleton/dist/skeleton.css'
+import { SkeletonTheme } from "react-loading-skeleton";
 
 import debounce from "../reuseCode/debouncingFunc";
 import { useQuery } from "@tanstack/react-query";
@@ -54,6 +55,7 @@ function Nav() {
           Authorization: `Bearer ${token}`
         }
       })
+     
       console.log("cart count res",res.data.cartCount)
       return res.data.cartCount
     }catch(err){
@@ -67,14 +69,58 @@ function Nav() {
     queryFn: handleCartCount
   })
 
-   if(isLoading){
-    return <div className='bg-gray-100 px-10 py-2 '>
-      {/* <h1 className=' bg-white text-center p-5 text-black text-6xl'>
-        ⏳ Loading...
-        </h1> */}
-        <Skeleton count={5} height={50} width={100} className="mx-auto" />
+if (isLoading) {
+  return (
+    <SkeletonTheme baseColor="#e5e7eb" highlightColor="#f3f4f6">
+      <nav className="flex items-center justify-between px-3 md:px-20 py-3 bg-white sticky top-0 border-b border-gray-200 z-50">
+
+        {/* Logo */}
+        <Skeleton width={120} height={30} borderRadius={6} />
+
+        {/* Nav links - desktop only */}
+        <div className="hidden lg:flex gap-8">
+          <Skeleton width={50} height={16} borderRadius={4} />
+          <Skeleton width={65} height={16} borderRadius={4} />
+          <Skeleton width={60} height={16} borderRadius={4} />
+          <Skeleton width={75} height={16} borderRadius={4} />
         </div>
-   }
+
+        {/* Right side */}
+        <div className="flex items-center gap-4">
+
+          {/* Search - desktop only */}
+          <div className="hidden lg:block">
+            <Skeleton width={280} height={38} borderRadius={12} />
+          </div>
+
+          {/* Profile */}
+          <div className="flex items-center gap-1">
+            <Skeleton circle width={28} height={28} />
+            <div className="hidden lg:block">
+              <Skeleton width={40} height={14} borderRadius={4} />
+            </div>
+          </div>
+
+          {/* Cart */}
+          <div className="flex items-center gap-1">
+            <Skeleton circle width={28} height={28} />
+            <div className="hidden lg:block">
+              <Skeleton width={30} height={14} borderRadius={4} />
+            </div>
+          </div>
+
+          {/* Hamburger - mobile only */}
+          <div className="lg:hidden">
+            <Skeleton width={28} height={28} borderRadius={4} />
+          </div>
+
+        </div>
+      </nav>
+    </SkeletonTheme>
+  )
+}
+
+
 
   return (
     <>
