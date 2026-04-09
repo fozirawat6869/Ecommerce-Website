@@ -7,7 +7,7 @@ import { RxCross2 } from "react-icons/rx";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
 import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import 'react-loading-skeleton/dist/skeleton.css' // for skeleton styles gray line effect
 import { SkeletonTheme } from "react-loading-skeleton";
 
 import debounce from "../reuseCode/debouncingFunc";

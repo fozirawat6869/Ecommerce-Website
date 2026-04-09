@@ -4,6 +4,8 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { useQuery } from '@tanstack/react-query'
 import { filterConfig } from '../reuseCode/filterConfig'
 import api, { BASE_URL } from '../../utils/api'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css' // for skeleton styles gray line effect
 
 function CategoryPage() {
   const { category } = useParams()
@@ -28,13 +30,15 @@ function CategoryPage() {
       }).toString()
 
       const res = await api.get(`/api/productsCategory?${queryParams}`)
+      // hold for 5 sec to see skeleton
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate 5 sec delay
       return res.data.categoryProducts || []
     } catch {
       return []
     }
   }
 
-  const { data } = useQuery({
+  const { data,isLoading,isError } = useQuery({
     queryKey: ['products', page, filters, category, price],
     queryFn: fetchProducts,
     cacheTime: 1000 * 60 * 5,
@@ -54,6 +58,8 @@ function CategoryPage() {
   }
 
   const currentFilterConfig = filterConfig[category] || {}
+
+
 
   return (
     <main className='flex flex-col lg:flex-row gap-5 bg-gray-100 px-3 sm:px-6 md:px-8 py-4'>
@@ -197,3 +203,4 @@ function CategoryPage() {
 }
 
 export default CategoryPage
+
