@@ -5,6 +5,7 @@ import connection from '../config/sqldb.js'
 import dotenv from 'dotenv';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 
 dotenv.config({ path: './config/config.env' });
@@ -45,6 +46,7 @@ export const sendOTP = (req, res) => {
         connection.query(`insert into users (mobile) values (?)`, 
           [mobile], 
           (err,result) => {
+            console.log("User insert result:", result);
              if(err){
                 return res.status(500).json({
                   success: false,
@@ -104,8 +106,10 @@ export const loginOTP = (req, res) => {
     }
 
     // Mobile not registered → send OTP
-    axios.get(`https://2factor.in/API/V1/${process.env.API_KEY}/SMS/${mobile}/AUTOGEN`)
+    axios.get(`https://2factor.in/API/V1/${process.env.API_KEY}/SMS/+91${mobile}/AUTOGEN`)
       .then(response => {
+
+        console.log("2Factor Response:", response);
         const session_id = response.data.Details;
      
         // Only return session_id to client
@@ -510,10 +514,6 @@ export const newlyAddedProducts = (req, res, next) => {
 // api for frontend to show the categories in ui
 
 
-
-
-
-
 export const categories=(req,res)=>{
    connection.query("select * from category",(err,result)=>{
      console.log(result)
@@ -807,6 +807,7 @@ export const reviews = async (req, res) => {
 // add to cart
 
 export const addToCart=(req,res)=>{
+
     console.log("add to cart api", req.body);
     console.log("authenticated user in add to cart api", req.user);
 
@@ -981,6 +982,9 @@ export const removeFromCart=(req,res)=>{
 
 
 
-// 
+// admin login with email and password
+
+
+
 
 

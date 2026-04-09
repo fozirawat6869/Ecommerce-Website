@@ -20,6 +20,7 @@ import api from "../../utils/api";
 function Nav() {
   const [InputValue, setInputValue] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
    const handleInput=(e)=>{
      e.preventDefault();
@@ -43,12 +44,18 @@ function Nav() {
    }
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const navigate = useNavigate();
+  
 
   const token = localStorage.getItem("token");
 
+  
+
   const handleCartCount=async()=>{
+   
     try{
+      if(!token){
+        return 0
+      }
       // ✅ changed axios → api
       const res= await api.get("/api/cartCount",{
         headers:{
@@ -218,7 +225,9 @@ if (isLoading) {
                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                   onClick={() => {
                     localStorage.removeItem("token");
+                    
                     window.location.reload();
+                   
                   }}
                 >
                   Logout
@@ -228,7 +237,15 @@ if (isLoading) {
             )}
           </div>
 
-          <Link to="/cart" className="relative flex items-center gap-1">
+          <div  onClick={()=>{
+             if(!token){
+    return(
+      alert("Please login to access the add to cart feature")
+    )
+  }else{
+    navigate("/cart")
+  }
+          }} className="relative cursor-pointer flex items-center gap-1">
             <IoCart className="text-2xl" />
 
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -236,7 +253,7 @@ if (isLoading) {
             </span>
 
             <p className="hidden lg:block">Cart</p>
-          </Link>
+          </div>
 
           <div className="lg:hidden cursor-pointer" onClick={toggleMenu}>
             {isMenuOpen ? (
