@@ -198,7 +198,7 @@ function UserLoginPage() {
 
                         <button
                             type="submit"
-                            className="w-full bg-blue-500 text-white font-semibold py-2 sm:py-3 rounded-lg hover:bg-gray-800 transition text-sm sm:text-base"
+                            className="w-full  bg-green-500 text-white font-semibold py-2 sm:py-3 rounded-lg cursor-pointer hover:bg-gray-800 transition text-sm sm:text-base"
                         >
                             Generate OTP
                         </button>
@@ -310,7 +310,7 @@ function UserLoginPage() {
 
                         <button
                             type="submit"
-                            className="w-full bg-blue-500 text-white font-semibold py-2 sm:py-3 rounded-lg hover:bg-gray-800 transition text-sm sm:text-base"
+                            className="w-full bg-blue-500 cursor-pointer text-white font-semibold py-2 sm:py-3 rounded-lg hover:bg-gray-800 transition text-sm sm:text-base"
                         >
                             Login
                         </button>

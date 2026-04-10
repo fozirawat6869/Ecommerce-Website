@@ -13,6 +13,7 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import debounce from "../reuseCode/debouncingFunc";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
+import {jwtDecode} from "jwt-decode";  
 
 // ✅ add this
 import api from "../../utils/api";
@@ -238,13 +239,18 @@ if (isLoading) {
           </div>
 
           <div  onClick={()=>{
-             if(!token){
+
+          if(!token){
     return(
       alert("Please login to access the add to cart feature")
     )
-  }else{
-    navigate("/cart")
   }
+             const decodedToken=jwtDecode(token)
+             if(decodedToken.role==="admin"){
+               alert("Admin can't use cart")
+             }
+
+     
           }} className="relative cursor-pointer flex items-center gap-1">
             <IoCart className="text-2xl" />
 
