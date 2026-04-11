@@ -5,6 +5,7 @@ import {getAllProducts,createProduct,productDetails
       , categories , userProfile,updateUserProfile,
       reUpdateProfile ,reviews ,addToCart , cartCount
       ,cartProducts ,removeFromCart , adminLogin
+      ,allUsers
       } from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
 import upload from '../config/multer.js'
@@ -68,5 +69,8 @@ router.route('/removeFromCart').post(isAuthenticated,removeFromCart)
 
 // admin login with email and password
 router.route('/adminLogin').post(adminLogin)
+
+// get all users for admin
+router.route('/allUsers').get(allUsers)
 
 export default router

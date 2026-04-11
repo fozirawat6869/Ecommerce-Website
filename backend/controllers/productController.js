@@ -1049,3 +1049,27 @@ connection.query(`select * from admin where email=?`,[email],(err,result)=>{
 }
 
 
+
+export const allUsers=(req,res)=>{
+
+  console.log("all users api", req.query);
+
+
+  let page = parseInt(req.query.page) || 1;   // if no page given, use 1
+  let limit = parseInt(req.query.limit) || 10;
+
+  let offset = (page - 1) * limit;
+ 
+  connection.query(`select * from users limit ? offset ?`,[limit,offset],(err,result)=>{
+    if(err){
+      console.log("Error while querying all users", err);
+      return res.status(500).json({ success: false, message: "DB error" });
+    }
+
+    res.status(200).json({
+      success:true,
+      users:result
+    })
+  })
+}
+

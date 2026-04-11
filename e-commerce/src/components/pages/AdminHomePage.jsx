@@ -41,13 +41,13 @@ useEffect(() => {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-xl shadow flex items-center gap-4">
+        <Link to={'/allUsers'} className="bg-white p-5 rounded-xl shadow flex items-center gap-4">
           <FaUsers className="text-purple-600 text-4xl" />
           <div>
             <h2 className="text-gray-500">Users</h2>
             <p className="text-2xl font-bold">89</p>
           </div>
-        </div>
+        </Link>
 
         <div className="bg-white p-5 rounded-xl shadow flex items-center gap-4">
           <FaRupeeSign className="text-red-600 text-3xl" />
