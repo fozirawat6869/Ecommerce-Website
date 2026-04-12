@@ -6,15 +6,23 @@ import AdminNav from "../nav/AdminNav";
 
 
 
+
 function Layout(){
 
-//    const location=useLocation();
-//    const hide=location.pathname==='/login'   
+const token = localStorage.getItem("token");
 
-   const token = localStorage.getItem("token"); 
-    const decodedToken=jwtDecode(token)
-    const role=decodedToken.role
+  let role = null;
 
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      role = decodedToken.role;
+    } catch (err) {
+      console.log("Error decoding token:", err);
+      console.log("Invalid token");
+      role = null;
+    }
+  }
   return(
     <>
     {/* {!hide && <Nav/>} */}

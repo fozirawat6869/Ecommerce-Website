@@ -97,15 +97,15 @@ function NewlyAddedProduct() {
           <button
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
-            className='bg-red-500 px-3 sm:px-4 py-2 rounded-lg text-white disabled:opacity-40'
+            className={`bg-red-500 px-3 sm:px-4 py-2 rounded-lg text-white disabled:opacity-40 ${page === 1 && "cursor-not-allowed"}`}
           >
             Previous
           </button>
 
           <button
-            disabled={newlyProduct.length < limit}
+            disabled={newlyProduct.length <= limit}
             onClick={() => setPage(page + 1)}
-            className='bg-green-500 px-3 sm:px-4 py-2 rounded-lg text-white disabled:opacity-40'
+            className={`bg-green-500 px-3 sm:px-4 py-2 rounded-lg text-white disabled:opacity-40 ${newlyProduct.length <= limit && "cursor-not-allowed"}`}
           >
             Next
           </button>

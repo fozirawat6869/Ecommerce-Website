@@ -21,6 +21,8 @@ function AllUsers() {
   const { data = [], isLoading } = useQuery({
     queryKey: ['users', page],
     queryFn: fetchUsers,
+    cacheTime: 60*1000*5,
+    staleTime: 60*1000*5,
   })
 
   return (

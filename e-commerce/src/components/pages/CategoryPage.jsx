@@ -31,7 +31,7 @@ function CategoryPage() {
 
       const res = await api.get(`/api/productsCategory?${queryParams}`)
       // hold for 5 sec to see skeleton
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate 5 sec delay
+      // await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate 5 sec delay
       return res.data.categoryProducts || []
     } catch {
       return []
@@ -59,6 +59,70 @@ function CategoryPage() {
 
   const currentFilterConfig = filterConfig[category] || {}
 
+
+if (isLoading) {
+  return (
+    <SkeletonTheme baseColor="#e5e7eb" highlightColor="#f3f4f6">
+      <main className='flex flex-col lg:flex-row gap-5 bg-gray-100 px-3 sm:px-6 md:px-8 py-4'>
+
+        {/* LEFT FILTER SKELETON */}
+        <div className='w-full lg:w-1/4 bg-white rounded-lg shadow p-4'>
+          <Skeleton height={25} width={120} className="mx-auto mb-4" />
+
+          {[1,2,3].map((_, i) => (
+            <div key={i} className="mb-4">
+              <Skeleton height={20} width={100} />
+              <div className="mt-2 flex flex-col gap-2">
+                <Skeleton height={15} width={140} />
+                <Skeleton height={15} width={120} />
+                <Skeleton height={15} width={100} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* RIGHT PRODUCTS SKELETON */}
+        <div className='w-full bg-white rounded-lg shadow'>
+
+          {/* HEADER */}
+          <div className='text-center py-4'>
+            <Skeleton height={30} width={200} className="mx-auto" />
+          </div>
+
+          {/* GRID */}
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-3 pb-4 justify-items-center'>
+            
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className='bg-gray-100 rounded-lg overflow-hidden w-full max-w-[250px]'
+              >
+                {/* IMAGE */}
+                <Skeleton className="h-40 sm:h-48 md:h-52 w-full" />
+
+                {/* DETAILS */}
+                <div className='p-3 flex flex-col gap-2'>
+                  <Skeleton height={15} width="80%" />
+                  <Skeleton height={12} width="90%" />
+                  <Skeleton height={16} width="40%" />
+                </div>
+              </div>
+            ))}
+
+          </div>
+
+          {/* PAGINATION */}
+          <div className='flex justify-center gap-3 py-4'>
+            <Skeleton height={35} width={100} />
+            <Skeleton height={35} width={100} />
+          </div>
+
+        </div>
+
+      </main>
+    </SkeletonTheme>
+  )
+}
 
 
   return (
@@ -184,7 +248,7 @@ function CategoryPage() {
           <button
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
-            className='bg-red-500 px-3 sm:px-4 py-2 rounded text-white text-sm sm:text-base disabled:opacity-50'
+            className={`bg-red-500 px-3 sm:px-4 py-2 rounded text-white text-sm sm:text-base disabled:opacity-50 ${page===1 && "cursor-not-allowed"}`}
           >
             Previous
           </button>
@@ -192,7 +256,7 @@ function CategoryPage() {
           <button
             disabled={data?.length < 10}
             onClick={() => setPage(page + 1)}
-            className='bg-green-500 px-3 sm:px-4 py-2 rounded text-white text-sm sm:text-base disabled:opacity-50'
+            className={`bg-green-500 px-3 sm:px-4 py-2 rounded text-white text-sm sm:text-base disabled:opacity-50 ${data?.length < 10 && "cursor-not-allowed"}`}
           >
             Next
           </button>

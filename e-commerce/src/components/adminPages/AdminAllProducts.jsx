@@ -25,10 +25,12 @@ function AdminAllProducts() {
   const { data = [], isLoading } = useQuery({
     queryKey: ['products', page],
     queryFn: fetchProducts,
+    cacheTime: 60*1000*5,
+    staleTime: 60*1000*5,
   })
 
   return (
-    <main className='bg-gray-100 min-h-screen px-3 sm:px-6 md:px-10 py-5'>
+    <main className='bg-gray-100  px-3 sm:px-6 md:px-10 py-5'>
 
       <h1 className='text-center text-lime-500 font-bold text-2xl md:text-3xl mb-6'>
         All Products 
@@ -58,8 +60,8 @@ function AdminAllProducts() {
 
             return (
               <div
-                key={item.product_id}
-                className='border-b border-gray-300 hover:bg-gray-50 transition px-3 py-3'
+                className='border-b border-gray-300 hover:bg-gray-50 tran                key={item.product_id}
+sition px-3 py-3'
               >
 
                 {/* ✅ MOBILE VIEW */}
