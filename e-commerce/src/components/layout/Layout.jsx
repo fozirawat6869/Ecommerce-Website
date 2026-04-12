@@ -18,7 +18,7 @@ function Layout(){
   return(
     <>
     {/* {!hide && <Nav/>} */}
-    {role!=="admin"?<Nav/>:<AdminNav/>}
+    {role=="admin"?<AdminNav/>:<Nav/>}
     {/* <Nav/> */}
     <Outlet/>
     <Footer/>

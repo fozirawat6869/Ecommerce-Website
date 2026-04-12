@@ -181,8 +181,8 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
   let size=req.query.size;
   // console.log(price)
   // console.log(category)
-   let page = parseInt(req.query.page) || 1;   // if no page given, use 1
-  let limit = parseInt(req.query.limit) ||2; // if no limit given, use 2
+   let page = parseInt(req.query.page) ;   // if no page given, use 1
+  let limit = parseInt(req.query.limit) ; // if no limit given, use 2
    let offset = (page - 1) * limit;
   //  let query="select * from product where 1=1"
 
@@ -203,7 +203,10 @@ export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
     
 
       // pagination
+      
+    if(limit){
         query += ` LIMIT ${limit} OFFSET ${offset}`;
+    }
     connection.query(query,(err,result)=>{
     // console.log(result)
      if(err){

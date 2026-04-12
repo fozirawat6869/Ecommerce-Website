@@ -30,6 +30,8 @@ function AllProducts() {
   const { data } = useQuery({
     queryKey: ['products', page, categoryValue, price],
     queryFn: fetchProducts,
+    cacheTime: 60*1000*5,
+    staleTime: 60*1000*5,
   })
 
   const handleCategory = (e) => {

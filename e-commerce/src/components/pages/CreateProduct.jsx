@@ -113,7 +113,7 @@ const handleSubmit = async (e) => {
     <div className="bg-gray-100 flex justify-center pt-2">
       <div className="bg-white w-full max-w-3xl p-6 rounded-xl shadow">
 
-        <h2 className="text-2xl font-semibold mb-6 text-center">
+        <h2 className="text-2xl text-blue-500 font-bold mb-6 text-center">
           Add New Product
         </h2>
 

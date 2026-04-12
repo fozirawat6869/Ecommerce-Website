@@ -1,17 +1,39 @@
-import React, { useEffect, useState } from "react";
+import  { cache, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 import api, { BASE_URL } from "../../utils/api";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css' // for skeleton styles gray line effect
 
+
+let cacheTime = null;
+let newlyProductCache = null;
+
 function Main() {
+
+
 
   const [newlyProduct, setNewlyProduct] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const now=Date.now();
+
+
+    console.log("Cache Time:", cacheTime);
+    console.log("Now:", now);
+    console.log("cache data:", newlyProductCache);
+    
+    if(newlyProductCache&&cacheTime&&now-cacheTime<5*60*1000){
+      console.log("Using cached data hit");
+      setLoading(false);
+      setNewlyProduct(newlyProductCache);
+      
+      return;
+    }
+    console.log("api hit cancel")
+
     api.get("/api/newlyAddedProducts", {
       params: {
         page: 1,
@@ -20,6 +42,8 @@ function Main() {
     })
     .then((res) => {
       setNewlyProduct(res.data.newlyAddedProducts || []);
+      newlyProductCache = res.data.newlyAddedProducts || [];
+      cacheTime =Date.now();
       setLoading(false);
     })
     .catch((err) => {

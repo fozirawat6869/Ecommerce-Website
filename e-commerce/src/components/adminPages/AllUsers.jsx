@@ -24,12 +24,12 @@ function AllUsers() {
   })
 
   return (
-  <main className='bg-gray-100 min-h-screen py-6 flex justify-center'>
+  <main className='bg-gray-100  py-6 flex justify-center'>
     
     <div className='w-full max-w-6xl px-3 sm:px-6'>
       
       {/* HEADER */}
-      <h1 className='text-center font-bold text-2xl md:text-3xl mb-6'>
+      <h1 className='text-center text-purple-500 font-bold text-2xl md:text-3xl mb-6'>
         All Users
       </h1>
 

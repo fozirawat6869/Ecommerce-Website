@@ -239,11 +239,14 @@ if (isLoading) {
           </div>
 
           <div  onClick={()=>{
+            console.log("cart clicked",token)
 
           if(!token){
-    return(
+   
       alert("Please login to access the add to cart feature")
-    )
+    
+  }else{
+    navigate("/cart")
   }
              const decodedToken=jwtDecode(token)
              if(decodedToken.role==="admin"){
