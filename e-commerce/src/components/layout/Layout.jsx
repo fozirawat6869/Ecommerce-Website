@@ -9,24 +9,34 @@ import AdminNav from "../nav/AdminNav";
 
 function Layout(){
 
+
 const token = localStorage.getItem("token");
+console.log("Token in Layout:", token);
 
   let role = null;
+
+
 
   if (token) {
     try {
       const decodedToken = jwtDecode(token);
       role = decodedToken.role;
+      console.log(role)
     } catch (err) {
-      console.log("Error decoding token:", err);
+      console.log("Error decoding token admin:", err);
       console.log("Invalid token");
-      role = null;
+      return
     }
   }
+
+  
+
   return(
     <>
     {/* {!hide && <Nav/>} */}
-    {role=="admin"?<AdminNav/>:<Nav/>}
+    {role==="admin" && <AdminNav/>}
+    {role==="user" && <Nav/>}
+    {!role && <Nav/>}
     {/* <Nav/> */}
     <Outlet/>
     <Footer/>
@@ -36,3 +46,4 @@ const token = localStorage.getItem("token");
 }
 
 export default Layout
+

@@ -21,6 +21,7 @@ function AdminNav() {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     navigate("/login");
+    window.location.reload(); // Reload to update layout based on new token
   };
 
   return (
