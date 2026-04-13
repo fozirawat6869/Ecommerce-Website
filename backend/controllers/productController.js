@@ -1115,3 +1115,31 @@ export const inputSearch = (req, res) => {
 };
 
 
+// delete product by admin
+
+export const deleteProduct=(req,res)=>{
+  console.log("Delete product api called", req.params);
+  const {id}=req.params;
+  console.log("Delete product id", id);
+
+  if(!id){
+    return res.status(400).json({
+      success:false,
+      message:"Product id is required"
+    })
+  }
+
+
+  connection.query(`delete from product where product_id=?`,[id],(err,result)=>{
+    console.log("Delete product result", result);
+    if(err){
+      console.log("Error while deleting product", err);
+      return res.status(500).json({ success: false, message: "DB error" });
+    }
+    res.status(200).json({
+      success:true,
+      message:"Product deleted successfully",
+      removedProduct:result
+    })
+  })
+}
