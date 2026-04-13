@@ -27,10 +27,12 @@ function Nav() {
 
      e.preventDefault();
      // if user type nothing then do nothing
-      if(e.target.value.trim()===""){
-      // alert("Please enter something to search")
-        return
-      }
+     
+  if (e.target.value.trim() === "") {
+    debounceSearch.cancel();   // stop any pending search calls
+    navigate("/"); // navigate to home page or any default page
+    return;
+  }
      setInputValue(e.target.value)
      debounceSearch(e.target.value)
    }
@@ -45,7 +47,7 @@ function Nav() {
 
    
    const debounceSearch=useMemo(()=>
-      debounce(handleSearch,5000)
+      debounce(handleSearch,1000)
    ,[handleSearch])
 
    const handleKeyDown=(e)=>{

@@ -2,82 +2,79 @@ import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import api, { BASE_URL } from "../../utils/api";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function SearchInputsProduct() {
-
   const { search } = useParams();
 
   const fetchProducts = async () => {
     const res = await api.get(`/api/inputSearch?search=${search}`);
-    console.log("Full response", res.data);
-    console.log("search results", res.data.products)
+    // await new Promise((resolve) => setTimeout(resolve, 5000)); // simulate network delay
     return res.data.products || [];
   };
 
   const { data = [], isLoading } = useQuery({
     queryKey: ["searchProducts", search],
     queryFn: fetchProducts,
-    cacheTime: 60 * 1000 * 5, // 5 minutes
-    staleTime: 60 * 1000 * 5, // 5 minutes
   });
 
-  if (isLoading) {
-    return <p className="text-center py-5">Loading...</p>;
-  }
-
   return (
-    <div className="px-4 md:px-10 py-5">
+  <div className="py-5 flex flex-col items-center px-10">
 
-      <h1 className="text-xl md:text-2xl font-bold text-center bg-gray-100 p-5 text-gray-500 mb-5">
-        Search Results for "{search}"
-      </h1>
+    <h1 className=" w-full  text-center text-2xl font-bold mb-6 bg-gray-200 text-gray-500 py-5">Search Results for "{search}"</h1>
 
-      <div className="flex flex-wrap justify-center gap-5">
+  <div className="flex flex-wrap justify-center gap-5">
 
-        {data.length === 0 ? (
-          <p>No products found</p>
-        ) : (
-          data.map((item) => (
-            <Link
-              key={item.product_id}
-              to={`/product/${item.product_id}`}
-              className="w-[260px] h-[360px] bg-gray-100 p-2 flex flex-col"
-            >
+    {isLoading
+      ? Array(4).fill(0).map((_, i) => (
+          <div
+            key={i}
+            className="w-[170px] sm:w-[190px] bg-gray-100 p-2 rounded-lg"
+          >
+            <Skeleton height={140} />
+            <Skeleton height={15} className="mt-2" />
+            <Skeleton height={12} />
+            <Skeleton height={15} width={60} />
+          </div>
+        ))
 
-              {/* IMAGE */}
-              <div className="w-full h-[70%]">
-                <img
-                  src={`${BASE_URL}/${item.image}`}
-                  alt={item.product_name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+      : data.length === 0 ? (
+        <p className="text-center text-gray-500 w-full">
+          No products found
+        </p>
+      ) : (
+        data.map((item) => (
+          <Link
+            key={item.product_id}
+            to={`/product/${item.product_id}`}
+            className="w-[170px] sm:w-[190px] bg-gray-100 p-2 rounded-lg"
+          >
+            <div className="h-[140px]">
+              <img
+                src={`${BASE_URL}/${item.image}`}
+                alt={item.product_name}
+                className="w-full h-full object-cover rounded"
+              />
+            </div>
 
-              {/* DETAILS */}
-              <div className="h-[30%] flex flex-col justify-between p-2">
+            <h2 className="text-sm mt-2 line-clamp-2">
+              {item.product_name}
+            </h2>
 
-                <h2 className="text-sm font-medium">
-                  {item.product_name}
-                </h2>
+            <p className="text-xs text-gray-500 line-clamp-2">
+              {item.product_description}
+            </p>
 
-                <p className="text-xs text-gray-500">
-                  {item.product_description?.length > 40
-                    ? item.product_description.slice(0, 40) + "..."
-                    : item.product_description}
-                </p>
+            <p className="font-bold text-sm">
+              ₹{item.product_price}
+            </p>
+          </Link>
+        ))
+      )}
 
-                <p className="font-bold">
-                  ₹{item.product_price}
-                </p>
-
-              </div>
-            </Link>
-          ))
-        )}
-
-      </div>
-      
-    </div>
+  </div>
+</div>
   );
 }
 

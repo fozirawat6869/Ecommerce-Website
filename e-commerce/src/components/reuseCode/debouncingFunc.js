@@ -18,10 +18,11 @@ export default function debounce(func,delay){
         timeoutId=setTimeout(()=>{ // set a new timeout to call the function after the specified delay
             func(...args)
         },delay)
+    }
 
         debounced.cancel=()=>{
             clearTimeout(timeoutId) // clear the timeout to prevent the function from being called
         }
-    }
+    
     return debounced
 }

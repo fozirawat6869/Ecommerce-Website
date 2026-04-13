@@ -13,6 +13,7 @@ function UserLoginPage() {
     const [mobileError, setMobileError] = useState("");
     const [otpError, setOtpError] = useState("");
     const [session_id, setSessionId] = useState("");
+    // const [otpMessage, setOtpMessage] = useState("");
 
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
@@ -61,6 +62,7 @@ function UserLoginPage() {
             if (res.data.success) {
                 setStep(2);
                 setSessionId(res.data.session_id);
+              
             } 
         } catch (error) {
             setMobileError(error.response?.data?.message || "Something went wrong");
@@ -236,21 +238,31 @@ function UserLoginPage() {
                         <p className="text-red-500 text-xs sm:text-sm mb-2 h-5">
                             {otpError ? otpError : " "}
                         </p>
+                    
 
                         <button
                             type="submit"
-                            className="w-full bg-black text-white py-2 sm:py-3 rounded-lg hover:bg-gray-800 transition text-sm sm:text-base"
+                            className="w-full cursor-pointer bg-black text-white py-2 sm:py-3 rounded-lg hover:bg-gray-800 transition text-sm sm:text-base"
                         >
                             Submit
                         </button>
 
+                       <div className='flex gap-5 mt-4 items-center justify-evenly '>
+                          <button
+                          onClick={handleGenerateOtp}
+                          className="cursor-pointer text-lg font-semibold sm:text-sm h-5">
+                               Resend OTP  
+                        </button>
+
                         <button
                             type="button"
-                            className="mt-2 w-full text-xs sm:text-sm text-blue-600 hover:underline"
+                            className=" cursor-pointer  text-xs sm:text-sm text-blue-600 hover:underline"
                             onClick={() => setStep(1)}
                         >
                             Edit mobile number
                         </button>
+                       </div>
+                          
                     </form>
                 )}
                 </>
