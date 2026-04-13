@@ -1077,3 +1077,39 @@ export const allUsers=(req,res)=>{
 }
 
 
+export const inputSearch = (req, res) => {
+  const search = req.query.search;
+  
+
+  console.log("BACKEND SEARCH:", search);
+
+  // ❌ empty search → return empty
+  if (!search || search.trim() === "") {
+    return res.json({
+      success: true,
+      allProduct: []
+    });
+  }
+
+  const searchTerm = `%${search.toLowerCase()}%`;
+
+  connection.execute(
+    `SELECT p.* ,(select image_path from product_images where product_id=p.product_id limit 1) as image FROM product p
+     WHERE LOWER(p.product_name) LIKE ? 
+     OR LOWER(p.product_description) LIKE ?`,
+    [searchTerm, searchTerm],
+    (err, result) => {
+      if (err) {
+        console.log("Error:", err);
+        return res.status(500).json({ success: false });
+      }
+
+      console.log("FILTERED RESULT:", result);
+
+      res.json({
+        success: true,
+        products: result
+      });
+    }
+  );
+};

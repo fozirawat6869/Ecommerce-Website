@@ -17,6 +17,8 @@ function SearchInputsProduct() {
   const { data = [], isLoading } = useQuery({
     queryKey: ["searchProducts", search],
     queryFn: fetchProducts,
+    cacheTime: 60 * 1000 * 5, // 5 minutes
+    staleTime: 60 * 1000 * 5, // 5 minutes
   });
 
   if (isLoading) {
