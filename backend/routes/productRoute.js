@@ -5,7 +5,7 @@ import {getAllProducts,createProduct,productDetails
       , categories , userProfile,updateUserProfile,
       reUpdateProfile ,reviews ,addToCart , cartCount
       ,cartProducts ,removeFromCart , adminLogin
-      ,allUsers
+      ,allUsers , inputSearch
       } from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
 import upload from '../config/multer.js'
@@ -72,5 +72,8 @@ router.route('/adminLogin').post(adminLogin)
 
 // get all users for admin
 router.route('/allUsers').get(allUsers)
+
+// get product through input search
+router.route('/inputSearch').get(inputSearch)
 
 export default router

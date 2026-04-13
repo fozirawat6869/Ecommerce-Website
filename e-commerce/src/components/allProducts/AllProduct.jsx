@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link,  } from 'react-router-dom'
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { useQuery } from '@tanstack/react-query'
 import api, { BASE_URL } from '../../utils/api'
 
+
 function AllProducts() {
 
+  
   const [showSection, setShowSection] = useState({
     category: false,
     price: false,
@@ -172,7 +174,7 @@ function AllProducts() {
             <button
               disabled={page === 1}
               onClick={() => setPage(page - 1)}
-              className='bg-red-500 px-4 py-2 rounded-xl text-white'
+              className={ ` bg-red-500 px-4 py-2 rounded-xl text-white ${page === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600 cursor-pointer'}` }
             >
               Previous
             </button>
@@ -180,7 +182,7 @@ function AllProducts() {
             <button
               disabled={data?.length < 10}
               onClick={() => setPage(page + 1)}
-              className='bg-green-500 px-4 py-2 rounded-xl text-white'
+              className={`bg-green-500 px-4 py-2 rounded-xl text-white ${data?.length < 10 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600 cursor-pointer'}`}
             >
               Next
             </button>

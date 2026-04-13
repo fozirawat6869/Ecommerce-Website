@@ -24,14 +24,25 @@ function Nav() {
   const navigate = useNavigate();
 
    const handleInput=(e)=>{
+
      e.preventDefault();
+     // if user type nothing then do nothing
+      if(e.target.value.trim()===""){
+      // alert("Please enter something to search")
+        return
+      }
      setInputValue(e.target.value)
      debounceSearch(e.target.value)
    }
 
  const handleSearch=useCallback((value)=>{
     console.log("searching for",value)
-   },[])
+     
+    navigate(`/searchInput/${value}`)
+  
+    },[navigate])
+    
+
    
    const debounceSearch=useMemo(()=>
       debounce(handleSearch,5000)
@@ -40,6 +51,7 @@ function Nav() {
    const handleKeyDown=(e)=>{
     if(e.key==="Enter"){
       e.preventDefault();
+      debounceSearch.cancel() // cancel any pending debounced calls
       handleSearch(InputValue)
     }
    }
