@@ -180,9 +180,9 @@ function AllProducts() {
             </button>
 
             <button
-              disabled={data?.length < 10}
+              disabled={data?.length <= 10}
               onClick={() => setPage(page + 1)}
-              className={`bg-green-500 px-4 py-2 rounded-xl text-white ${data?.length < 10 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600 cursor-pointer'}`}
+              className={`bg-green-500 px-4 py-2 rounded-xl text-white ${data?.length <= 10 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600 cursor-pointer'}`}
             >
               Next
             </button>
