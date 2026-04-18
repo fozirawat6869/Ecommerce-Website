@@ -15,7 +15,7 @@ function AddToCart() {
       },
     });
 
-    // await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate 2 sec delay
+    await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate 2 sec delay
     return res.data.data;
   };
 

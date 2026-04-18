@@ -4,6 +4,7 @@ import { useNavigate ,Link} from "react-router-dom";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../utils/api";
+import AdminLoader from '../../Loaders/ForAdminHomePage'
 
 function AdminHomePage() {
 
@@ -20,7 +21,8 @@ const handleAllProudcts = async () => {
   try {
     const res = await api.get("/api/products")
       console.log("products res", res.data.allProduct)
-    return res.data.allProduct || []
+    // await new Promise((resolve)=>setTimeout(resolve,5000))
+      return res.data.allProduct || []
   } catch {
     console.log("error fetching products")
     return []
@@ -31,6 +33,7 @@ const handleAllProudcts = async () => {
     try {
       const res = await api.get("/api/allUsers")  
       console.log("users res", res.data.users)
+      // await new Promise((resolve)=>setTimeout(resolve,5000))
       return res.data.allUsers || []
     } catch {
       console.log("error fetching users")
@@ -38,7 +41,7 @@ const handleAllProudcts = async () => {
     }
   }
 
-  const{data:allProducts}=useQuery({
+  const{data:allProducts,isLoading}=useQuery({
     queryKey:["allProducts"],
     queryFn:handleAllProudcts,
     cacheTime:1000*60*5, // 5 min cache
@@ -50,6 +53,12 @@ const handleAllProudcts = async () => {
     cacheTime:1000*60*5, // 5 min cache
     staleTime:1000*60*2, // 2 min fresh
   })
+
+  if(isLoading){
+    return (
+     <AdminLoader/>
+    )
+  }
 
   return (
     <div className=" bg-gray-100 p-4">
