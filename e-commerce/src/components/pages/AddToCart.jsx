@@ -15,7 +15,7 @@ function AddToCart() {
       },
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate 2 sec delay
+    // await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate 2 sec delay
     return res.data.data;
   };
 
@@ -28,8 +28,8 @@ function AddToCart() {
     queryFn: fetchCart,
 
     // ✅ caching
-    staleTime: 1000 * 60 * 5,   // 5 min fresh
-    cacheTime: 1000 * 60 * 10,  // 10 min cache
+    // staleTime: 1000 * 60 * 5,   // 5 min fresh
+    // cacheTime: 1000 * 60 * 10,  // 10 min cache
   });
 
   // ✅ REMOVE ITEM (Mutation)
@@ -73,8 +73,8 @@ function AddToCart() {
   // ✅ ERROR
   if (isError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <h2 className="text-xl text-red-500">Error loading cart</h2>
+      <div className=" flex items-center justify-center bg-white">
+        <h2 className="text-xl text-red-500 p-5 ">Error loading cart</h2>
       </div>
     );
   }

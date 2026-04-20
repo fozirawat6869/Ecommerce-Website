@@ -10,7 +10,7 @@ import {getAllProducts,createProduct,productDetails
 // import { test } from '../controllers/productController.js';
 import upload from '../config/multer.js'
 import isAuthenticated from '../middleware/isAuthenticated.js'
-
+import {globalLimiter,authLimiter,otpLimiter} from '../middleware/rateLimiter.js'
 
 const router=express.Router();
 
@@ -31,12 +31,12 @@ router.route('/productsCategory').get(categoryProducts)
 
 
 // user register
-router.route('/registerr').post(sendOTP)
-router.route('/verifyOTP').post(verifyOTP) 
+router.route('/registerr').post(authLimiter,sendOTP)
+router.route('/verifyOTP').post(otpLimiter,verifyOTP) 
 
 
 // user login
-router.route('/login').post(loginOTP)
+router.route('/login').post(authLimiter,loginOTP)
 
 router.route('/categories').get(categories)
 
