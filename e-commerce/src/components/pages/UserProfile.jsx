@@ -6,6 +6,7 @@ import axios from "axios";
 import { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import api from "../../utils/api"; // ✅ added
+import UserLoader from '../../Loaders/ForUserProfile'
 
 function UserProfile() {
 
@@ -40,7 +41,7 @@ function UserProfile() {
           }
         });
       
-    
+      // await new Promise((resolve)=>setTimeout(resolve,5000))
       console.log("response" , res.data.user)
       return res.data.user || []
     }
@@ -49,7 +50,7 @@ function UserProfile() {
     }
   };
 
-  const{data,refetch}=useQuery({
+  const{data,refetch,isLoading}=useQuery({
     queryKey:["userProfile"],
     queryFn:fetchUserData,
     cacheTime:5*60*1000, // 5 minutes
@@ -57,8 +58,11 @@ function UserProfile() {
     
   })
 
-   console.log(data)
-   if(!data) return <h1 className="p-5">Loading....</h1>
+   if(isLoading){
+    return (
+      <UserLoader/>
+    )
+   }
    
 
 console.log(formData)
