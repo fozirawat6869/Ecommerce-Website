@@ -43,3 +43,15 @@ export const otpLimiter = rateLimit({
 });
 
 
+// 🛒 HEAVY ACTION (cart / order / payment)
+export const actionLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 10, // only 10 actions per minute
+  keyGenerator: (req) => req.user?.id || req.ip, // per user if logged in
+  handler: (req, res) => {
+    console.log("ACTION LIMIT HIT 🚫");
+    res.status(429).json({
+      error: "Too many actions, please slow down"
+    });
+  }
+});
