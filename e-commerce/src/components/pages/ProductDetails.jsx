@@ -487,6 +487,16 @@ function ProductDetails() {
     staleTime: 5 * 60 * 1000,
   });
 
+  if(isError){
+    return(
+      <>
+      <div className="flex justify-center items-center p-5">
+        <h1 className="text-red-500">Error</h1>
+      </div>
+      </>
+    )
+  }
+
 if (isLoading) {
   return (
     <div className="bg-gray-100 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-28 pt-2 pb-5 animate-pulse">
