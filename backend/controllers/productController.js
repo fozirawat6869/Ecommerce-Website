@@ -148,7 +148,7 @@ export const verifyOTP = async (req, res) => {
       `https://2factor.in/API/V1/${process.env.API_KEY}/SMS/VERIFY/${session_id}/${otp}`
     );
 
-    const token=jwt.sign({ role: "user", mobile:mobile },process.env.JWT_SECRET,{ expiresIn:'7d' })
+    const token=jwt.sign({ role: "user", mobile:mobile },process.env.JWT_SECRET,{ expiresIn:'30d' })
     console.log("Generated JWT Token:", token);
     if (response.data.Status === "Success") {
       return res.status(200).json({ 
@@ -317,6 +317,7 @@ export const productDetails = (req, res) => {
   const reviewOffset = (reviewPage - 1) * reviewLimit;
 
   const { id } = req.params;
+  console.log(req.user)
   const userMobile = req.user.mobile;
 
   // 1. Get product
