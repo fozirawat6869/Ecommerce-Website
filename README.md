@@ -60,7 +60,3 @@ A full-stack E-commerce web application built using modern technologies with sep
 - Caching
 - Optimized API calls
 - Clean project structure
-
----
-
-## 📂 Project Structure
