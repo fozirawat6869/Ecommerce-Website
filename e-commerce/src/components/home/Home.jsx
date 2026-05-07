@@ -9,7 +9,7 @@ function Home() {
     <>
     
     <Categories/>
-    {/* <ImageSlider/> */}
+    <ImageSlider/>
     <Main/>
  
    

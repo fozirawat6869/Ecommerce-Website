@@ -52,7 +52,7 @@ const Categories = () => {
             className="flex flex-col items-center cursor-pointer flex-shrink-0 min-w-[70px] sm:min-w-[90px] "
           >
 
-            <div className="bg-gray-200   hover:border-blue-500 hover:border-2   transition duration-200
+            <div className="bg-gray-200   hover:border-blue-500 hover:border-2   transition duration-200 hover:scale-110 will-change-transform
                             rounded-full flex items-center justify-center
                             w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
 
