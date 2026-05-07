@@ -154,12 +154,10 @@ function AddToCart() {
 
                 <button
                   onClick={() => removeMutation.mutate(item.cart_id)}
-                  disabled={removeMutation.isPending}
+                  disabled={removeMutation.isPending && removeMutation.variables === item.cart_id}
                   className="text-red-500 text-sm hover:underline disabled:opacity-50"
                 >
-                  {removeMutation.isPending
-                    ? "Removing..."
-                    : "Remove"}
+                 {removeMutation.isPending && removeMutation.variables === item.cart_id ? "Removing..." : "Remove"}
                 </button>
               </div>
             </div>
