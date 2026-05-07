@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // export const BASE_URL = "http://localhost:8000";
-export const BASE_URL = "https://ecommerce-website-production-79e8.up.railway.app";
+// export const BASE_URL = "https://ecommerce-website-production-79e8.up.railway.app"; for railway deployment
+export const BASE_URL = "https://ecommerce-website-egix.onrender.com";
 
 const api = axios.create({
   baseURL: BASE_URL
