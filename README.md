@@ -1,32 +1,12 @@
 # 🛒 E-Commerce Website
 
-A full-stack E-commerce web application built using modern technologies with separate frontend and backend deployments.
-
----
 
 ## 🚀 Live Demo
-🔗 Frontend: https://ecommerce-website-two-rose.vercel.app  
+🔗 Frontend: https://ecommerce-website-two-rose.vercel.app
 
 ---
 
-## 🛠️ Tech Stack
-
-### Frontend
-- React.js
-- Tailwind CSS
-
-### Backend
-- Node.js
-- Express.js
-- REST API
-
-### Database
-- MySQL
-
-### Hosting
-- Frontend: Vercel
-- Backend: Railway
-- Database: Railway
+A full-stack e-commerce web application built with modern technologies, featuring a fully responsive UI, secure authentication, and cloud-hosted infrastructure.
 
 ---
 
@@ -60,3 +40,30 @@ A full-stack E-commerce web application built using modern technologies with sep
 - Caching
 - Optimized API calls
 - Clean project structure
+
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- React.js
+- Tailwind CSS
+
+### Backend
+- Node.js
+- Express.js
+- REST API
+
+### Database
+- MySQL
+
+### Hosting
+- Frontend: Vercel
+- Backend: Render
+- Database: Aiven
+
+
+
+
+
