@@ -202,74 +202,78 @@ if (isLoading) {
           )}
         </div>
       </div>
+{/* PRODUCTS */}
+<div className='w-full bg-white rounded-lg shadow'>
+  <h1 className='text-center font-bold text-xl sm:text-2xl py-4'>
+    {category} Products
+  </h1>
 
-      {/* PRODUCTS */}
-      <div className='w-full bg-white rounded-lg shadow'>
-        <h1 className='text-center font-bold text-xl sm:text-2xl py-4'>
-          {category} Products
-        </h1>
-
-        {/* ✅ CENTER FIX HERE */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-3 pb-4 justify-items-center'>
-          
-          {data?.length === 0 ? (
-            <div className='col-span-full text-center text-gray-500 py-10'>
-              No products available
-            </div>
-          ) : (
-            data?.map((item) => (
-              <Link
-                to={`/product/${item.product_id}`}
-                key={item.product_id}
-                className='bg-gray-100 rounded-lg overflow-hidden w-full max-w-[250px] mx-auto hover:shadow-lg transition'
-              >
-                <div className='h-40 sm:h-48 md:h-52'>
-                  <img
-                    className='w-full h-full object-cover'
-                    src={`${BASE_URL}/${item.image}`}
-                    alt={item.product_name}
-                  />
-                </div>
-
-                <div className='p-3 flex flex-col gap-1'>
-                  <h2 className='text-sm sm:text-base text-gray-700 font-semibold'>
-                    {item.product_name}
-                  </h2>
-
-                  <p className='text-xs sm:text-sm text-gray-500'>
-                    {item.product_description.length > 40
-                      ? item.product_description.substring(0, 40) + "..."
-                      : item.product_description}
-                  </p>
-
-                  <p className='font-bold text-sm sm:text-base'>
-                    ₹{item.product_price}
-                  </p>
-                </div>
-              </Link>
-            ))
-          )}
-        </div>
-
-        {/* Pagination */}
-        <div className='flex justify-center gap-3 py-4'>
-          <button
-            disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-            className={`bg-red-500 px-3 sm:px-4 py-2 rounded text-white text-sm sm:text-base disabled:opacity-50 ${page===1 && "cursor-not-allowed"}`}
-          >
-            Previous
-          </button>
-
-          <button
-            disabled={data?.length < 10}
-            onClick={() => setPage(page + 1)}
-            className={`bg-green-500 px-3 sm:px-4 py-2 rounded text-white text-sm sm:text-base disabled:opacity-50 ${data?.length < 10 && "cursor-not-allowed"}`}
-          >
-            Next
-          </button>
-        </div>
+  {/* PRODUCTS GRID */}
+  <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-3 pb-4 justify-items-center'>
+    
+    {data?.length === 0 ? (
+      <div className='col-span-full text-center text-gray-500 py-10'>
+        No products available
       </div>
+    ) : (
+      data?.map((item) => (
+        <Link
+          to={`/product/${item.product_id}`}
+          key={item.product_id}
+          className='bg-gray-100 rounded-lg overflow-hidden w-[150px] sm:w-[190px] md:w-[220px] lg:w-full lg:max-w-[250px] mx-auto hover:shadow-lg transition'
+        >
+
+          {/* IMAGE */}
+          <div className='h-[120px] sm:h-40 md:h-48 lg:h-52'>
+            <img
+              className='w-full h-full object-cover'
+              src={`${BASE_URL}/${item.image}`}
+              alt={item.product_name}
+            />
+          </div>
+
+          {/* DETAILS */}
+          <div className='p-2 sm:p-3 flex flex-col gap-1'>
+
+            <h2 className='text-xs sm:text-sm md:text-base text-gray-700 font-semibold line-clamp-2'>
+              {item.product_name}
+            </h2>
+
+            <p className='text-[11px] sm:text-xs md:text-sm text-gray-500'>
+              {item.product_description.length > 40
+                ? item.product_description.substring(0, 40) + "..."
+                : item.product_description}
+            </p>
+
+            <p className='font-bold text-xs sm:text-sm md:text-base'>
+              ₹{item.product_price}
+            </p>
+
+          </div>
+        </Link>
+      ))
+    )}
+  </div>
+
+  {/* Pagination */}
+  <div className='flex justify-center gap-3 py-4'>
+    <button
+      disabled={page === 1}
+      onClick={() => setPage(page - 1)}
+      className={`bg-red-500 px-3 sm:px-4 py-2 rounded text-white text-sm sm:text-base disabled:opacity-50 ${page === 1 && "cursor-not-allowed"}`}
+    >
+      Previous
+    </button>
+
+    <button
+      disabled={data?.length < 10}
+      onClick={() => setPage(page + 1)}
+      className={`bg-green-500 px-3 sm:px-4 py-2 rounded text-white text-sm sm:text-base disabled:opacity-50 ${data?.length < 10 && "cursor-not-allowed"}`}
+    >
+      Next
+    </button>
+  </div>
+</div>
     </main>
   )
 }
