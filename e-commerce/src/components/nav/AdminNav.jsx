@@ -55,7 +55,7 @@ function AdminNav() {
             <Link
               to={item.path}
               onClick={() => setIsMenuOpen(false)}
-              className="block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition"
+              className="block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition font-bold hover:scale-105"
             >
               {item.name}
             </Link>

@@ -51,10 +51,10 @@ function AboutUs() {
             Skills
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 mb-10 sm:mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 mb-10 sm:mb-12 ">
 
             {/* Frontend */}
-            <div className="bg-gray-50 p-5 sm:p-6 rounded-2xl shadow-sm">
+            <div className="bg-gray-100 p-5 sm:p-6 rounded-2xl shadow-sm hover:scale-105 transition duration-200 hover:shadow-lg">
               <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-3">
                 Frontend Development
               </h3>
@@ -73,7 +73,7 @@ function AboutUs() {
             </div>
 
             {/* Backend */}
-            <div className="bg-gray-50 p-5 sm:p-6 rounded-2xl shadow-sm">
+            <div className="bg-gray-100 p-5 sm:p-6 rounded-2xl shadow-sm hover:scale-105 transition duration-200 hover:shadow-lg">
               <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-3">
                 Backend Development
               </h3>
@@ -90,7 +90,7 @@ function AboutUs() {
             </div>
 
             {/* Database */}
-            <div className="bg-gray-50 p-5 sm:p-6 rounded-2xl shadow-sm">
+            <div className="bg-gray-100 p-5 sm:p-6 rounded-2xl shadow-sm hover:scale-105 transition duration-200 hover:shadow-lg">
               <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-3">
                 Database
               </h3>
@@ -105,7 +105,7 @@ function AboutUs() {
             </div>
 
             {/* Tools */}
-            <div className="bg-gray-50 p-5 sm:p-6 rounded-2xl shadow-sm">
+            <div className="bg-gray-100 p-5 sm:p-6 rounded-2xl shadow-sm hover:scale-105 transition duration-200 hover:shadow-lg">
               <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-3">
                 Tools & Platforms
               </h3>
@@ -131,7 +131,7 @@ function AboutUs() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
             {/* Project 1 */}
-            <div className="bg-gray-100 p-5 sm:p-6 rounded-2xl shadow-sm hover:shadow-lg transition flex flex-col">
+            <div className="bg-gray-100 p-5 sm:p-6 rounded-2xl shadow-sm hover:shadow-lg transition flex flex-col hover:scale-105 transition duration-200 ">
               <h4 className="text-lg sm:text-xl font-semibold mb-2">
                 E-Commerce Website
               </h4>
@@ -146,14 +146,14 @@ function AboutUs() {
                 href="https://github.com/fozirawat6869/Ecommerce-Website"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-auto inline-block bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition text-center"
+                className="mt-auto inline-block hover:bg-pink-500 text-white px-4 py-2 rounded-lg bg-green-500 transition text-center"
               >
                 View Code on GitHub
               </a>
             </div>
 
             {/* Project 2 */}
-            <div className="bg-gray-100 p-5 sm:p-6 rounded-2xl shadow-sm hover:shadow-lg transition flex flex-col">
+            <div className="bg-gray-100 p-5 sm:p-6 rounded-2xl shadow-sm hover:shadow-lg transition flex flex-col hover:scale-105 transition duration-200 ">
               <h4 className="text-lg sm:text-xl font-semibold mb-2">
                 Portfolio Website
               </h4>
@@ -167,14 +167,14 @@ function AboutUs() {
                 href="https://github.com/fozirawat6869/Portfolio-Website"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-auto inline-block bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition text-center"
+                className="mt-auto inline-block hover:bg-pink-500 text-white px-4 py-2 rounded-lg bg-green-500 transition text-center"
               >
                 View Code on GitHub
               </a>
             </div>
 
             {/* Project 3 */}
-            <div className="bg-gray-100 p-5 sm:p-6 rounded-2xl shadow-sm hover:shadow-lg transition flex flex-col">
+            <div className="bg-gray-100 p-5 sm:p-6 rounded-2xl shadow-sm hover:shadow-lg transition flex flex-col hover:scale-105 transition duration-200 ">
               <h4 className="text-lg sm:text-xl font-semibold mb-2">
                 Library Management System
               </h4>
@@ -189,7 +189,7 @@ function AboutUs() {
                 href="https://github.com/fozirawat6869/Library-Management-System"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-auto inline-block bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition text-center"
+                className="mt-auto inline-block hover:bg-pink-500 text-white px-4 py-2 rounded-lg bg-green-500 transition text-center"
               >
                 View Code on GitHub
               </a>

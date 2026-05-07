@@ -65,7 +65,7 @@ const handleAllProudcts = async () => {
 
       {/* Header */}
       
-        <h1 className="text-3xl font-bold text-center mb-5 text-green-500 bg-white p-5">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold text-center mb-5 text-purple-500 bg-white p-5">Admin Dashboard</h1>
       
 
       {/* Stats Cards */}

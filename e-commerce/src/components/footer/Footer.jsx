@@ -1,8 +1,9 @@
 
 
 
-
 import React from 'react'
+
+import {Link} from 'react-router-dom'
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { FaGithub } from "react-icons/fa";
@@ -61,7 +62,7 @@ function Footer() {
       href="https://www.instagram.com/mayur_rawat__" 
       target="_blank" 
       rel="noopener noreferrer"
-      className="hover:text-blue-700"
+      className="hover:text-pink-500"
     >
       <FaInstagramSquare />
     </a>
@@ -71,12 +72,14 @@ function Footer() {
 
 
           {/* About Section */}
-          <div className="bg-white p-6 rounded-2xl shadow flex flex-col justify-between">
+          <Link to="/About" 
+           onClick={() => window.scrollTo(0, 0)}
+          className="bg-white p-6 rounded-2xl shadow flex flex-col justify-between ">
             <h1 className="text-xl font-bold text-center">About</h1>
             <p className="mt-4 text-sm text-gray-700 leading-relaxed">
             I am a motivated and detail-oriented Full Stack Web Developer with a strong foundation in both front-end and back-end technologies. I enjoy building modern, responsive, and user-friendly web applications using React.js, Node.js, Express.js, and MySQL.
             </p>
-          </div>
+          </Link>
 
         </div>
 

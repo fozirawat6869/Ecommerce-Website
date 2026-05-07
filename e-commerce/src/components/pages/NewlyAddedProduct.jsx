@@ -113,12 +113,12 @@ function NewlyAddedProduct() {
           </button>
 
           <button
-            disabled={newlyProduct.length <= limit || loading}
+            disabled={newlyProduct.length < limit || loading}
             onClick={() => setPage(page + 1)}
             className={`
               bg-green-500 px-3 sm:px-4 py-2 rounded-lg text-white
               disabled:opacity-40
-              ${newlyProduct.length <= limit || loading ? "cursor-not-allowed" : "cursor-pointer"}
+              ${newlyProduct.length < limit || loading ? "cursor-not-allowed" : "cursor-pointer"}
             `}
           >
             Next
