@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
-import { Link,  } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { useQuery } from '@tanstack/react-query'
 import api, { BASE_URL } from '../../utils/api'
 
-
 function AllProducts() {
 
-  
   const [showSection, setShowSection] = useState({
     category: false,
     price: false,
@@ -32,8 +30,8 @@ function AllProducts() {
   const { data } = useQuery({
     queryKey: ['products', page, categoryValue, price],
     queryFn: fetchProducts,
-    cacheTime: 60*1000*5,
-    staleTime: 60*1000*5,
+    cacheTime: 60 * 1000 * 5,
+    staleTime: 60 * 1000 * 5,
   })
 
   const handleCategory = (e) => {
@@ -132,7 +130,7 @@ function AllProducts() {
               <Link
                 to={`/product/${item.product_id}`}
                 key={item.product_id}
-                className='w-[260px] h-[360px] p-2 bg-gray-100 cursor-pointer flex flex-col  rounded-lg hover:scale-105 transition-transform duration-200 will-change-transform'
+                className='w-[150px] sm:w-[190px] md:w-[220px] lg:w-[260px] h-[280px] sm:h-[320px] md:h-[340px] lg:h-[360px] p-2 bg-gray-100 cursor-pointer flex flex-col rounded-lg hover:scale-105 transition-transform duration-200 will-change-transform'
               >
 
                 {/* IMAGE */}
@@ -145,19 +143,19 @@ function AllProducts() {
                 </div>
 
                 {/* DETAILS */}
-                <div className='w-full h-[30%] flex flex-col justify-between px-3 py-2 '>
+                <div className='w-full h-[30%] flex flex-col justify-between px-2 sm:px-3 py-2'>
 
-                  <h2 className='text-gray-600 text-[15px] font-medium'>
+                  <h2 className='text-[13px] sm:text-[15px] text-gray-600 font-medium line-clamp-2'>
                     {item.product_name}
                   </h2>
 
-                  <p className='text-sm text-gray-500'>
+                  <p className='text-xs sm:text-sm text-gray-500'>
                     {item.product_description?.length > 38
                       ? item.product_description.substring(0, 38) + "..."
                       : item.product_description}
                   </p>
 
-                  <p className='font-bold text-[16px]'>
+                  <p className='font-bold text-sm sm:text-[16px]'>
                     ₹{item.product_price}
                   </p>
 
@@ -174,7 +172,7 @@ function AllProducts() {
             <button
               disabled={page === 1}
               onClick={() => setPage(page - 1)}
-              className={ ` bg-red-500 px-4 py-2 rounded-xl text-white ${page === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600 cursor-pointer'}` }
+              className={`bg-red-500 px-4 py-2 rounded-xl text-white ${page === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600 cursor-pointer'}`}
             >
               Previous
             </button>
