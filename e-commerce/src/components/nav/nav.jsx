@@ -163,25 +163,25 @@ if (isLoading) {
           } lg:flex lg:flex-row lg:static lg:w-auto lg:shadow-none lg:gap-8 items-center transition-all duration-300`}
         >
           <li>
-            <Link to="/" className="block px-4 py-2 font-bold hover:font-semibold hover:text-blue-600 hover:scale-110 transition-transform duration-300" onClick={() => setIsMenuOpen(false)}>
+            <Link to="/" className="block px-4 py-2 font-bold hover:text-blue-600 hover:scale-110 transition-transform duration-300" onClick={() => setIsMenuOpen(false)}>
               Home
             </Link>
           </li>
 
           <li>
-            <Link to="/AllProducts" className="block font-bold px-4 py-2 hover:font-semibold hover:text-blue-600 hover:scale-110 transition-transform duration-300" onClick={() => setIsMenuOpen(false)}>
+            <Link to="/AllProducts" className="block px-4 py-2 font-bold   hover:text-blue-600 hover:scale-110 transition-transform duration-300" onClick={() => setIsMenuOpen(false)}>
               Products
             </Link>
           </li>
 
           <li>
-            <Link to="/about" className="block font-bold px-4 py-2 hover:font-semibold hover:text-blue-600 hover:scale-110 transition-transform duration-300" onClick={() => setIsMenuOpen(false)}>
+            <Link to="/about" className="block px-4 py-2 font-bold hover:text-blue-600 hover:scale-110 transition-transform duration-300" onClick={() => setIsMenuOpen(false)}>
               About Us
             </Link>
           </li>
 
           <li>
-            <Link to="/contact" className="block font-bold px-4 py-2 hover:font-semibold hover:text-blue-600 hover:scale-110 transition-transform duration-300" onClick={() => setIsMenuOpen(false)}>
+            <Link to="/contact" className="block px-4 py-2 font-bold hover:text-blue-600 hover:scale-110 transition-transform duration-300" onClick={() => setIsMenuOpen(false)}>
               Contact Us
             </Link>
           </li>

@@ -49,10 +49,10 @@ const Categories = () => {
           <div
             key={index}
             onClick={() => setSelectedCategoryItem(item.name)}
-            className="flex flex-col items-center cursor-pointer flex-shrink-0 min-w-[70px] sm:min-w-[90px]"
+            className="flex flex-col items-center cursor-pointer flex-shrink-0 min-w-[70px] sm:min-w-[90px] "
           >
 
-            <div className="bg-gray-200 hover:bg-gray-300 transition 
+            <div className="bg-gray-200   hover:border-blue-500 hover:border-2   transition duration-200
                             rounded-full flex items-center justify-center
                             w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
 
