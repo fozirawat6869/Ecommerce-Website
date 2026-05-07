@@ -59,11 +59,19 @@ function CategoryPage() {
 
   const currentFilterConfig = filterConfig[category] || {}
 
+  if(isError){
+    return (
+      <div className='flex items-center justify-center h-64'>
+        <p className='text-red-500 text-lg'>Error loading products. Please try again.</p>
+      </div>
+    )
+  } 
+
 
 if (isLoading) {
   return (
     <SkeletonTheme baseColor="#e5e7eb" highlightColor="#f3f4f6">
-      <main className='flex flex-col lg:flex-row gap-5 bg-gray-100 px-3 sm:px-6 md:px-8 py-4'>
+      <main className='flex flex-col lg:flex-row gap-5 bg-gray-100 px-3 sm:px-6 md:px-8 py-3'>
 
         {/* LEFT FILTER SKELETON */}
         <div className='w-full lg:w-1/4 bg-white rounded-lg shadow p-4'>
@@ -126,7 +134,7 @@ if (isLoading) {
 
 
   return (
-    <main className='flex flex-col lg:flex-row gap-5 bg-gray-100 px-3 sm:px-6 md:px-8 py-4'>
+    <main className='flex flex-col lg:flex-row gap-5 bg-gray-100 px-3 sm:px-6 md:px-8 py-2'>
 
       {/* FILTER */}
       <div className='w-full lg:w-1/4 bg-white rounded-lg shadow'>

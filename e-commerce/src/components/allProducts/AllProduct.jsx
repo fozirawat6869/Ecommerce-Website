@@ -55,7 +55,7 @@ function AllProducts() {
   }
 
   return (
-    <main className='flex flex-col lg:flex-row gap-5 bg-gray-100 px-4 sm:px-6 md:px-8 lg:px-10 py-3'>
+    <main className='flex flex-col lg:flex-row gap-5 bg-gray-100 px-4 sm:px-6 md:px-8 lg:px-10 py-2'>
 
       {/* LEFT FILTER */}
       <div className='w-full lg:w-1/4 bg-white'>
@@ -132,7 +132,7 @@ function AllProducts() {
               <Link
                 to={`/product/${item.product_id}`}
                 key={item.product_id}
-                className='w-[260px] h-[360px] p-2 bg-gray-100 cursor-pointer flex flex-col'
+                className='w-[260px] h-[360px] p-2 bg-gray-100 cursor-pointer flex flex-col  rounded-lg hover:scale-105 transition-transform duration-200 will-change-transform'
               >
 
                 {/* IMAGE */}
@@ -145,7 +145,7 @@ function AllProducts() {
                 </div>
 
                 {/* DETAILS */}
-                <div className='w-full h-[30%] flex flex-col justify-between px-3 py-2'>
+                <div className='w-full h-[30%] flex flex-col justify-between px-3 py-2 '>
 
                   <h2 className='text-gray-600 text-[15px] font-medium'>
                     {item.product_name}

@@ -48,7 +48,7 @@ function SearchInputsProduct() {
           <Link
             key={item.product_id}
             to={`/product/${item.product_id}`}
-            className="w-[170px] sm:w-[190px] bg-gray-100 p-2 rounded-lg"
+            className="w-[170px] sm:w-[190px] bg-gray-100 p-2 rounded-lg hover:scale-105 transition-transform duration-200 will-change-transform"
           >
             <div className="h-[140px]">
               <img
@@ -79,3 +79,5 @@ function SearchInputsProduct() {
 }
 
 export default SearchInputsProduct;
+
+

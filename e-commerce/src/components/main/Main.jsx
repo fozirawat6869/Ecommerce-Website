@@ -102,7 +102,7 @@ if (loading) {
   }
 
   return (
-    <div className="bg-gray-100 px-2 sm:px-5 md:px-10 py-4">
+    <div className="bg-gray-100 px-2 sm:px-5 md:px-10 py-3">
       <div className="bg-white rounded-lg">
 
         {/* HEADER */}

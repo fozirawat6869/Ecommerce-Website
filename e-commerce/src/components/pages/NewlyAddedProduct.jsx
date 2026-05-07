@@ -23,7 +23,7 @@ function NewlyAddedProduct() {
   const loading = isLoading;
 
   return (
-    <div className='bg-gray-100 px-2 sm:px-4 md:px-6 py-4'>
+    <div className='bg-gray-100 px-2 sm:px-4 md:px-6 py-2'>
 
       <div className='bg-white rounded-xl shadow-md'>
 
