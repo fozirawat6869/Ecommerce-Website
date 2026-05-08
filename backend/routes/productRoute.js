@@ -31,7 +31,7 @@ router.route('/productsCategory').get(categoryProducts)
 
 
 // user register
-router.route('/registerr').post(authLimiter,sendOTP)
+router.route('/registerr').post(otpLimiter,sendOTP)
 router.route('/verifyOTP').post(otpLimiter,verifyOTP) 
 
 

@@ -46,7 +46,10 @@ function RegisterPage() {
                 mobile: mobile
             });
 
+            console.log("REGISTER RESPONSE:", res.data);
+
             if (res.data.success) {
+
                 if (res.data.message === "Mobile number already registered. Please login.") {
                     setMobileError(res.data.message);
                     return;
@@ -54,12 +57,17 @@ function RegisterPage() {
 
                 setStep(2);
                 setSessionId(res.data.session_id);
+
             } else {
                 setMobileError("Failed to send OTP");
             }
 
         } catch (error) {
-            setMobileError("Fail otp sending", error.response?.data?.message || "Something went wrong");
+            console.log("REGISTER ERROR:", error.response?.data);
+
+            setMobileError(
+                error.response?.data?.message || "Something went wrong"
+            );
         }
     };
 
@@ -75,12 +83,14 @@ function RegisterPage() {
             const res = await api.post("/api/verifyOTP", {
                 mobile: mobile,
                 otp: otp,
-                session_id:session_id
+                session_id: session_id
             });
 
+            console.log("VERIFY RESPONSE:", res.data);
+
             if (res.data.success) {
-                localStorage.setItem('token',res.data.token);
-                navigate('/')
+                localStorage.setItem('token', res.data.token);
+                navigate('/');
             } else {
                 setOtpError("Invalid OTP. Try again.");
                 return;
@@ -91,7 +101,12 @@ function RegisterPage() {
             setOtp("");
 
         } catch (error) {
-            setOtpError("Invalid OTP. Try again.", error.response?.data?.message || "Something went wrong");
+
+            console.log("VERIFY ERROR:", error.response?.data);
+
+            setOtpError(
+                error.response?.data?.message || "Invalid OTP. Try again."
+            );
         }
     };
 
