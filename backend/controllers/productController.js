@@ -15,68 +15,52 @@ dotenv.config({ path: './config/config.env' });
 
 // send OTP
 
-export const sendOTP = (req, res) => {
-  const { mobile } = req.body;
+export const verifyOTP = async (req, res) => {
+  console.log("verify otp api", req.body);
 
-  if (!mobile) {
-    return res.status(400).json({ success: false, message: "Mobile number is required" });
+  const { session_id, otp, mobile } = req.body;
+
+  if (!session_id || !otp) {
+    return res.status(400).json({
+      success: false,
+      message: "Session ID and OTP are required"
+    });
   }
 
-  // Check if mobile already exists
-  const query = `SELECT * FROM users WHERE mobile = ?`;
-  connection.query(query, [mobile], (err, result) => {
-    if (err) {
-      console.log("DB Error:", err);
-      return res.status(500).json({ success: false, message: "Database error" });
-    }
+  try {
+    const response = await axios.get(
+      `https://2factor.in/API/V1/${process.env.API_KEY}/SMS/VERIFY/${session_id}/${otp}`
+    );
 
-    if (result.length > 0) {
-      // Mobile already registered → show message but do NOT fail OTP
-      return res.status(200).json({ 
-        success: true, 
-        message: "Mobile number already registered. Please login." 
+    if (response.data.Status === "Success") {
+
+      const token = jwt.sign(
+        { role: "user", mobile },
+        process.env.JWT_SECRET,
+        { expiresIn: "30d" }
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: "OTP verified successfully",
+        token
+      });
+
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid OTP"
       });
     }
 
-    // Mobile not registered → send OTP
-    axios.get(`https://2factor.in/API/V1/${process.env.API_KEY}/SMS/${mobile}/AUTOGEN`)
-      .then(response => {
-        const session_id = response.data.Details;
-        const OTP = response.data.OTP;
-        connection.query(`insert into users (mobile) values (?)`, 
-          [mobile], 
-          (err,result) => {
-            console.log("User insert result:", result);
-             if(err){
-                return res.status(500).json({
-                  success: false,
-                  message: "Database error while saving user"
-
-
-                });
-                
-             }
-
-               // Only return session_id to client
-        res.status(200).json({
-          success: true,
-          message: `OTP sent to +91${mobile}`,
-          session_id
-        });
-          })
-       
-      })
-      .catch(error => {
-        console.log("2Factor Error:", error.response?.data || error.message);
-        res.status(500).json({ 
-          success: false, 
-          message: "Failed to send OTP", 
-          error: error.response?.data || error.message 
-        });
-      });
-  });
+  } catch (err) {
+    console.log("2Factor Verify Error:", err.response?.data || err.message);
+    return res.status(500).json({
+      success: false,
+      message: "OTP verification failed"
+    });
+  }
 };
-
 
 // login
 
@@ -135,83 +119,38 @@ export const loginOTP = (req, res) => {
 
 
 // verify 
-// REGISTER VERIFY OTP
-export const verifyOTP = (req, res) => {
-  const { session_id, otp, mobile } = req.body;
+export const verifyOTP = async (req, res) => {
+  console.log("verify otp api", req.body);
+  const { session_id, otp,mobile } = req.body;
 
   if (!session_id || !otp || !mobile) {
-    return res.status(400).json({
-      success: false,
-      message: "Session ID, OTP and mobile are required",
-    });
+    return res.status(400).json({ success: false, message: "Session ID and OTP are required" });
   }
 
-  // Step 1: verify OTP with 2Factor
-  axios
-    .get(
+  try {
+    const response = await axios.get(
       `https://2factor.in/API/V1/${process.env.API_KEY}/SMS/VERIFY/${session_id}/${otp}`
-    )
-    .then((response) => {
-      if (response.data.Status !== "Success") {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid OTP",
-        });
-      }
+    );
 
-      // Step 2: check if user exists
-      const query = `SELECT * FROM users WHERE mobile = ?`;
-
-      connection.query(query, [mobile], (err, result) => {
-        if (err) {
-          return res.status(500).json({
-            success: false,
-            message: "Database error",
-          });
-        }
-
-        // Step 3: if user does NOT exist → create user (REGISTER FLOW)
-        if (result.length === 0) {
-          const insertQuery = `INSERT INTO users (mobile) VALUES (?)`;
-
-          connection.query(insertQuery, [mobile], (err) => {
-            if (err) {
-              return res.status(500).json({
-                success: false,
-                message: "User registration failed",
-              });
-            }
-
-            const token = jwt.sign(
-              { role: "user", mobile },
-              process.env.JWT_SECRET,
-              { expiresIn: "30d" }
-            );
-
-            return res.status(200).json({
-              success: true,
-              message: "User registered successfully",
-              token,
-            });
-          });
-        } else {
-          // optional: already exists (should not happen in register flow)
-          return res.status(400).json({
-            success: false,
-            message: "User already exists",
-          });
-        }
-      });
-    })
-    .catch((err) => {
-      console.log("OTP Verify Error:", err.response?.data || err.message);
-
-      return res.status(500).json({
+    const token=jwt.sign({ role: "user", mobile:mobile },process.env.JWT_SECRET,{ expiresIn:'30d' })
+    console.log("Generated JWT Token:", token);
+    if (response.data.Status === "Success") {
+      return res.status(200).json({ 
+        success: true, 
+        message: "OTP verified successfully", 
+        token });
+    } else {
+      return res.status(400).json({ 
         success: false,
-        message: "OTP verification failed",
-      });
-    });
+         message: "Invalid OTP" });
+    }
+
+  } catch (err) {
+    console.log("2Factor Verify Error:", err.response?.data || err.message);
+    res.status(500).json({ success: false, message: "OTP verification failed", error: err.message });
+  }
 };
+
 
 
 // All Products 
