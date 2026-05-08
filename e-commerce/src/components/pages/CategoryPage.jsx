@@ -38,7 +38,7 @@ function CategoryPage() {
     }
   }
 
-  const { data,isLoading,isError } = useQuery({
+  const { data,isLoading,isError,isFetching } = useQuery({
     queryKey: ['products', page, filters, category, price],
     queryFn: fetchProducts,
     cacheTime: 1000 * 60 * 5,
@@ -129,6 +129,14 @@ if (isLoading) {
 
       </main>
     </SkeletonTheme>
+  )
+}
+
+if(isFetching){
+  return (
+    <div className='flex items-center justify-center h-64'>
+      <p className='text-gray-500 text-lg'>Updating products...</p>
+    </div>
   )
 }
 
