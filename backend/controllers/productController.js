@@ -171,60 +171,68 @@ export const verifyOTP = async (req, res) => {
 
 // All Products 
 
-export const getAllProducts=handleAsyncErrors(async(req,res,next)=>{
-  console.log("all products ")
-  console.log(req.query)
- 
-  console.log(req.query)  //  get the page,limit form query
-  let category=req.query.category;
-  let price=req.query.price;
-  let size=req.query.size;
-  // console.log(price)
-  // console.log(category)
-   let page = parseInt(req.query.page) ;   // if no page given, use 1
-  let limit = parseInt(req.query.limit) ; // if no limit given, use 2
-   let offset = (page - 1) * limit;
-  //  let query="select * from product where 1=1"
+export const getAllProducts = handleAsyncErrors(async (req, res, next) => {
+  console.log("all products");
+  console.log(req.query);
 
-  let query = "select p.*,(select pi.image_path from product_images pi where pi.product_id = p.product_id limit 1) as image from product p";
+  let { category, price, size, page = 1, limit = 10 } = req.query;
 
+  page = parseInt(page);
+  limit = parseInt(limit);
+  let offset = (page - 1) * limit;
 
-    // if category is there in query
-      if(category==="Men" || category==="Women" || category==="Mouse" || category==="Camera" || category==="Earphones" || category==="Mobiles" || category==="Speakers" || category==="Televisions" || category==="Trimmers" || category==="Watches"){
-        query+=` join category c on p.product_category_id=c.id and c.name="${category}"`
-      }
-     if(price==="100" || price==="200" || price==="300" || price==="400" || price==="500" || price==="1000"  ){    
-          query += ` where p.product_price <=${price}`;
-       }
-       if(price==="1000plus"){
-        query+=` where p.product_price >= 1000 `
-       }
-  
-    
+  let query = `
+    SELECT p.*,
+    (SELECT pi.image_path 
+     FROM product_images pi 
+     WHERE pi.product_id = p.product_id 
+     LIMIT 1) as image
+    FROM product p
+    JOIN category c ON p.product_category_id = c.id
+    WHERE 1=1
+  `;
 
-      // pagination
-      
-    if(limit){
-        query += ` LIMIT ${limit} OFFSET ${offset}`;
+  let params = [];
+
+  // CATEGORY FILTER
+  if (category) {
+    query += ` AND LOWER(c.name) = LOWER(?)`;
+    params.push(category);
+  }
+
+  // PRICE FILTER
+  if (price) {
+    if (["100","200","300","400","500","1000"].includes(price)) {
+      query += ` AND p.product_price <= ?`;
+      params.push(Number(price));
+    } else if (price === "1000plus") {
+      query += ` AND p.product_price >= ?`;
+      params.push(1000);
     }
-    connection.query(query,(err,result)=>{
-    // console.log(result)
-     if(err){
-      console.log(err)
-      return next(new HandleError("error in query of allProducts",400))
-     }
+  }
+
+  // PAGINATION
+  query += ` LIMIT ? OFFSET ?`;
+  params.push(limit, offset);
+
+  connection.query(query, params, (err, result) => {
+    if (err) {
+      console.log(err);
+      return next(new HandleError("error in query of allProducts", 400));
+    }
+
     res.status(200).json({
-      success:true,
-      allProduct:result
-    })
-  })
-  
-})
+      success: true,
+      allProduct: result
+    });
+  });
+});
 
 
 
 
 // Category filtered products
+
 export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
     try {
         console.log("Query params:", req.query);
@@ -235,50 +243,52 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
         const pageNum = parseInt(page) || 1;
         const offset = (pageNum - 1) * limitNum;
 
-        // ✅ FIXED: JOIN is hardcoded here, no conditions in ON clause
         let query = `
-            SELECT p.*,
-            (SELECT pi.image_path 
-             FROM product_images pi 
-             WHERE pi.product_id = p.product_id 
-             LIMIT 1) AS image
-            FROM product p
-            JOIN category c ON p.product_category_id = c.id
-            WHERE 1=1
+          SELECT p.*,
+          (SELECT pi.image_path 
+           FROM product_images pi 
+           WHERE pi.product_id=p.product_id 
+           LIMIT 1) as image
+          FROM product p
         `;
 
         let params = [];
 
-        // ✅ Category filter
-        if (category && category.trim() !== "") {
-            query += ` AND LOWER(c.name) = LOWER(?)`;
-            params.push(category.trim());
+        // JOIN
+        if (category) {
+            query += ` JOIN category c ON p.product_category_id = c.id`;
         }
 
-        // ✅ Dynamic filters (SubCategory, Brand etc.)
+        query += ` WHERE 1=1`;
+
+        // Category filter
+        if (category) {
+            query += ` AND c.name = ?`;
+            params.push(category);
+        }
+
+        // ✅ DYNAMIC FILTERS
         Object.keys(dynamicFilters).forEach((key) => {
             const value = dynamicFilters[key];
-            if (value && value.trim() !== "") {
+
+            if (value) {
                 query += ` AND JSON_UNQUOTE(JSON_EXTRACT(p.product_attributes, '$.${key}')) = ?`;
-                params.push(value.trim());
+                params.push(value);
             }
         });
 
-        // ✅ Price filter — check "1000plus" FIRST before Number()
-        if (price && price.trim() !== "") {
-            if (price === "1000plus") {
+        // Price filter
+        if (price) {
+            if (["100","200","300","400","500","1000"].includes(price)) {
+                query += ` AND p.product_price <= ?`;
+                params.push(price);
+            } else if (price === "1000plus") {
                 query += ` AND p.product_price >= ?`;
                 params.push(1000);
-            } else {
-                const priceNum = Number(price);
-                if (!isNaN(priceNum) && priceNum > 0) {
-                    query += ` AND p.product_price <= ?`;
-                    params.push(priceNum);
-                }
             }
         }
 
-        // ✅ Pagination
+        // Pagination
         query += ` LIMIT ? OFFSET ?`;
         params.push(limitNum, offset);
 
@@ -287,7 +297,7 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
 
         connection.query(query, params, (err, result) => {
             if (err) {
-                console.error("SQL Error:", err);
+                console.error("Error in query:", err);
                 return next(new HandleError("Database query error", 400));
             }
 
@@ -298,7 +308,7 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
         });
 
     } catch (error) {
-        console.error("Server Error:", error);
+        console.error("Unexpected error:", error);
         return next(new HandleError("Server error", 500));
     }
 });
