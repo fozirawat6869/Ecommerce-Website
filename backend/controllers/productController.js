@@ -242,18 +242,12 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
            FROM product_images pi 
            WHERE pi.product_id=p.product_id 
            LIMIT 1) as image
-          FROM product p
+          FROM product p JOIN category c ON p.product_category_id = c.id where 1=1
         `;
 
         let params = [];
 
-        // JOIN
-        if (category) {
-            query += ` JOIN category c ON p.product_category_id = c.id`;
-        }
-
-        query += ` WHERE 1=1`;
-
+     
         // Category filter
         if (category) {
             query += ` AND c.name = ?`;
