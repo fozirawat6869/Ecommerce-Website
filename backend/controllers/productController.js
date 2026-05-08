@@ -135,38 +135,83 @@ export const loginOTP = (req, res) => {
 
 
 // verify 
-export const verifyOTP = async (req, res) => {
-  console.log("verify otp api", req.body);
-  const { session_id, otp,mobile } = req.body;
+// REGISTER VERIFY OTP
+export const verifyOTP = (req, res) => {
+  const { session_id, otp, mobile } = req.body;
 
   if (!session_id || !otp || !mobile) {
-    return res.status(400).json({ success: false, message: "Session ID and OTP are required" });
+    return res.status(400).json({
+      success: false,
+      message: "Session ID, OTP and mobile are required",
+    });
   }
 
-  try {
-    const response = await axios.get(
+  // Step 1: verify OTP with 2Factor
+  axios
+    .get(
       `https://2factor.in/API/V1/${process.env.API_KEY}/SMS/VERIFY/${session_id}/${otp}`
-    );
+    )
+    .then((response) => {
+      if (response.data.Status !== "Success") {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid OTP",
+        });
+      }
 
-    const token=jwt.sign({ role: "user", mobile:mobile },process.env.JWT_SECRET,{ expiresIn:'30d' })
-    console.log("Generated JWT Token:", token);
-    if (response.data.Status === "Success") {
-      return res.status(200).json({ 
-        success: true, 
-        message: "OTP verified successfully", 
-        token });
-    } else {
-      return res.status(400).json({ 
+      // Step 2: check if user exists
+      const query = `SELECT * FROM users WHERE mobile = ?`;
+
+      connection.query(query, [mobile], (err, result) => {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            message: "Database error",
+          });
+        }
+
+        // Step 3: if user does NOT exist → create user (REGISTER FLOW)
+        if (result.length === 0) {
+          const insertQuery = `INSERT INTO users (mobile) VALUES (?)`;
+
+          connection.query(insertQuery, [mobile], (err) => {
+            if (err) {
+              return res.status(500).json({
+                success: false,
+                message: "User registration failed",
+              });
+            }
+
+            const token = jwt.sign(
+              { role: "user", mobile },
+              process.env.JWT_SECRET,
+              { expiresIn: "30d" }
+            );
+
+            return res.status(200).json({
+              success: true,
+              message: "User registered successfully",
+              token,
+            });
+          });
+        } else {
+          // optional: already exists (should not happen in register flow)
+          return res.status(400).json({
+            success: false,
+            message: "User already exists",
+          });
+        }
+      });
+    })
+    .catch((err) => {
+      console.log("OTP Verify Error:", err.response?.data || err.message);
+
+      return res.status(500).json({
         success: false,
-         message: "Invalid OTP" });
-    }
-
-  } catch (err) {
-    console.log("2Factor Verify Error:", err.response?.data || err.message);
-    res.status(500).json({ success: false, message: "OTP verification failed", error: err.message });
-  }
+        message: "OTP verification failed",
+      });
+    });
 };
-
 
 
 // All Products 
