@@ -14,6 +14,7 @@ import debounce from "../reuseCode/debouncingFunc";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import {jwtDecode} from "jwt-decode";  
+import { useEffect } from "react";
 
 // ✅ add this
 import api from "../../utils/api";
@@ -21,6 +22,30 @@ import api from "../../utils/api";
 function Nav() {
   const [InputValue, setInputValue] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser]=useState(null)
+
+
+    useEffect(() => {
+     
+      async function getUser(){
+            try{
+              const res= await api.get("/api/userProfile",{
+              headers:{
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+              }
+            })
+            console.log("user profile res in nav",res.data)
+            setUser(res.data.user)
+
+            }catch(err){
+              console.log("error in fetching user profile in nav",err)
+            }
+      }
+      getUser()
+     
+    },[])
+
+
   const navigate = useNavigate();
 
    const handleInput=(e)=>{
@@ -62,8 +87,7 @@ function Nav() {
   
 
   const token = localStorage.getItem("token");
-
-  
+ 
 
   const handleCartCount=async()=>{
    
@@ -208,6 +232,7 @@ if (isLoading) {
                 if (!token) navigate("/login");
               }}
               className="flex items-center gap-1 hover:bg-gray-100 px-2 py-1 rounded-lg cursor-pointer"
+               onClick={()=>navigate(token ? "/profile" : "/login")}
             >
               {token ? (
                 <CgProfile className="text-2xl" />
@@ -215,7 +240,7 @@ if (isLoading) {
                 <IoMdPersonAdd className="text-2xl" />
               )}
               <p className="hidden lg:block">
-                {token ? "Profile" : "Login"}
+                {token ? `${user?.first_name}` : "Login"}
               </p>
             </div>
 

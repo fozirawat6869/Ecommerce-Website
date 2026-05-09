@@ -27,7 +27,7 @@ function AllProducts() {
     }
   }
 
-  const { data } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ['products', page, categoryValue, price],
     queryFn: fetchProducts,
     cacheTime: 60 * 1000 * 5,
@@ -121,20 +121,49 @@ function AllProducts() {
         <h1 className='text-center font-bold text-2xl py-5'>All Products</h1>
 
         {/* PRODUCTS */}
-        <div className='flex flex-wrap justify-center gap-5 pb-5'>
+        <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 pb-5 px-3'>
 
-          {data?.length === 0 ? (
-            <p className='text-gray-500'>No products found</p>
+          {(isLoading || isFetching) ? (
+
+            [...Array(10)].map((_, index) => (
+              <div
+                key={index}
+                className='w-full h-[280px] sm:h-[320px] md:h-[340px] lg:h-[360px] p-2 bg-gray-100 rounded-lg animate-pulse'
+              >
+
+                {/* IMAGE SKELETON */}
+                <div className='w-full h-[70%] bg-gray-300 rounded-md'></div>
+
+                {/* TEXT SKELETON */}
+                <div className='w-full h-[30%] flex flex-col justify-between px-2 sm:px-3 py-2'>
+
+                  <div className='h-4 bg-gray-300 rounded w-[90%]'></div>
+
+                  <div className='h-3 bg-gray-300 rounded w-[70%]'></div>
+
+                  <div className='h-4 bg-gray-300 rounded w-[40%]'></div>
+
+                </div>
+              </div>
+            ))
+
+          ) : data?.length === 0 ? (
+
+            <p className='text-gray-500 col-span-full text-center'>
+              No products found
+            </p>
+
           ) : (
+
             data?.map((item) => (
               <Link
                 to={`/product/${item.product_id}`}
                 key={item.product_id}
-                className='w-[150px] sm:w-[190px] md:w-[220px] lg:w-[260px] h-[280px] sm:h-[320px] md:h-[340px] lg:h-[360px] p-2 bg-gray-100 cursor-pointer flex flex-col rounded-lg hover:scale-105 transition-transform duration-200 will-change-transform'
+                className='w-full h-[280px] sm:h-[320px] md:h-[340px] lg:h-[360px] p-2 bg-gray-100 cursor-pointer flex flex-col rounded-lg hover:scale-105 transition-transform duration-200 will-change-transform'
               >
 
                 {/* IMAGE */}
-                <div className='w-full h-[70%]'>
+                <div className='w-full h-[70%] overflow-hidden rounded-md'>
                   <img
                     className='w-full h-full object-cover'
                     src={`${BASE_URL}/${item.image}`}
@@ -162,6 +191,7 @@ function AllProducts() {
                 </div>
               </Link>
             ))
+
           )}
 
         </div>
@@ -169,10 +199,15 @@ function AllProducts() {
         {/* PAGINATION */}
         <div className='bg-gray-100'>
           <div className='flex justify-center gap-5 p-5 bg-white'>
+
             <button
               disabled={page === 1}
               onClick={() => setPage(page - 1)}
-              className={`bg-red-500 px-4 py-2 rounded-xl text-white ${page === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600 cursor-pointer'}`}
+              className={`bg-red-500 px-4 py-2 rounded-xl text-white ${
+                page === 1
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'hover:bg-red-600 cursor-pointer'
+              }`}
             >
               Previous
             </button>
@@ -180,10 +215,15 @@ function AllProducts() {
             <button
               disabled={data?.length < 10}
               onClick={() => setPage(page + 1)}
-              className={`bg-green-500 px-4 py-2 rounded-xl text-white ${data?.length < 10 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600 cursor-pointer'}`}
+              className={`bg-green-500 px-4 py-2 rounded-xl text-white ${
+                data?.length < 10
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'hover:bg-green-600 cursor-pointer'
+              }`}
             >
               Next
             </button>
+
           </div>
         </div>
 
