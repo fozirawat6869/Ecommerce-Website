@@ -317,7 +317,7 @@ return (
 
             <div className=" mb-2">
                 <button 
-                onclick={()=>{
+                onClick={()=>{
                   localStorage.removeItem("token")
                     navigate("/");
                     window.location.reload();
