@@ -44,7 +44,7 @@ export const sendOTP = (req, res) => {
     //  console.log("Mobile number not registered, sending OTP:", mobile);
      console.log("2Factor API URL:", `https://2factor.in/API/V1/${process.env.API_KEY}/SMS/+91${mobile}/AUTOGEN`);
     // Mobile not registered → send OTP
-    axios.get(`https://2factor.in/API/V1/${process.env.API_KEY}/SMS/+91${mobile}/AUTOGEN`)
+    axios.get(`https://2factor.in/API/V1/${process.env.API_KEY}/SMS/+91${mobile}/AUTOGEN/OTP1`)
       .then(response => {
         // console.log("2Factor Response:", response);
        
