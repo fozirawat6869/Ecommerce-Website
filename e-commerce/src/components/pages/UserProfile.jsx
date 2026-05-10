@@ -7,6 +7,7 @@ import { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import api from "../../utils/api"; // ✅ added
 import UserLoader from '../../Loaders/ForUserProfile'
+import { Link } from "react-router-dom";
 
 function UserProfile() {
 
