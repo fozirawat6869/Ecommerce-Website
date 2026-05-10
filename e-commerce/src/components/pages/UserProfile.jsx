@@ -313,6 +313,13 @@ return (
               />
             </div>
 
+            <div className=" mb-2">
+                <Link to="/logout" className="text-red-500 text-white font-bold px-3 py-2 rounded-2xl ">
+                  Logout
+                </Link>
+            </div>
+
+
           </div>
         </div>
       </>
