@@ -4,11 +4,11 @@ function FormPage() {
   return (
     <>
      {/* Contact Form */}
-      <div className="flex justify-center mt-3 px-4">
+      <div className="flex justify-center mt-3 px-4 bg-gray-100">
         <form 
           action="https://formspree.io/f/xqawlrao" 
           method="POST" 
-          className="flex flex-col gap-4 w-full max-w-lg p-6 sm:p-10 bg-white rounded-2xl shadow-md"
+          className="flex flex-col gap-4 w-full max-w-2xl p-6 sm:p-10 bg-white rounded-2xl shadow-md"
         >
           <h1 className="text-center text-2xl sm:text-3xl font-bold">Form</h1>
 
