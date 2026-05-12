@@ -2,6 +2,7 @@
 import ImageSlider from '../imageSlider/ImageSlider'
 import Categories from '../category/Categories'
 import Main from '../main/Main'
+import FormPage from '../pages/FormPage'
 
 
 function Home() {
@@ -11,9 +12,10 @@ function Home() {
     <Categories/>
     <ImageSlider/>
     <Main/>
- 
+    <FormPage/>
    
     </>
+    
    
   )
 }
