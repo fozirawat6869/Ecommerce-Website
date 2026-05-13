@@ -125,7 +125,7 @@ function UserLoginPage() {
         if(res.data.success){
             localStorage.setItem('token',res.data.token);
              navigate('/adminHome');
-            window.location.reload(); // Reload to update layout based on new token
+            // window.location.reload(); // Reload to update layout based on new token
            
         }
 
