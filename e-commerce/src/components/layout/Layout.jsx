@@ -1,11 +1,12 @@
-
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Nav from "../nav/nav";
 import Footer from "../footer/Footer";
 import { jwtDecode } from "jwt-decode";
 import AdminNav from "../nav/AdminNav";
 
 function Layout() {
+
+  useLocation();
 
   const token = localStorage.getItem("token");
 
@@ -18,6 +19,8 @@ function Layout() {
       const decodedToken = jwtDecode(token);
 
       role = decodedToken.role;
+
+      console.log(role);
 
     } catch (err) {
 
