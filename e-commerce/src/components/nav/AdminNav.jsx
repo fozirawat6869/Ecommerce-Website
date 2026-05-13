@@ -9,6 +9,7 @@ import { CgProfile } from "react-icons/cg";
 
 function AdminNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
