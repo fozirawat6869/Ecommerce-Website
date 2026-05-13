@@ -24,6 +24,8 @@ function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser]=useState(null)
 
+  const token = localStorage.getItem("token");
+ 
 
     useEffect(() => {
      
@@ -34,7 +36,7 @@ function Nav() {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
               }
             })
-            console.log("user profile res in nav",res.data)
+            console.log("user profile res in nav",res.data.user)
             setUser(res.data.user)
 
             }catch(err){
@@ -43,7 +45,7 @@ function Nav() {
       }
       getUser()
      
-    },[])
+    },[token])
 
 
   const navigate = useNavigate();
@@ -86,8 +88,7 @@ function Nav() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   
 
-  const token = localStorage.getItem("token");
- 
+
 
   const handleCartCount=async()=>{
    

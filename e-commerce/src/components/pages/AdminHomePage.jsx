@@ -34,7 +34,7 @@ const handleAllProudcts = async () => {
       const res = await api.get("/api/allUsers")  
       console.log("users res", res.data.users)
       // await new Promise((resolve)=>setTimeout(resolve,5000))
-      return res.data.allUsers || []
+      return res.data.users || []
     } catch {
       console.log("error fetching users")
       return []
@@ -54,11 +54,17 @@ const handleAllProudcts = async () => {
     staleTime:1000*60*2, // 2 min fresh
   })
 
+  
+
   if(isLoading){
     return (
      <AdminLoader/>
     )
   }
+
+
+  
+
 
   return (
     <div className=" bg-gray-100 p-4">
@@ -91,7 +97,7 @@ const handleAllProudcts = async () => {
           <FaUsers className="text-purple-600 text-4xl" />
           <div>
             <h2 className="text-gray-500">Total Users</h2>
-            <p className="text-2xl font-bold">{allUsers?.length+1 || 0}</p>
+            <p className="text-2xl font-bold">{allUsers?.length}</p>
           </div>
         </Link>
 
