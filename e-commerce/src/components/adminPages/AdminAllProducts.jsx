@@ -218,7 +218,7 @@ function AdminAllProducts() {
           disabled={page === 1}
           onClick={() => setPage(page - 1)}
           className={`px-4 py-2 rounded-lg text-white transition 
-            ${page === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500 hover:bg-red-600"}`}
+            ${page === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500 hover:bg-red-600 cursor-pointer"}`}
         >
           Previous
         </button>
@@ -229,7 +229,7 @@ function AdminAllProducts() {
           disabled={data.length < 10}
           onClick={() => setPage(page + 1)}
           className={`px-4 py-2 rounded-lg text-white transition 
-            ${data.length < 10 ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"}`}
+            ${data.length < 10 ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600 cursor-pointer"}`}
         >
           Next
         </button>
