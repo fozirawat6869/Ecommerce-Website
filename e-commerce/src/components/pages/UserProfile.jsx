@@ -222,7 +222,7 @@ return (
                   })
                 }
                  }
-                className="text-blue-600 text-sm font-medium hover:underline">
+                className="text-blue-600 text-sm font-medium hover:underline cursor-pointer">
                   {editButton.forName?"cancel":"edit"}
                   </button>
               </div>
@@ -282,7 +282,7 @@ return (
                   })
                 }
                  }
-                className="text-blue-600 text-sm hover:underline">
+                className="text-blue-600 text-sm hover:underline cursor-pointer">
                   {editButton.forEmail?"Cancel":"Edit"}
                 </button>
               </div>
