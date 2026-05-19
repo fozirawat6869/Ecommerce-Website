@@ -1217,3 +1217,45 @@ export const getAddress=(req,res)=>{
 
 
 
+// add address
+
+export const addAddress=(req,res)=>{
+  console.log("inside the add address api")
+  console.log(req.body)
+  const {full_name,phone_no,pincode,state,city,addres}=req.body
+  const phoneNumber=Number(phone_no)
+  const pinCode=Number(pincode)
+
+  console.log(full_name,state,phone_no)
+
+
+   const{mobile}=req.user
+ 
+
+  connection.query("select * from users where mobile=? ",[mobile],(err,result)=>{
+   if(err){
+      return res.status(400).json({
+        success:false,
+        message:"error to found the user with that mobile"
+      })
+    }
+  
+    const userId=result[0].id
+
+    connection.query(`insert into address (user_id,full_name,mobile,pincode,state,city,addres) values(?,?,?,?,?,?,?)`,[userId,full_name,phoneNumber,pinCode,state,city,addres],(err,addressResult)=>{
+      console.log("address inserted")
+         if(err){
+      return res.status(400).json({
+        success:false,
+        message:"error in inserting the address"
+      })
+    }
+       res.status(200).json({
+        success:true,
+        message:"address inserted successfully",
+        address:addressResult
+       })
+    })
+
+  })
+}

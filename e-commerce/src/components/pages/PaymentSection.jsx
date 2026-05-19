@@ -32,7 +32,7 @@ function PaymentSection() {
 
       console.log("api response", res.data);
 
-      return res.data;
+      return res.data.userAddress || []
 
     } catch (err) {
       console.log("wrong api", err);
@@ -46,7 +46,7 @@ function PaymentSection() {
     queryFn: fetchAddress,
   });
 
-  console.log("data", data);
+  console.log("data from quer ", data);
 
   // SAFETY
   const addressData = Array.isArray(data)
@@ -87,7 +87,7 @@ function PaymentSection() {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen flex gap-5 items-start justify-center p-5">
+    <div className="bg-gray-100  flex gap-5 items-start justify-center p-2">
 
       {/* ADDRESS SECTION */}
 
