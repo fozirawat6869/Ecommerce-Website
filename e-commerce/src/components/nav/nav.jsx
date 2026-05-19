@@ -1,4 +1,5 @@
 
+
 import React, { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoSearch, IoCart } from "react-icons/io5";
@@ -7,7 +8,7 @@ import { RxCross2 } from "react-icons/rx";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
 import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css' // for skeleton styles gray line effect
+import 'react-loading-skeleton/dist/skeleton.css'
 import { SkeletonTheme } from "react-loading-skeleton";
 
 import debounce from "../reuseCode/debouncingFunc";
@@ -16,7 +17,6 @@ import { useCallback } from "react";
 import {jwtDecode} from "jwt-decode";  
 import { useEffect } from "react";
 
-// ✅ add this
 import api from "../../utils/api";
 
 function Nav() {
@@ -25,10 +25,8 @@ function Nav() {
   const [user, setUser]=useState(null)
 
   const token = localStorage.getItem("token");
- 
 
     useEffect(() => {
-     
       async function getUser(){
             try{
               const res= await api.get("/api/userProfile",{
@@ -44,20 +42,15 @@ function Nav() {
             }
       }
       getUser()
-     
     },[token])
-
 
   const navigate = useNavigate();
 
    const handleInput=(e)=>{
-
      e.preventDefault();
-     // if user type nothing then do nothing
-     
   if (e.target.value.trim() === "") {
-    debounceSearch.cancel();   // stop any pending search calls
-    navigate("/"); // navigate to home page or any default page
+    debounceSearch.cancel();
+    navigate("/");
     return;
   }
      setInputValue(e.target.value)
@@ -66,13 +59,9 @@ function Nav() {
 
  const handleSearch=useCallback((value)=>{
     console.log("searching for",value)
-     
     navigate(`/searchInput/${value}`)
-  
     },[navigate])
-    
 
-   
    const debounceSearch=useMemo(()=>
       debounce(handleSearch,1000)
    ,[handleSearch])
@@ -80,29 +69,23 @@ function Nav() {
    const handleKeyDown=(e)=>{
     if(e.key==="Enter"){
       e.preventDefault();
-      debounceSearch.cancel() // cancel any pending debounced calls
+      debounceSearch.cancel()
       handleSearch(InputValue)
     }
    }
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  
-
-
 
   const handleCartCount=async()=>{
-   
     try{
       if(!token){
         return 0
       }
-      // ✅ changed axios → api
       const res= await api.get("/api/cartCount",{
         headers:{
           Authorization: `Bearer ${token}`
         }
       })
-     
       console.log("cart count res",res.data.cartCount)
       return res.data.cartCount
     }catch(err){
@@ -167,11 +150,9 @@ if (isLoading) {
   )
 }
 
-
-
   return (
     <>
-      <nav className="flex items-center justify-between px-3 md:px-20 py-3 bg-white sticky top-0 border-b border-gray-200 z-50">
+      <nav className="flex items-center justify-between px-3 md:px-20 py-3 bg-white sticky top-0 border-b border-gray-200 z-50 max-w-[100vw]">
         
         <Link
           to="/"
@@ -183,7 +164,7 @@ if (isLoading) {
         <ul
           className={`${
             isMenuOpen
-              ? "flex flex-col absolute top-16 left-0 w-full bg-white border-t border-gray-200 py-4 shadow-md z-40"
+              ? "flex flex-col absolute top-16 left-0 w-screen bg-white border-t border-gray-200 py-4 shadow-md z-40"
               : "hidden"
           } lg:flex lg:flex-row lg:static lg:w-auto lg:shadow-none lg:gap-8 items-center transition-all duration-300`}
         >
@@ -194,7 +175,7 @@ if (isLoading) {
           </li>
 
           <li>
-            <Link to="/AllProducts" className="block px-4 py-2 font-bold   hover:text-blue-600 hover:scale-110 transition-transform duration-300" onClick={() => setIsMenuOpen(false)}>
+            <Link to="/AllProducts" className="block px-4 py-2 font-bold hover:text-blue-600 hover:scale-110 transition-transform duration-300" onClick={() => setIsMenuOpen(false)}>
               Products
             </Link>
           </li>
@@ -268,7 +249,6 @@ if (isLoading) {
                     localStorage.removeItem("token");
                     navigate("/");
                     window.location.reload();
-                   
                   }}
                 >
                   Logout
@@ -278,22 +258,17 @@ if (isLoading) {
             )}
           </div>
 
-          <div  onClick={()=>{
+          <div onClick={()=>{
             console.log("cart clicked",token)
-
-          if(!token){
-   
-      alert("Please login to access the add to cart feature")
-    
-  }else{
-    navigate("/cart")
-  }
-             const decodedToken=jwtDecode(token)
-             if(decodedToken.role==="admin"){
-               alert("Admin can't use cart")
-             }
-
-     
+            if(!token){
+              alert("Please login to access the add to cart feature")
+            }else{
+              navigate("/cart")
+            }
+            const decodedToken=jwtDecode(token)
+            if(decodedToken.role==="admin"){
+              alert("Admin can't use cart")
+            }
           }} className="relative cursor-pointer flex items-center gap-1">
             <IoCart className="text-2xl" />
 
@@ -319,4 +294,3 @@ if (isLoading) {
 }
 
 export default Nav;
-

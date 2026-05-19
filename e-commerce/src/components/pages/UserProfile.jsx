@@ -142,7 +142,7 @@ const handleReUpdate=async ()=>{
 
 
 return (
-  <div className=" bg-gray-100 p-3">
+  <div className=" bg-gray-100 p-2">
 
     {data?.first_name === "" && data?.last_name === "" && data?.email === "" ? (
       <>
@@ -184,7 +184,7 @@ return (
       </>
     ) : (
       <>
-        <div className="bg-gray-100 p-5 flex flex-col md:flex-row gap-10 items-start">
+        <div className="bg-gray-100 px-5 flex flex-col md:flex-row gap-10 items-start">
 
           {/* left side */}
           <div className="w-full md:w-[35%] flex flex-col gap-5 bg-white rounded-lg shadow-md p-5">
