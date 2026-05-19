@@ -105,7 +105,7 @@ function PaymentSection() {
             </p>
 
             <button
-              onClick={() => navigate("/add-address")}
+              onClick={() => navigate("/addAddress")}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl transition-all duration-300"
             >
               Add Address
