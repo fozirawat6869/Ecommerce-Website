@@ -16,7 +16,9 @@ import api from "../../utils/api";
 function PaymentSection() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
   const token = localStorage.getItem("token");
+  
 
   // Fetch Address
   const fetchAddress = async () => {
@@ -71,6 +73,40 @@ function PaymentSection() {
     },
   ];
 
+  const handlePlaceOrder = async () => {
+         setShowPopup(true);
+
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    // }
+  // try {
+  //   const res = await api.post(
+  //     "/api/order",
+  //     {
+  //       address: addressData?.[0],
+  //       paymentMethod: selected,
+  //     },
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   );
+
+  //   if (res.data.success) {
+  //     setShowPopup(true);
+
+  //     setTimeout(() => {
+  //       navigate("/");
+  //     }, 2000);
+  //   }
+
+  // } catch (err) {
+  //   console.log("Order failed", err);
+  // }
+};
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center mt-5 text-2xl font-semibold">
@@ -80,6 +116,31 @@ function PaymentSection() {
   }
 
   return (
+    <>
+      {showPopup && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+    <div className="bg-white p-6 rounded-2xl text-center">
+
+      <h1 className="text-2xl font-bold text-green-600">
+        🎉 Order Placed Successfully
+      </h1>
+
+      <p className="text-gray-600 mt-2">
+        Your order has been confirmed
+      </p>
+
+      <button
+        onClick={() => navigate("/")}
+        className="mt-4 bg-black text-white px-5 py-2 rounded-lg"
+      >
+        Continue Shopping
+      </button>
+
+    </div>
+
+  </div>
+)}
     <div className="bg-gray-100 flex flex-col lg:flex-row gap-4 lg:gap-5 items-center lg:items-start justify-center p-2 ">
 
       {/* ADDRESS SECTION */}
@@ -248,6 +309,7 @@ function PaymentSection() {
 
         {/* BUTTON */}
         <button
+         onClick={handlePlaceOrder}
           disabled={
             selected !== "cod" || addressData.length === 0
           }
@@ -269,7 +331,341 @@ function PaymentSection() {
 
       </div>
     </div>
+    </>
   );
 }
 
 export default PaymentSection;
+
+
+
+// import { useQuery } from "@tanstack/react-query";
+// import React, { useState } from "react";
+// import {
+//   FaCreditCard,
+//   FaWallet,
+//   FaMoneyBillWave,
+//   FaCheckCircle,
+//   FaTimesCircle,
+// } from "react-icons/fa";
+
+// import { useNavigate } from "react-router-dom";
+// import api from "../../utils/api";
+
+// function PaymentSection() {
+//   const navigate = useNavigate();
+//   const [selected, setSelected] = useState("");
+//   const token = localStorage.getItem("token");
+
+//   // ⭐ ONLY ADDED
+//   const [showPopup, setShowPopup] = useState(false);
+
+//   // Fetch Address
+//   const fetchAddress = async () => {
+//     try {
+//       const res = await api.get("/api/getAddress", {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
+
+//       console.log("api response", res.data);
+
+//       return res.data.userAddress || [];
+//     } catch (err) {
+//       console.log("wrong api", err);
+//       return [];
+//     }
+//   };
+
+//   // React Query
+//   const { data, isLoading } = useQuery({
+//     queryKey: ["getAddress"],
+//     queryFn: fetchAddress,
+//   });
+
+//   const addressData = Array.isArray(data)
+//     ? data
+//     : data?.address || data?.data || [];
+
+//   // Payment Options
+//   const paymentOptions = [
+//     {
+//       id: "credit",
+//       title: "Credit Card",
+//       icon: <FaCreditCard size={26} />,
+//       available: false,
+//       message: "Coming Soon",
+//     },
+//     {
+//       id: "debit",
+//       title: "Debit Card",
+//       icon: <FaWallet size={26} />,
+//       available: false,
+//       message: "Currently Unavailable",
+//     },
+//     {
+//       id: "cod",
+//       title: "Cash on Delivery",
+//       icon: <FaMoneyBillWave size={26} />,
+//       available: true,
+//       message: "Available",
+//     },
+//   ];
+
+//   if (isLoading) {
+//     return (
+//       <div className="flex items-center justify-center mt-5 text-2xl font-semibold">
+//         Loading...
+//       </div>
+//     );
+//   }
+
+//   // ⭐ ONLY ADDED FUNCTION
+//   const handlePlaceOrder = async () => {
+//     try {
+//       const res = await api.post(
+//         "/api/order",
+//         {
+//           address: addressData?.[0],
+//           paymentMethod: selected,
+//         },
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
+
+//       if (res.data.success) {
+//         setShowPopup(true);
+
+//         setTimeout(() => {
+//           navigate("/");
+//         }, 2000);
+//       }
+//     } catch (err) {
+//       console.log("Order failed", err);
+//     }
+//   };
+
+//   return (
+//     <div className="bg-gray-100 flex flex-col lg:flex-row gap-4 lg:gap-5 items-center lg:items-start justify-center p-2 ">
+
+//       {/* ADDRESS SECTION */}
+//       {addressData.length === 0 ? (
+
+//         <div className="bg-white w-full max-w-sm sm:max-w-md rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-7 border border-gray-200">
+
+//           <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 sm:mb-3">
+//             No Address Found
+//           </h2>
+
+//           <p className="text-sm sm:text-base text-gray-500 leading-6 sm:leading-7 mb-4 sm:mb-6">
+//             Please add your delivery address before placing order.
+//           </p>
+
+//           <button
+//             onClick={() => navigate("/addAddress")}
+//             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 sm:py-3 rounded-xl sm:rounded-2xl transition"
+//           >
+//             Add Address
+//           </button>
+//         </div>
+
+//       ) : (
+
+//         <div className="bg-white w-full max-w-sm sm:max-w-md rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-6 border border-gray-200">
+
+//           <div className="flex items-start justify-between gap-4">
+
+//             <div>
+
+//               <p className="text-xs sm:text-sm font-bold text-gray-500 mb-2">
+//                 Deliver To :
+//               </p>
+
+//               <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
+//                 {addressData?.[0]?.full_name}
+//               </h2>
+
+//               <p className="text-xs sm:text-sm text-gray-600 mt-2 leading-5 sm:leading-7">
+//                 {addressData?.[0]?.city},{" "}
+//                 {addressData?.[0]?.state} - {addressData?.[0]?.pincode}
+//               </p>
+
+//               <p className="text-sm text-gray-700 font-medium mt-3">
+//                 {addressData?.[0]?.mobile}
+//               </p>
+
+//             </div>
+
+//           </div>
+
+//           <div className="mt-4 sm:mt-5 bg-green-100 border border-green-200 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-center justify-between">
+
+//             <p className="text-green-700 text-xs sm:text-sm">
+//               Delivery address verified
+//             </p>
+
+//             <button className="text-blue-600 font-medium hover:underline text-xs sm:text-sm">
+//               Edit
+//             </button>
+
+//           </div>
+//         </div>
+//       )}
+
+//       {/* PAYMENT SECTION */}
+//       <div className="w-full max-w-sm sm:max-w-md lg:max-w-3xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-7">
+
+//         <div className="mb-5 sm:mb-7">
+
+//           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">
+//             Payment Method
+//           </h1>
+
+//           <p className="text-sm sm:text-base text-gray-500 mt-2">
+//             Select your preferred payment option
+//           </p>
+
+//         </div>
+
+//         {/* PAYMENT OPTIONS */}
+//         <div className="space-y-3 sm:space-y-4">
+
+//           {paymentOptions.map((item) => (
+
+//             <div
+//               key={item.id}
+//               onClick={() => item.available && setSelected(item.id)}
+//               className={`relative overflow-hidden border-2 rounded-xl sm:rounded-2xl p-3 sm:p-5 transition-all duration-300 group
+
+//               ${
+//                 selected === item.id
+//                   ? "border-green-500 bg-green-50 scale-[1.02]"
+//                   : "border-gray-200 bg-white"
+//               }
+
+//               ${
+//                 item.available
+//                   ? "hover:shadow-xl hover:border-green-400 cursor-pointer"
+//                   : "cursor-not-allowed opacity-80 hover:border-red-300"
+//               }
+//               `}
+//             >
+
+//               {!item.available && (
+//                 <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+
+//                   <p className="text-white font-semibold text-sm sm:text-lg">
+//                     Not Available Right Now
+//                   </p>
+
+//                 </div>
+//               )}
+
+//               <div className="flex items-center justify-between">
+
+//                 <div className="flex items-center gap-3 sm:gap-4">
+
+//                   <div className={`p-2 sm:p-4 rounded-xl
+//                     ${
+//                       item.available
+//                         ? "bg-green-100 text-green-600"
+//                         : "bg-red-100 text-red-500"
+//                     }
+//                   `}>
+//                     {item.icon}
+//                   </div>
+
+//                   <div>
+
+//                     <h2 className="text-sm sm:text-lg font-semibold text-gray-800">
+//                       {item.title}
+//                     </h2>
+
+//                     <p className={`text-xs sm:text-sm mt-1
+//                       ${
+//                         item.available
+//                           ? "text-green-600"
+//                           : "text-red-500"
+//                       }
+//                     `}>
+//                       {item.message}
+//                     </p>
+
+//                   </div>
+//                 </div>
+
+//                 <div>
+//                   {item.available ? (
+//                     <FaCheckCircle className="text-green-500" size={20} />
+//                   ) : (
+//                     <FaTimesCircle className="text-red-400" size={20} />
+//                   )}
+//                 </div>
+
+//               </div>
+
+//             </div>
+
+//           ))}
+
+//         </div>
+
+//         {/* BUTTON (ONLY ADD onClick) */}
+//         <button
+//           onClick={handlePlaceOrder}
+//           disabled={
+//             selected !== "cod" || addressData.length === 0
+//           }
+//           className={`w-full mt-6 sm:mt-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-lg font-semibold transition
+
+//           ${
+//             selected === "cod" && addressData.length > 0
+//               ? "bg-green-600 hover:bg-green-700 text-white"
+//               : "bg-gray-300 text-gray-500 cursor-not-allowed"
+//           }
+//           `}
+//         >
+//           {addressData.length === 0
+//             ? "Add Address First"
+//             : selected === "cod"
+//             ? "Place Order"
+//             : "Select Payment Method"}
+//         </button>
+
+//       </div>
+
+//       {/* ⭐ POPUP (ONLY ADDED) */}
+//       {showPopup && (
+//         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+//           <div className="bg-white p-6 rounded-2xl text-center">
+
+//             <h1 className="text-2xl font-bold text-green-600">
+//               🎉 Order Placed Successfully
+//             </h1>
+
+//             <p className="text-gray-600 mt-2">
+//               Your order has been confirmed
+//             </p>
+
+//             <button
+//               onClick={() => navigate("/")}
+//               className="mt-4 bg-black text-white px-5 py-2 rounded-lg"
+//             >
+//               Continue Shopping
+//             </button>
+
+//           </div>
+
+//         </div>
+//       )}
+
+//     </div>
+//   );
+// }
+
+// export default PaymentSection;

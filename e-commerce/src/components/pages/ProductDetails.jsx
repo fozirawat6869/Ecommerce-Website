@@ -468,7 +468,7 @@ if (isLoading) {
 
             <button 
             onClick={()=>navigate('/paymentSection')}
-           className="cursor-pointer w-1/2 bg-yellow-400 font-semibold  px-5  py-3 rounded text-lg  w-full "
+           className="cursor-pointer w-1/2 bg-yellow-400 font-semibold  px-5  py-3 rounded text-lg  w-full hover:bg-yellow-500"
           >
             Buy at ₹ {product.product_price*productQuantityForCart}
           </button>
