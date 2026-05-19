@@ -1,5 +1,6 @@
 
 
+import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import {
   FaCreditCard,
@@ -8,8 +9,34 @@ import {
   FaCheckCircle,
   FaTimesCircle,
 } from "react-icons/fa";
+import api from "../../utils/api";
 
 function PaymentSection() {
+     
+    const token=localStorage.getItem('token')
+    console.log("token",token)
+
+    const fetchAddress=async()=>{
+      try{
+           const res=await api.get('/api/getAddress',{
+               headers:{
+                Authorization:`Bearer ${token}`
+               }
+           })
+         return res || []
+
+      }catch(err){
+        console.log("wrong api", err)
+      }
+    }
+
+    const {data}=useQuery({
+        queryKey:['getAddress'],
+        queryFn:fetchAddress,
+         
+    })
+    console.log(data)
+
   const [selected, setSelected] = useState("");
 
   const paymentOptions = [
@@ -37,8 +64,54 @@ function PaymentSection() {
   ];
 
   return (
-    <div className=" bg-gray-100 flex items-center justify-center p-2">
-      <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-7">
+    <div className=" bg-gray-100 flex gap-5 items-center justify-center p-2">
+
+             <div className="bg-white rounded-2xl shadow-md p-5 mb-6 border border-gray-200">
+
+  {/* Top */}
+  <div className="flex items-start justify-between gap-4">
+
+    {/* Left */}
+    <div>
+      <p className="text-sm text-gray-500 mb-2">
+        Deliver To:
+      </p>
+
+      <h2 className="text-lg font-semibold text-gray-800">
+        Mayur Rawat
+      </h2>
+
+      <p className="text-gray-600 text-sm mt-1 leading-6">
+        Chwincha Gawn, Pauri Garhwal, Uttarakhand - 246001
+      </p>
+
+      <p className="text-gray-700 font-medium mt-2">
+        8755306869
+      </p>
+    </div>
+
+    {/* Button */}
+    <button className="border border-blue-500 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition">
+      Change
+    </button>
+  </div>
+
+  {/* Warning Box */}
+  <div className="mt-5 bg-orange-100 border border-orange-200 rounded-xl p-4 flex items-center justify-between">
+
+    <p className="text-orange-700 text-sm">
+      Incomplete address details for delivery
+    </p>
+
+    <button className="text-blue-600 font-medium hover:underline">
+      Edit Details
+    </button>
+  </div>
+</div>
+        
+      <div className="w-full max-w-3xl bg-white rounded-3xl shadow-2xl p-7">
+
+   
 
         {/* Heading */}
         <div className="mb-7">
@@ -165,3 +238,4 @@ function PaymentSection() {
 }
 
 export default PaymentSection;
+

@@ -5,7 +5,8 @@ import {getAllProducts,createProduct,productDetails
       , categories , userProfile,updateUserProfile,
       reUpdateProfile ,reviews ,addToCart , cartCount
       ,cartProducts ,removeFromCart , adminLogin
-      ,allUsers , inputSearch ,deleteProduct
+      ,allUsers , inputSearch ,deleteProduct,
+      getAddress
       } from '../controllers/productController.js'
 // import { test } from '../controllers/productController.js';
 import upload from '../config/multer.js'
@@ -78,5 +79,9 @@ router.route('/inputSearch').get(inputSearch)
 
 
 router.route('/deleteProduct/:id').delete(deleteProduct)
+
+
+// get address 
+router.route('/getAddress').get(isAuthenticated,getAddress)
 
 export default router

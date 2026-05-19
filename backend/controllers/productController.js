@@ -1074,6 +1074,9 @@ connection.query(`select * from admin where email=?`,[email],(err,result)=>{
 
 
 
+
+// get all users
+
 export const allUsers=(req,res)=>{
 
   console.log("all users api", req.query);
@@ -1163,4 +1166,50 @@ export const deleteProduct=(req,res)=>{
       removedProduct:result
     })
   })
+}
+
+
+
+
+
+// get user address query
+
+export const getAddress=(req,res)=>{
+
+  const{mobile}=req.user
+ 
+
+  connection.query("select * from users where mobile=? ",[mobile],(err,result)=>{
+   if(err){
+      return res.status(400).json({
+        success:false,
+        message:"error to found the user with that mobile"
+      })
+    }
+   
+    console.log("user result",result)
+   
+
+    const userId=result[0].id
+    
+
+    connection.query("select * from address where user_id=?",[userId],(err,address)=>{
+      console.log("user address : ",address)
+       if(err){
+      return res.status(400).json({
+        success:false,
+        message:"error to found the user with that mobile"
+      })
+    }
+    res.status(200).json({
+      success:true,
+      message:"get address successfully",
+      userAddress:address
+    })
+
+    })
+
+  })
+  
+
 }
