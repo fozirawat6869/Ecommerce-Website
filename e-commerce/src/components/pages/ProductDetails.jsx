@@ -15,6 +15,8 @@ import { BASE_URL } from "../../utils/api";
 
 function ProductDetails() {
 
+
+
   const queryClient=useQueryClient()
 
   const token = localStorage.getItem("token");
@@ -465,6 +467,7 @@ if (isLoading) {
            )}
 
             <button 
+            onClick={()=>navigate('/paymentSection')}
            className="cursor-pointer w-1/2 bg-yellow-400 font-semibold  px-5  py-3 rounded text-lg  w-full "
           >
             Buy at ₹ {product.product_price*productQuantityForCart}
