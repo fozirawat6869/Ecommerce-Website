@@ -338,7 +338,9 @@ export const productDetails = (req, res) => {
 
   const { id } = req.params;
   console.log(req.user)
-  const userMobile = req.user.mobile;
+const userMobile = req.user?.mobile;
+
+
 
   // 1. Get product
   connection.query(`select * from product where product_id=?`, [id], (err, result) => {
@@ -368,6 +370,16 @@ export const productDetails = (req, res) => {
             return res.status(500).json({ success: false, message: "Error in reviews query" });
           }
 
+          if (!userMobile) {
+  return res.status(200).json({
+    success: true,
+    productDetail: result[0],
+    images: images.map(img => img.image_path),
+    reviews: reviewsResult,
+    inCart: false
+  });
+}
+
           // 4. Get user id
           connection.query(`SELECT id FROM users WHERE mobile = ?`, [userMobile], (err, userResult) => {
 
@@ -382,6 +394,8 @@ export const productDetails = (req, res) => {
             }
 
             const user_id = userResult[0].id;
+
+            
 
             // 5. Check cart
             connection.query(

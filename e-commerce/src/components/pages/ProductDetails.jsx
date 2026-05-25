@@ -35,9 +35,12 @@ function ProductDetails() {
        const res = await api.get(
       `/api/products/${id}?reviewPage=${reviewPage}&reviewLimit=2`,
       {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        // headers: {
+        //   Authorization: `Bearer ${token}`
+        // }
+        headers: token
+  ? { Authorization: `Bearer ${token}` }
+  : {}
       }
     );
     if(!res.data){
@@ -214,7 +217,12 @@ if (isLoading) {
     if (rating === 3) return "Good";
     if (rating === 4) return "Very Good";
     if (rating === 5) return "Excellent";
+
   };
+
+
+    
+
 
   const handleRating = async (star) => {
     setRating(star);
