@@ -386,48 +386,48 @@ function ProductDetails() {
             </div>
           </div>
 
-          <div className="flex justify-center gap-5 w-full">
+   <div className="flex justify-center gap-5 w-full">
 
-  <button
-    onClick={handleAddToCart}
-    className={`cursor-pointer w-1/2 font-semibold px-5 py-3 rounded-xl text-lg w-full transition-all duration-300 active:scale-95
-      ${
-        inCart
-          ? "bg-green-500 text-white hover:bg-green-600 shadow-lg shadow-green-200"
-          : "border border-black hover:bg-black hover:text-white"
-      }`}
-  >
-    {inCart ? (
-      <span className="flex items-center justify-center gap-2">
-        ✅ Add More To Cart
-      </span>
-    ) : (
-      "Add to Cart"
-    )}
-  </button>
+  {inCart ? (
+    <>
+      <button
+        onClick={handleAddToCart}
+        className="cursor-pointer w-1/2 bg-green-500 text-white font-semibold px-5 py-3 rounded-xl text-lg hover:bg-green-600 transition-all duration-300 active:scale-95 shadow-lg shadow-green-200"
+      >
+        <span className="flex items-center justify-center gap-2">
+          ✅ Add More To Cart
+        </span>
+      </button>
 
-  {inCart && (
-    <button
-      onClick={() => {
-        if (!checkLogin()) return;
-        navigate("/cart");
-      }}
-      className="cursor-pointer w-1/2 bg-yellow-400 font-semibold px-5 py-3 rounded-xl text-lg w-full hover:bg-yellow-500 transition-all duration-300 active:scale-95 shadow-lg shadow-yellow-200"
-    >
-      🛒 Go to Cart
-    </button>
-  )}
+      <button
+        onClick={() => {
+          if (!checkLogin()) return;
+          navigate("/cart");
+        }}
+        className="cursor-pointer w-1/2 bg-yellow-400 font-semibold px-5 py-3 rounded-xl text-lg hover:bg-yellow-500 transition-all duration-300 active:scale-95 shadow-lg shadow-yellow-200"
+      >
+        🛒 Go to Cart
+      </button>
+    </>
+  ) : (
+    <>
+      <button
+        onClick={handleAddToCart}
+        className="cursor-pointer w-1/2 border border-black font-semibold px-5 py-3 rounded-xl text-lg hover:bg-black hover:text-white transition-all duration-300 active:scale-95"
+      >
+        Add to Cart
+      </button>
 
-  {!inCart && (
-    <button
-      onClick={() => {
-        if (!checkLogin()) return;
-        navigate('/paymentSection');
-      }}
-      className="cursor-pointer w-1/2 bg-yellow-400 font-semibold px-5 py-3 rounded-xl text-lg w-full hover:bg-yellow-500 transition-all duration-300 active:scale-95 shadow-lg shadow-yellow-200"
-    >
-      Buy at ₹ {product.product_price * productQuantityForCart}
-    </button>
+      <button
+        onClick={() => {
+          if (!checkLogin()) return;
+          navigate('/paymentSection');
+        }}
+        className="cursor-pointer w-1/2 bg-yellow-400 font-semibold px-5 py-3 rounded-xl text-lg hover:bg-yellow-500 transition-all duration-300 active:scale-95 shadow-lg shadow-yellow-200"
+      >
+        Buy at ₹ {product.product_price * productQuantityForCart}
+      </button>
+    </>
   )}
 
 </div>
