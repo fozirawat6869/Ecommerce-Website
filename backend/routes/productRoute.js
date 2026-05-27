@@ -13,6 +13,7 @@ import {getAllProducts,createProduct,productDetails
 import upload from '../config/multer.js'
 import isAuthenticated from '../middleware/isAuthenticated.js'
 import {globalLimiter,authLimiter,otpLimiter} from '../middleware/rateLimiter.js'
+import optionalAuth from '../middleware/optionalIsAuthentication.js'
 
 const router=express.Router();
 
@@ -24,7 +25,7 @@ router.route('/products').get(getAllProducts).post(createProduct)
 // router.route('/test').get(test)
 
 // updateProduct and delete product
- router.route('/products/:id').get(productDetails)
+ router.route('/products/:id').get(optionalAuth,productDetails)
  // .put(updateProduct).delete(deleteProduct).get(getSingleProduct)
 
 
