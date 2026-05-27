@@ -113,6 +113,8 @@ function ProductDetails() {
   }
 
   const { product, images, reviews, inCart } = data;
+  console.log("it is incart",inCart);
+  
 
   if (!selectedImage && images.length) setSelectedImage(images[0]);
 
