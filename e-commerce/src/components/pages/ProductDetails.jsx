@@ -78,32 +78,143 @@ function ProductDetails() {
     );
   }
 
-  if (isLoading) {
+   if (isLoading) {
     return (
       <div className="bg-gray-100 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-28 pt-2 pb-5 animate-pulse">
 
         <div className="flex flex-col lg:flex-row gap-5">
 
-          <div className="bg-white w-full lg:w-1/2 p-4 sm:p-6 flex flex-col gap-5">
+          {/* LEFT SIDE */}
+          <div className="bg-white w-full lg:w-1/2 p-4 sm:p-6 rounded-xl flex flex-col gap-5">
 
+            {/* Main Image */}
             <div className="w-full h-72 sm:h-96 md:h-[500px] lg:h-[520px] bg-gray-300 rounded-2xl"></div>
 
+            {/* Thumbnail Images */}
             <div className="flex justify-center gap-3 flex-wrap">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 bg-gray-300 rounded-lg"></div>
+                <div
+                  key={i}
+                  className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 bg-gray-300 rounded-lg"
+                ></div>
               ))}
             </div>
 
           </div>
 
-          <div className="bg-white w-full lg:w-1/2 p-5 flex flex-col gap-4">
+          {/* RIGHT SIDE */}
+          <div className="bg-white w-full lg:w-1/2 p-5 rounded-xl flex flex-col gap-5">
 
-            <div className="h-6 sm:h-8 w-3/4 bg-gray-300 rounded"></div>
+            {/* Product Name */}
+            <div className="h-8 w-3/4 bg-gray-300 rounded"></div>
 
-            <div className="h-4 w-full bg-gray-300 rounded"></div>
-            <div className="h-4 w-5/6 bg-gray-300 rounded"></div>
+            {/* Description */}
+            <div className="flex flex-col gap-2">
+              <div className="h-4 w-full bg-gray-300 rounded"></div>
+              <div className="h-4 w-5/6 bg-gray-300 rounded"></div>
+              <div className="h-4 w-4/6 bg-gray-300 rounded"></div>
+            </div>
 
-            <div className="h-6 w-32 bg-gray-300 rounded"></div>
+            {/* Price */}
+            <div className="h-8 w-32 bg-gray-300 rounded"></div>
+
+            {/* Attributes */}
+            <div className="flex flex-wrap gap-5 mt-2">
+              {[1, 2].map((i) => (
+                <div key={i} className="flex flex-col gap-2">
+                  <div className="h-4 w-16 bg-gray-300 rounded"></div>
+                  <div className="h-10 w-24 bg-gray-300 rounded"></div>
+                </div>
+              ))}
+            </div>
+
+            {/* Reviews Heading */}
+            <div className="h-6 w-40 bg-gray-300 rounded mt-3"></div>
+
+            {/* Review Cards */}
+            <div className="flex flex-col gap-4">
+              {[1, 2].map((i) => (
+                <div key={i} className="border-b border-gray-200 pb-4 flex flex-col gap-2">
+
+                  <div className="h-4 w-32 bg-gray-300 rounded"></div>
+
+                  <div className="flex gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <div
+                        key={star}
+                        className="h-5 w-5 bg-gray-300 rounded"
+                      ></div>
+                    ))}
+                  </div>
+
+                  <div className="h-3 w-full bg-gray-300 rounded"></div>
+                  <div className="h-3 w-4/5 bg-gray-300 rounded"></div>
+
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination Buttons */}
+            <div className="flex gap-3">
+              <div className="h-10 w-24 bg-gray-300 rounded-xl"></div>
+              <div className="h-10 w-24 bg-gray-300 rounded-xl"></div>
+            </div>
+
+            {/* Stock */}
+            <div className="h-5 w-40 bg-gray-300 rounded"></div>
+
+            {/* Quantity */}
+            <div className="flex flex-col gap-3">
+
+              <div className="h-5 w-52 bg-gray-300 rounded"></div>
+
+              <div className="flex items-center w-fit border rounded-xl overflow-hidden">
+
+                <div className="h-12 w-12 bg-gray-300"></div>
+
+                <div className="h-12 w-14 bg-gray-200"></div>
+
+                <div className="h-12 w-12 bg-gray-300"></div>
+
+              </div>
+
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-center gap-5 w-full">
+
+              <div className="h-14 w-1/2 bg-gray-300 rounded-xl"></div>
+
+              <div className="h-14 w-1/2 bg-gray-300 rounded-xl"></div>
+
+            </div>
+
+            {/* Rating */}
+            <div className="flex flex-col gap-4 mt-3">
+
+              <div className="h-6 w-40 bg-gray-300 rounded"></div>
+
+              <div className="flex gap-3">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div
+                    key={i}
+                    className="h-8 w-8 bg-gray-300 rounded-full"
+                  ></div>
+                ))}
+              </div>
+
+            </div>
+
+            {/* Review Box */}
+            <div className="flex flex-col gap-3">
+
+              <div className="h-6 w-48 bg-gray-300 rounded"></div>
+
+              <div className="h-32 w-full bg-gray-300 rounded"></div>
+
+              <div className="h-12 w-40 bg-gray-300 rounded"></div>
+
+            </div>
 
           </div>
 
@@ -111,7 +222,6 @@ function ProductDetails() {
       </div>
     );
   }
-
   const { product, images, reviews, inCart } = data;
   console.log("it is incart",inCart);
   
