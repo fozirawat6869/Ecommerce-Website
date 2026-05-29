@@ -905,121 +905,188 @@ export const reviews = async (req, res,next) => {
 
 // add to cart
 
-export const addToCart=(req,res)=>{
+export const addToCart = (req, res, next) => {
 
     console.log("add to cart api", req.body);
     console.log("authenticated user in add to cart api", req.user);
 
-    const productId=req.body.productId;
-    const quantity=req.body.quantity;
-    const userMobile=req.user.mobile;
+    const productId = req.body.productId;
+    const quantity = req.body.quantity;
+    const userMobile = req.user.mobile;
 
-    if(!productId){
-      return res.status(400).json({
-        success:false,
-        message:"Product id is required"
-      })
+    if (!productId) {
+        return next(
+            new HandleError(
+                "Product id is required",
+                400
+            )
+        );
     }
-    
+
     // 1. Get user id using mobile
     connection.query(
-      `SELECT id FROM users WHERE mobile = ?`,
-      [userMobile],
-      (err, userResult) => {
-        console.log("User query result in add to cart:", userResult);
-        if (err) {
-          console.log("Error while getting user id", err);
-          return res.status(500).json({ success: false, message: "DB error" });
-        }
-        if (userResult.length === 0) {
-          return res.status(400).json({
-            success: false,
-            message: "No user found for this user"
-          });
-        }
-        const user_id = userResult[0].id; // user id from users table
-        
-        // 2. Check if product already in cart
-               // i have done this in productDetails api
+        `SELECT id FROM users WHERE mobile = ?`,
+        [userMobile],
+        (err, userResult) => {
+
+            console.log("User query result in add to cart:", userResult);
+
+            if (err) {
+                console.log("Error while getting user id", err);
+
+                return next(
+                    new HandleError(
+                        "DB error",
+                        500
+                    )
+                );
+            }
+
+            if (userResult.length === 0) {
+                return next(
+                    new HandleError(
+                        "No user found for this user",
+                        404
+                    )
+                );
+            }
+
+            const user_id = userResult[0].id;
+
+            // 2. Check if product already in cart
+            // i have done this in productDetails api
 
             // 3. Insert into cart
             connection.query(
-              `INSERT INTO cart (user_id, product_id, product_quantity) VALUES (?, ?, ?)`,
-              [user_id, productId, quantity],
-              (err, insertResult) => {
-                if (err) {
-                  console.log("Error while adding to cart", err);
-                  return res.status(500).json({ success: false, message: "DB error while adding to cart" });
+                `INSERT INTO cart (user_id, product_id, product_quantity) VALUES (?, ?, ?)`,
+                [user_id, productId, quantity],
+                (err, insertResult) => {
+
+                    if (err) {
+                        console.log("Error while adding to cart", err);
+
+                        return next(
+                            new HandleError(
+                                "DB error while adding to cart",
+                                500
+                            )
+                        );
+                    }
+
+                    console.log("Add to cart result", insertResult);
+
+                    return res.status(201).json({
+                        success: true,
+                        message: "Product added to cart successfully",
+                        data: insertResult
+                    });
                 }
-                console.log("Add to cart result", insertResult);
-                return res.status(201).json({
-                  success: true,
-                  message: "Product added to cart successfully",
-                  data: insertResult
-                });
-              }
             );
-          }
-        );
-        
+        }
+    );
+};
 
-    
-
-}
 
 
 // Cart Count
 
-export const cartCount=(req,res)=>{
-  const userMobile=req.user.mobile;
-connection.query(`SELECT id FROM users WHERE mobile = ?`,[userMobile],(err,userResult)=>{
-  if(err){
-    console.log("Error while getting user id for cart count", err);
-    return res.status(500).json({ success: false, message: "DB error" });
-  }
-  if(userResult.length===0){
-    return res.status(400).json({
-      success:false,
-      message:"No user found for this user"
-    })
-  }
-  const user_id=userResult[0].id;
-  connection.query(`SELECT COUNT(*) as count FROM cart WHERE user_id=?`,[user_id],(err,countResult)=>{
-    if(err){
-      console.log("Error while getting cart count", err);
-      return res.status(500).json({ success: false, message: "DB error" });
-    }
-    console.log("Cart count result", countResult);
-    res.status(200).json({
-      success:true,
-      cartCount:countResult[0].count
-    })
-  }
-   )
+export const cartCount = (req, res, next) => {
 
-}
-)}
+  const userMobile = req.user.mobile;
+
+  connection.query(
+    `SELECT id FROM users WHERE mobile = ?`,
+    [userMobile],
+    (err, userResult) => {
+
+      if (err) {
+        console.log("Error while getting user id for cart count", err);
+
+        return next(
+          new HandleError(
+            "DB error while getting user",
+            500
+          )
+        );
+      }
+
+      if (userResult.length === 0) {
+        return next(
+          new HandleError(
+            "No user found for this user",
+            404
+          )
+        );
+      }
+
+      const user_id = userResult[0].id;
+
+      connection.query(
+        `SELECT COUNT(*) as count FROM cart WHERE user_id=?`,
+        [user_id],
+        (err, countResult) => {
+
+          if (err) {
+            console.log("Error while getting cart count", err);
+
+            return next(
+              new HandleError(
+                "DB error while getting cart count",
+                500
+              )
+            );
+          }
+
+          console.log("Cart count result", countResult);
+
+          res.status(200).json({
+            success: true,
+            cartCount: countResult[0].count
+          });
+        }
+      );
+    }
+  );
+};
+
 
 
 // get cart products for cart page
 
-export const cartProducts=(req,res)=>{
-  const userMobile=req.user.mobile;
-  connection.query(`SELECT id FROM users WHERE mobile = ?`,[userMobile],(err,userResult)=>{
-    if(err){
-      console.log("Error while getting user id for cart products", err);
-      return res.status(500).json({ success: false, message: "DB error" });
-    }
-    if(userResult.length===0){
-      return res.status(400).json({
-        success:false,
-        message:"No user found for this user"
-      })
-    }
-    const user_id=userResult[0].id;
-    
-    let query=`SELECT 
-c.id AS cart_id,c.product_quantity as cart_quantity,
+export const cartProducts = (req, res, next) => {
+
+  const userMobile = req.user.mobile;
+
+  connection.query(
+    `SELECT id FROM users WHERE mobile = ?`,
+    [userMobile],
+    (err, userResult) => {
+
+      if (err) {
+        console.log("Error while getting user id for cart products", err);
+
+        return next(
+          new HandleError(
+            "DB error while getting user",
+            500
+          )
+        );
+      }
+
+      if (userResult.length === 0) {
+        return next(
+          new HandleError(
+            "No user found for this user",
+            404
+          )
+        );
+      }
+
+      const user_id = userResult[0].id;
+
+      let query = `SELECT 
+c.id AS cart_id,
+c.product_quantity as cart_quantity,
 p.*,
 (
   SELECT i.image_path 
@@ -1029,21 +1096,33 @@ p.*,
 ) AS image
 FROM cart c
 JOIN product p ON c.product_id = p.product_id
-WHERE c.user_id = ?`
-    connection.query(query,[user_id],(err,cartProductsResult)=>{
-      if(err){
-        console.log("Error while getting cart products", err);
-        return res.status(500).json({ success: false, message: "DB error" });
-      }
-      res.status(200).json({
-        success:true,
-        data:cartProductsResult
-      })
-    })
-  }
+WHERE c.user_id = ?`;
 
-)}
+      connection.query(
+        query,
+        [user_id],
+        (err, cartProductsResult) => {
 
+          if (err) {
+            console.log("Error while getting cart products", err);
+
+            return next(
+              new HandleError(
+                "DB error while getting cart products",
+                500
+              )
+            );
+          }
+
+          res.status(200).json({
+            success: true,
+            data: cartProductsResult
+          });
+        }
+      );
+    }
+  );
+};
 
 // remove from cart
 export const removeFromCart=(req,res)=>{
@@ -1083,76 +1162,114 @@ export const removeFromCart=(req,res)=>{
 
 // admin login with email and password
 
-
-export const adminLogin=(req,res)=>{
+export const adminLogin = (req, res, next) => {
 
   console.log("admin login api", req.body);
 
-const {email,password}=req.body;
+  const { email, password } = req.body;
 
-// bcrypt.hash(password,10,(err,hash)=>{
-//   if(err){
-//     console.log("Error while hashing password", err);
-//     return res.status(500).json({ success: false, message: "Error while hashing password" });
-//   }
-//   console.log("Hashed password:", hash);
-  
+  // bcrypt.hash(password,10,(err,hash)=>{
+  //   if(err){
+  //     console.log("Error while hashing password", err);
 
-// })
+  //     return next(
+  //       new HandleError(
+  //         "Error while hashing password",
+  //         500
+  //       )
+  //     );
+  //   }
 
+  //   console.log("Hashed password:", hash);
 
-// })
+  // })
 
-connection.query(`select * from admin where email=?`,[email],(err,result)=>{
-  if(err){
-    console.log("Error while querying admin", err);
-    return res.status(500).json({ success: false, message: "DB error" });
-  }
-  if(result.length===0){
-    return res.status(400).json({
-      success:false,
-      message:"Wrong email"
-    })
-  }
-  console.log("Admin query result", result);
-  const hash=result[0].password;
+  connection.query(
+    `select * from admin where email=?`,
+    [email],
+    (err, result) => {
 
-  // compare password with hash password using bcrypt
-  bcrypt.compare(password, hash, (err, result) => {
-    if (err) {
-      console.log("Error while comparing password", err);
-      return res.status(500).json({ success: false, message: "Error while comparing password" });
+      if (err) {
+        console.log("Error while querying admin", err);
+
+        return next(
+          new HandleError(
+            "DB error",
+            500
+          )
+        );
+      }
+
+      if (result.length === 0) {
+        return next(
+          new HandleError(
+            "Wrong email",
+            400
+          )
+        );
+      }
+
+      console.log("Admin query result", result);
+
+      const hash = result[0].password;
+
+      // compare password with hash password using bcrypt
+      bcrypt.compare(
+        password,
+        hash,
+        (err, result) => {
+
+          if (err) {
+            console.log("Error while comparing password", err);
+
+            return next(
+              new HandleError(
+                "Error while comparing password",
+                500
+              )
+            );
+          }
+
+          console.log("Password comparison result:", result);
+
+          if (result === true) {
+
+            const token = jwt.sign(
+              {
+                email: email,
+                role: "admin"
+              },
+              process.env.JWT_SECRET,
+              {
+                expiresIn: "7d"
+              }
+            );
+
+            res.status(200).json({
+              success: true,
+              message: "Admin logged in successfully",
+              token: token
+            });
+
+          } else {
+
+            return next(
+              new HandleError(
+                "Wrong password",
+                400
+              )
+            );
+          }
+        }
+      );
     }
-    console.log("Password comparison result:", result);
-    if(result===true){
-      const token=jwt.sign({email:email,role:"admin"},process.env.JWT_SECRET,{ expiresIn:'7d' })
-      res.status(200).json({
-        success:true,
-        message:"Admin logged in successfully",
-        token:token
-      })
-    }else{
-      res.status(400).json({
-        success:false,
-        message:"Wrong password"
-      })
-    }
-})
-
-
-})
-
-
-
-
-}
-
-
+  );
+};
 
 
 // get all users
 
-export const allUsers=(req,res)=>{
+export const allUsers=(req,res,next)=>{
 
   console.log("all users api", req.query);
 
@@ -1165,7 +1282,8 @@ export const allUsers=(req,res)=>{
   connection.query(`select * from users limit ? offset ?`,[limit,offset],(err,result)=>{
     if(err){
       console.log("Error while querying all users", err);
-      return res.status(500).json({ success: false, message: "DB error" });
+      return next(new HandleError("DB error",500))
+      
     }
 
     res.status(200).json({
@@ -1176,7 +1294,9 @@ export const allUsers=(req,res)=>{
 }
 
 
-export const inputSearch = (req, res) => {
+
+
+export const inputSearch = (req,res,next) => {
   const search = req.query.search;
   
 
@@ -1200,7 +1320,13 @@ export const inputSearch = (req, res) => {
     (err, result) => {
       if (err) {
         console.log("Error:", err);
-        return res.status(500).json({ success: false });
+          return next(
+          new HandleError(
+            "Error while searching products",
+            500
+          )
+        );
+        // res.status(500).json({ success: false });
       }
 
       console.log("FILTERED RESULT:", result);
@@ -1216,16 +1342,19 @@ export const inputSearch = (req, res) => {
 
 // delete product by admin
 
-export const deleteProduct=(req,res)=>{
+export const deleteProduct=(req,res,next)=>{
   console.log("Delete product api called", req.params);
   const {id}=req.params;
   console.log("Delete product id", id);
 
   if(!id){
-    return res.status(400).json({
-      success:false,
-      message:"Product id is required"
-    })
+    return next(new HandleError("Product id is required",400))
+    // res.status(400).json({
+    //   success:false,
+    //   message:"Product id is required"
+    // })
+
+
   }
 
 
@@ -1233,7 +1362,8 @@ export const deleteProduct=(req,res)=>{
     console.log("Delete product result", result);
     if(err){
       console.log("Error while deleting product", err);
-      return res.status(500).json({ success: false, message: "DB error" });
+      return next(new HandleError("DB error",500))
+      // res.status(500).json({ success: false, message: "DB error" });
     }
     res.status(200).json({
       success:true,
@@ -1249,88 +1379,137 @@ export const deleteProduct=(req,res)=>{
 
 // get user address query
 
-export const getAddress=(req,res)=>{
+export const getAddress = (req, res, next) => {
 
-  const{mobile}=req.user
- 
+  const { mobile } = req.user;
 
-  connection.query("select * from users where mobile=? ",[mobile],(err,result)=>{
-   if(err){
-      return res.status(400).json({
-        success:false,
-        message:"error to found the user with that mobile"
-      })
+  connection.query(
+    "select * from users where mobile=?",
+    [mobile],
+    (err, result) => {
+
+      if (err) {
+        return next(
+          new HandleError(
+            "Error while finding user",
+            500
+          )
+        );
+      }
+
+      if (result.length === 0) {
+        return next(
+          new HandleError(
+            "User not found",
+            404
+          )
+        );
+      }
+
+      console.log("user result", result);
+
+      const userId = result[0].id;
+
+      connection.query(
+        "select * from address where user_id=?",
+        [userId],
+        (err, address) => {
+
+          console.log("user address :", address);
+
+          if (err) {
+            return next(
+              new HandleError(
+                "Error while fetching address",
+                500
+              )
+            );
+          }
+
+          res.status(200).json({
+            success: true,
+            message: "get address successfully",
+            userAddress: address
+          });
+        }
+      );
     }
-   
-    console.log("user result",result)
-   
-
-    const userId=result[0].id
-    
-
-    connection.query("select * from address where user_id=?",[userId],(err,address)=>{
-      console.log("user address : ",address)
-       if(err){
-      return res.status(400).json({
-        success:false,
-        message:"error to found the user with that mobile"
-      })
-    }
-    res.status(200).json({
-      success:true,
-      message:"get address successfully",
-      userAddress:address
-    })
-
-    })
-
-  })
-  
-
-}
-
+  );
+};
 
 
 
 // add address
+export const addAddress = (req, res, next) => {
 
-export const addAddress=(req,res)=>{
-  console.log("inside the add address api")
-  console.log(req.body)
-  const {full_name,phone_no,pincode,state,city,addres}=req.body
-  const phoneNumber=Number(phone_no)
-  const pinCode=Number(pincode)
+  console.log("inside the add address api");
+  console.log(req.body);
 
-  console.log(full_name,state,phone_no)
+  const { full_name, phone_no, pincode, state, city, addres } = req.body;
 
+  const phoneNumber = Number(phone_no);
+  const pinCode = Number(pincode);
 
-   const{mobile}=req.user
- 
+  console.log(full_name, state, phone_no);
 
-  connection.query("select * from users where mobile=? ",[mobile],(err,result)=>{
-   if(err){
-      return res.status(400).json({
-        success:false,
-        message:"error to found the user with that mobile"
-      })
+  const { mobile } = req.user;
+
+  connection.query(
+    "select * from users where mobile=?",
+    [mobile],
+    (err, result) => {
+
+      if (err) {
+        return next(
+          new HandleError(
+            "Error while finding user",
+            500
+          )
+        );
+      }
+
+      if (result.length === 0) {
+        return next(
+          new HandleError(
+            "User not found",
+            404
+          )
+        );
+      }
+
+      const userId = result[0].id;
+
+      connection.query(
+        `insert into address (user_id,full_name,mobile,pincode,state,city,addres) values(?,?,?,?,?,?,?)`,
+        [
+          userId,
+          full_name,
+          phoneNumber,
+          pinCode,
+          state,
+          city,
+          addres
+        ],
+        (err, addressResult) => {
+
+          console.log("address inserted");
+
+          if (err) {
+            return next(
+              new HandleError(
+                "Error in inserting the address",
+                500
+              )
+            );
+          }
+
+          res.status(200).json({
+            success: true,
+            message: "address inserted successfully",
+            address: addressResult
+          });
+        }
+      );
     }
-  
-    const userId=result[0].id
-
-    connection.query(`insert into address (user_id,full_name,mobile,pincode,state,city,addres) values(?,?,?,?,?,?,?)`,[userId,full_name,phoneNumber,pinCode,state,city,addres],(err,addressResult)=>{
-      console.log("address inserted")
-         if(err){
-      return res.status(400).json({
-        success:false,
-        message:"error in inserting the address"
-      })
-    }
-       res.status(200).json({
-        success:true,
-        message:"address inserted successfully",
-        address:addressResult
-       })
-    })
-
-  })
-}
+  );
+};
