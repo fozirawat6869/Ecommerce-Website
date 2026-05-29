@@ -24,7 +24,7 @@ function ForAddToCart() {
              {[1, 2, 3, 4].map((_, index) => (
                <div
                  key={index}
-                 className="bg-blue-400 p-4 sm:p-5 rounded-2xl shadow-sm flex flex-col sm:flex-row justify-between gap-4"
+                 className="bg-gray-300 p-4 sm:p-5 rounded-2xl shadow-sm flex flex-col sm:flex-row justify-between gap-4"
                >
                  
                  {/* LEFT CONTENT */}
