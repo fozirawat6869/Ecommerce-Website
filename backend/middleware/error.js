@@ -30,4 +30,7 @@ export default error;
 // We are creating a class named CustomError
 // It gets all the features of the built-in Error class
 // Compare this snippet from backend/utils/handleErrors.js:
-// class CustomError extends Error {
+// class CustomError extends Error 
+
+
+

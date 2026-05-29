@@ -330,7 +330,7 @@ export const categoryProducts = handleAsyncErrors(async (req, res, next) => {
 
 // // Product Details
 
-export const productDetails = (req, res) => {
+export const productDetails = (req, res,next) => {
 
   const reviewPage = parseInt(req.query.reviewPage) || 1;
   const reviewLimit = parseInt(req.query.reviewLimit) || 2;
@@ -346,7 +346,8 @@ const userMobile = req.user?.mobile;
   connection.query(`select * from product where product_id=?`, [id], (err, result) => {
 
     if (err) {
-      return res.status(500).json({ success: false, message: "Error in product query" });
+      return next()
+      // res.status(500).json({ success: false, message: "Error in product query" });
     }
 
     // 2. Get images
@@ -549,6 +550,8 @@ export const newlyAddedProducts = (req, res, next) => {
   }
 };
 
+
+
 // api for frontend to show the categories in ui
 
 
@@ -556,8 +559,7 @@ export const categories=(req,res)=>{
    connection.query("select * from category",(err,result)=>{
      console.log(result)
      if(err){
-      console.log("err in categories query",err)
-      return 
+      return next(new HandleError("error in category api",500))
      }
      res.status(200).json({
       success:true,
@@ -567,7 +569,10 @@ export const categories=(req,res)=>{
 }
 
 
-export const userProfile=(req,res)=>{
+
+// user profile 
+
+export const userProfile=(req,res,next)=>{
 
 const mobile=req.user.mobile;
 
@@ -575,7 +580,8 @@ connection.query(`select * from users where mobile=?`,[mobile],(err,result)=>{
 
   if(err){
     console.log("err in user profile query",err)
-    return res.status(500).json({ success: false, message: "DB error" });
+    return next(new HandleError("DB error",500))
+    // res.status(500).json({ success: false, message: "DB error" });
   }
   console.log("user profile query result",result)
   res.status(200).json({
@@ -586,39 +592,80 @@ connection.query(`select * from users where mobile=?`,[mobile],(err,result)=>{
 }
 
 
-export const updateUserProfile=(req,res)=>{
-  
+
+// update the profile
+
+export const updateUserProfile = (req, res, next) => {
+
   console.log("update user profile api", req.body);
 
-  const{ first_name,last_name,email}=req.body;
-  const mobile=req.user.mobile;
+  const { first_name, last_name, email } = req.body;
+  const mobile = req.user.mobile;
 
-  connection.query("update users set first_name=?, last_name=?, email=? where mobile=?",
-  [first_name,last_name,email,mobile],(err,result)=>{
-    if(err){
-      console.log("err in update user profile query",err)
-      return res.status(500).json({ success: false, message: "DB error" });
-    }
-     
-    connection.query(`select * from users where mobile=?`,[mobile],(err,userdata)=>{
-        
-      console.log("user profile query result after update",userdata)
-      if(err){
-        console.log("err in user profile query after update",err)
-        return res.status(500).json({ success: false, message: "DB error" });
+  connection.query(
+    "UPDATE users SET first_name=?, last_name=?, email=? WHERE mobile=?",
+    [first_name, last_name, email, mobile],
+    (err, result) => {
+
+      if (err) {
+        console.log("err in update user profile query", err);
+
+        return next(
+          new HandleError(
+            "Database error while updating profile",
+            500
+          )
+        );
       }
 
-  
-    res.status(200).json({
-      success:true,
-      message:"User profile updated successfully",
-      data:userdata
-    })
-  })
-}
-  )}
+      connection.query(
+        "SELECT * FROM users WHERE mobile=?",
+        [mobile],
+        (err, userdata) => {
 
-  export const reUpdateProfile=(req,res)=>{
+          if (err) {
+            console.log(
+              "err in user profile query after update",
+              err
+            );
+
+            return next(
+              new HandleError(
+                "Database error while fetching updated user",
+                500
+              )
+            );
+          }
+
+          if (userdata.length === 0) {
+            return next(
+              new HandleError(
+                "User not found",
+                404
+              )
+            );
+          }
+
+          console.log(
+            "user profile query result after update",
+            userdata
+          );
+
+          res.status(200).json({
+            success: true,
+            message: "User profile updated successfully",
+            data: userdata[0]
+          });
+        }
+      );
+    }
+  );
+};
+
+
+// re updat
+
+  export const reUpdateProfile=(req,res,next)=>{
      console.log("reUpdate data",req.body)
      console.log("authenticate profile", req.user)
      const {first_name,last_name,email}=req.body
@@ -651,10 +698,7 @@ export const updateUserProfile=(req,res)=>{
      connection.query(query,values,(err,result)=>{
       if(err){
         console.log("err in backend with query", err)
-        res.status(500).json({
-          success:false,
-          message:"failed re update the profile"
-        })
+        return next(new HandleError("failed re update the profile",500))
       }
       console.log("reupdata the result",result)
       res.status(201).json({
@@ -669,7 +713,7 @@ export const updateUserProfile=(req,res)=>{
 
   // Reviews and Ratings 
 
-export const reviews = async (req, res) => {
+export const reviews = async (req, res,next) => {
 
   console.log("review api called", req.body);
   console.log("authenticated user in review api", req.user);
@@ -678,10 +722,7 @@ export const reviews = async (req, res) => {
   const userMobile = req.user.mobile;
 
   if (!productId) {
-    return res.status(400).json({
-      success: false,
-      message: "Product id is required"
-    });
+    return next(new HandleError("Product id is required",400))
   }
 
   // 1. Get user id using mobile
@@ -692,14 +733,11 @@ export const reviews = async (req, res) => {
 
       if (err) {
         console.log("Error while getting user id", err);
-        return res.status(500).json({ success: false, message: "DB error" });
+        return next(new HandleError("DB error",500))
       }
 
       if (userResult.length === 0) {
-        return res.status(400).json({
-          success: false,
-          message: "No user found for this user"
-        });
+        return next(new HandleError("No user found for this user",400))
       }
 
       const user_id = userResult[0].id;
@@ -712,7 +750,12 @@ export const reviews = async (req, res) => {
 
           if (err) {
             console.log("Error while checking existing review", err);
-            return res.status(500).json({ success: false, message: "DB error" });
+            return next(
+              new HandleError(
+                "Error while checking existing review",
+                500
+              )
+            );
           }
 
           console.log("review query result", reviewResult);
@@ -722,6 +765,7 @@ export const reviews = async (req, res) => {
 
             // Update review text only
             if (rating === "") {
+
               connection.query(
                 `UPDATE reviews 
                  SET review_text = ? 
@@ -731,7 +775,13 @@ export const reviews = async (req, res) => {
 
                   if (err) {
                     console.log("Error while updating review", err);
-                    return res.status(500).json({ success: false, message: "DB error" });
+
+                    return next(
+                      new HandleError(
+                        "Error while updating review",
+                        500
+                      )
+                    );
                   }
 
                   console.log("update result", updateResult);
@@ -745,35 +795,41 @@ export const reviews = async (req, res) => {
               );
 
               return;
-            } else{
-              
-            // Update rating only
-            connection.query(
-              `UPDATE reviews 
-               SET rating = ? 
-               WHERE product_id = ? AND user_id = ?`,
-              [rating, productId, user_id],
-              (err, updateResult) => {
 
-                if (err) {
-                  console.log("Error while updating rating", err);
-                  return res.status(500).json({ success: false, message: "DB error" });
+            } else {
+
+              // Update rating only
+              connection.query(
+                `UPDATE reviews 
+                 SET rating = ? 
+                 WHERE product_id = ? AND user_id = ?`,
+                [rating, productId, user_id],
+                (err, updateResult) => {
+
+                  if (err) {
+                    console.log("Error while updating rating", err);
+
+                    return next(
+                      new HandleError(
+                        "Error while updating rating",
+                        500
+                      )
+                    );
+                  }
+
+                  console.log("update result", updateResult);
+
+                  return res.status(201).json({
+                    success: true,
+                    message: "Rating updated successfully",
+                    data: updateResult
+                  });
                 }
+              );
 
-                console.log("update result", updateResult);
-
-                return res.status(201).json({
-                  success: true,
-                  message: "Rating updated successfully",
-                  data: updateResult
-                });
-              }
-            );
-
-            return;
-          }
+              return;
             }
-
+          }
 
           // ================= INSERT =================
           if (rating === "") {
@@ -787,10 +843,13 @@ export const reviews = async (req, res) => {
 
                 if (err) {
                   console.log("Error while inserting review", err);
-                  return res.status(500).json({
-                    success: false,
-                    message: "DB error while saving review"
-                  });
+
+                  return next(
+                    new HandleError(
+                      "DB error while saving review",
+                      500
+                    )
+                  );
                 }
 
                 console.log("insert review result", insertResultReview);
@@ -804,34 +863,37 @@ export const reviews = async (req, res) => {
             );
 
             return;
-          }else{
-            
-          // Insert rating only
-          connection.query(
-            `INSERT INTO reviews (product_id, user_id, rating) 
-             VALUES (?, ?, ?)`,
-            [productId, user_id, rating],
-            (err, insertResultRating) => {
 
-              if (err) {
-                console.log("Error while inserting rating", err);
-                return res.status(500).json({
-                  success: false,
-                  message: "DB error while saving rating"
+          } else {
+
+            // Insert rating only
+            connection.query(
+              `INSERT INTO reviews (product_id, user_id, rating) 
+               VALUES (?, ?, ?)`,
+              [productId, user_id, rating],
+              (err, insertResultRating) => {
+
+                if (err) {
+                  console.log("Error while inserting rating", err);
+
+                  return next(
+                    new HandleError(
+                      "DB error while saving rating",
+                      500
+                    )
+                  );
+                }
+
+                console.log("insert rating result", insertResultRating);
+
+                return res.status(201).json({
+                  success: true,
+                  message: "Rating submitted successfully",
+                  data: insertResultRating
                 });
               }
-
-              console.log("insert rating result", insertResultRating);
-
-              return res.status(201).json({
-                success: true,
-                message: "Rating submitted successfully",
-                data: insertResultRating
-              });
-            }
-          );
+            );
           }
-
 
         }
       );
@@ -839,7 +901,6 @@ export const reviews = async (req, res) => {
     }
   );
 };
-
 
 
 // add to cart
