@@ -72,7 +72,7 @@ function ForAddToCart() {
            </div>
  
            {/* RIGHT SIDE (ORDER SUMMARY) */}
-           <div className="bg-blue-400 p-4 sm:p-6 rounded-2xl shadow h-fit">
+           <div className="bg-gray-300 p-4 sm:p-6 rounded-2xl shadow h-fit">
              
              <Skeleton height={22} width="60%" />
  
