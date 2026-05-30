@@ -20,15 +20,17 @@ function CreateProductAdmin() {
     attributes: {},
   });
 
+  // Fetch categories
   useEffect(() => {
     api
-      .get("/api/categories")
+      .get("/api/categories") // ✅ changed
       .then((res) => {
         setCategories(res.data.categories);
       })
       .catch((err) => console.log(err));
   }, []);
 
+  // Category change
   const handleCategoryChange = (e) => {
     const categoryID = e.target.value;
     const categoryval = categories.find(
@@ -73,12 +75,18 @@ function CreateProductAdmin() {
         data.append(key, value);
       });
 
-      formData.image.forEach((file) => {
+      formData.image.forEach((file, index) => {
         data.append("images", file);
       });
 
+      for (let [key, value] of data.entries()) {
+        console.log(key, value);
+      }
+
       const res = await api.post("/api/createProduct", data);
 
+      console.log("AFTER API CALL");
+      console.log("res.data:", res.data);
       alert("Product created successfully!");
 
       setFormData({
@@ -112,12 +120,13 @@ function CreateProductAdmin() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* all your inputs remain same */}
+
+          {/* ALL YOUR INPUTS SAME (NO CHANGE) */}
 
           <button
             type="submit"
             disabled={isSubmitting} // ✅ ADDED
-            className={`w-full py-2 rounded-lg text-white ${
+            className={`w-full text-white py-2 rounded-lg ${
               isSubmitting
                 ? "bg-blue-400 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700"
@@ -125,6 +134,7 @@ function CreateProductAdmin() {
           >
             {isSubmitting ? "Creating Product..." : "Create Product"}
           </button>
+
         </form>
       </div>
     </div>
