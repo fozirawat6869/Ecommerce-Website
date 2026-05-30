@@ -6,7 +6,7 @@ import { useRef } from "react";
 function CreateProductAdmin() {
   const [categories, setCategories] = useState([]);
   const [activeAttributes, setActiveAttributes] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false); // ✅ ADDED
+  const [isLoading, setIsLoading] = useState(false); // ✅ ADDED
 
   const inputRef = useRef(null);
 
@@ -17,13 +17,13 @@ function CreateProductAdmin() {
     quantity: "",
     image: [],
     category: "",
-    attributes: {},
+    attributes: {}
   });
 
   // Fetch categories
   useEffect(() => {
     api
-      .get("/api/categories") // ✅ changed
+      .get("/api/categories")
       .then((res) => {
         setCategories(res.data.categories);
       })
@@ -40,7 +40,7 @@ function CreateProductAdmin() {
     setFormData((prev) => ({
       ...prev,
       category: categoryID,
-      attributes: {},
+      attributes: {}
     }));
 
     const categoryName = categoryval?.name || "";
@@ -52,15 +52,17 @@ function CreateProductAdmin() {
       ...prev,
       attributes: {
         ...prev.attributes,
-        [attrName]: value,
-      },
+        [attrName]: value
+      }
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setIsSubmitting(true); // ✅ ADDED
+    if (isLoading) return; // ✅ prevent double click
+
+    setIsLoading(true); // ✅ lock button
 
     try {
       const data = new FormData();
@@ -75,17 +77,12 @@ function CreateProductAdmin() {
         data.append(key, value);
       });
 
-      formData.image.forEach((file, index) => {
+      formData.image.forEach((file) => {
         data.append("images", file);
       });
 
-      for (let [key, value] of data.entries()) {
-        console.log(key, value);
-      }
-
       const res = await api.post("/api/createProduct", data);
 
-      console.log("AFTER API CALL");
       console.log("res.data:", res.data);
       alert("Product created successfully!");
 
@@ -96,7 +93,7 @@ function CreateProductAdmin() {
         quantity: "",
         image: [],
         category: "",
-        attributes: {},
+        attributes: {}
       });
 
       setActiveAttributes({});
@@ -108,7 +105,7 @@ function CreateProductAdmin() {
       console.log("Error creating product", err.response?.data || err);
       alert("Failed to create product.");
     } finally {
-      setIsSubmitting(false); // ✅ ADDED
+      setIsLoading(false); // ✅ unlock button
     }
   };
 
@@ -120,21 +117,117 @@ function CreateProductAdmin() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          <input
+            name="name"
+            type="text"
+            placeholder="Product Name"
+            className="w-full border rounded-lg px-4 py-2"
+            value={formData.name}
+            onChange={(e) =>
+              setFormData({ ...formData, name: e.target.value })
+            }
+            required
+          />
 
-          {/* ALL YOUR INPUTS SAME (NO CHANGE) */}
+          <textarea
+            name="description"
+            placeholder="Description"
+            className="w-full border rounded-lg px-4 py-2"
+            value={formData.description}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+          />
+
+          <input
+            name="price"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder="Price (max 100000)"
+            className="w-full border rounded-lg px-4 py-2"
+            value={formData.price}
+            onChange={(e) => {
+              const raw = e.target.value.replace(/\D/g, "");
+              if (raw === "") {
+                setFormData({ ...formData, price: "" });
+                return;
+              }
+              const num = Number(raw);
+              if (num > 100000) return;
+              setFormData({ ...formData, price: raw });
+            }}
+            required
+          />
+
+          <input
+            name="quantity"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder="Quantity (max 100000)"
+            className="w-full border rounded-lg px-4 py-2"
+            value={formData.quantity}
+            onChange={(e) => {
+              const raw = e.target.value.replace(/\D/g, "");
+              if (raw === "") {
+                setFormData({ ...formData, quantity: "" });
+                return;
+              }
+              const num = Number(raw);
+              if (num > 100000) return;
+              setFormData({ ...formData, quantity: raw });
+            }}
+            required
+          />
+
+          <label className="block mb-1 text-gray-600">
+            You can upload up to 4 images
+          </label>
+
+          <input
+            type="file"
+            name="image"
+            ref={inputRef}
+            multiple
+            className="w-full border rounded-lg px-4 py-2"
+            accept="image/*"
+            onChange={(e) => {
+              const files = Array.from(e.target.files);
+              if (formData.image.length + files.length > 4) {
+                alert("You can upload a maximum of 4 images only!");
+                return;
+              }
+              const updatedFiles = [...formData.image, ...files].slice(0, 4);
+              setFormData({ ...formData, image: updatedFiles });
+            }}
+          />
+
+          <select
+            className="w-full border rounded-lg px-4 py-2"
+            value={formData.category}
+            onChange={handleCategoryChange}
+            required
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
 
           <button
             type="submit"
-            disabled={isSubmitting} // ✅ ADDED
-            className={`w-full text-white py-2 rounded-lg ${
-              isSubmitting
-                ? "bg-blue-400 cursor-not-allowed"
+            disabled={isLoading} // ✅ disable button
+            className={`w-full py-2 rounded-lg text-white ${
+              isLoading
+                ? "bg-gray-400 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
-            {isSubmitting ? "Creating Product..." : "Create Product"}
+            {isLoading ? "Creating Product..." : "Create Product"} {/* ✅ text change */}
           </button>
-
         </form>
       </div>
     </div>
