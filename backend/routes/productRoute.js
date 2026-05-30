@@ -1,7 +1,7 @@
 import express from 'express'
 import {getAllProducts,createProduct,productDetails
   ,newlyAddedProducts,categoryProducts
-      , categories, inputSearch } from '../controllers/productController.js'
+      , categories, inputSearch ,getProductCount} from '../controllers/productController.js'
 
 import { sendOTP,verifyOTP,loginOTP } from '../controllers/authController.js'
 import { userProfile,updateUserProfile,
@@ -20,6 +20,9 @@ router.route('/newlyAddedProducts').get(newlyAddedProducts)
 
 // GET all products and Create Product
 router.route('/products').get(getAllProducts).post(createProduct)
+
+// get count of all products
+router.route('/totalProducts').get(getProductCount)
 
 // router.route('/test').get(test)
 

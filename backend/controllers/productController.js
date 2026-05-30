@@ -448,7 +448,22 @@ export const inputSearch = (req,res,next) => {
 };
 
 
+//  Total count of products 
 
+export const getProductCount = async (req, res) => {
+  connection.query(
+    "SELECT COUNT(*) as total FROM product",
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ success: false });
+      }
 
+      res.json({
+        success: true,
+        total: result[0].total
+      });
+    }
+  );
+};
 
 

@@ -19,13 +19,13 @@ useEffect(() => {
 
 const handleAllProudcts = async () => {
   try {
-    const res = await api.get("/api/products")
-      console.log("products res", res.data.allProduct)
+    const res = await api.get("/api/totalProducts")
+      console.log("products res", res.data.total)
     // await new Promise((resolve)=>setTimeout(resolve,5000))
-      return res.data.allProduct || []
+      return res.data.total || 0
   } catch {
     console.log("error fetching products")
-    return []
+    return 0
   }
 }
 
@@ -41,7 +41,7 @@ const handleAllProudcts = async () => {
     }
   }
 
-  const{data:allProducts,isLoading}=useQuery({
+  const{data:productCount,isLoading}=useQuery({
     queryKey:["allProducts"],
     queryFn:handleAllProudcts,
     cacheTime:1000*60*5, // 5 min cache
@@ -81,7 +81,7 @@ const handleAllProudcts = async () => {
           <FaBox className="text-blue-600 text-3xl" />
           <div>
             <h2 className="text-gray-500">Total Products</h2>
-            <p className="text-2xl font-bold">{allProducts?.length ?? 0}</p>
+            <p className="text-2xl font-bold">{productCount??0}</p>
           </div>
         </Link>
 
