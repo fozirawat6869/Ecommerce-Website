@@ -2,16 +2,15 @@ import express from 'express'
 import {getAllProducts,createProduct,productDetails
   ,newlyAddedProducts
     ,categoryProducts
-      , categories , userProfile,updateUserProfile,
-      reUpdateProfile ,reviews ,addToCart , cartCount
+      , categories ,reviews ,addToCart , cartCount
       ,cartProducts ,removeFromCart 
       ,allUsers , inputSearch ,deleteProduct,
       getAddress,
       addAddress
       } from '../controllers/productController.js'
 
-      import { adminLogin,sendOTP,verifyOTP,loginOTP } from '../controllers/authControler.js'
-// import { test } from '../controllers/productController.js';
+import { adminLogin,sendOTP,verifyOTP,loginOTP } from '../controllers/authControler.js'
+import { userProfile,updateUserProfile,reUpdateProfile } from '../controllers/userController.js'
 import upload from '../config/multer.js'
 import isAuthenticated from '../middleware/isAuthenticated.js'
 import {globalLimiter,authLimiter,otpLimiter} from '../middleware/rateLimiter.js'
