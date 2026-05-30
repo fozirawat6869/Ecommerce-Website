@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 import api from "../../utils/api"; // ✅ changed
 import { filterConfig } from "../reuseCode/filterConfig";
 import { useRef } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 function CreateProductAdmin() {
+  const queryClient = useQueryClient();
   const [categories, setCategories] = useState([]);
   const [activeAttributes, setActiveAttributes] = useState({});
   const [isLoading, setIsLoading] = useState(false); // ✅ ADDED
@@ -91,6 +93,7 @@ const handleSubmit = async (e) => {
     console.log("AFTER API CALL"); 
     console.log("res.data:", res.data);
     alert("Product created successfully!");
+    queryClient.invalidateQueries({ queryKey: ['products'] });
 
     setFormData({
       name: "",

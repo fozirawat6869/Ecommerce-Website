@@ -81,7 +81,7 @@ const handleAllProudcts = async () => {
           <FaBox className="text-blue-600 text-3xl" />
           <div>
             <h2 className="text-gray-500">Total Products</h2>
-            <p className="text-2xl font-bold">{allProducts?.length +1|| 0}</p>
+            <p className="text-2xl font-bold">{allProducts?.length ?? 0}</p>
           </div>
         </Link>
 
