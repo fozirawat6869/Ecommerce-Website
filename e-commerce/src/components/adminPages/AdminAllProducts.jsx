@@ -15,7 +15,7 @@ function AdminAllProducts() {
       )
       return res.data.allProduct || []
     } catch (err) {
-      console.log("error in fetching products")
+      console.log("error in fetching products",err)
       return []
     }
   }

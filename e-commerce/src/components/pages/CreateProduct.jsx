@@ -59,6 +59,8 @@ function CreateProductAdmin() {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+  if (isLoading) return;
+    setIsLoading(true); // ✅ ADD THIS
 
   try {
     const data = new FormData();
@@ -107,6 +109,8 @@ const handleSubmit = async (e) => {
   } catch (err) {
     console.log("Error creating product", err.response?.data || err);
     alert("Failed to create product.");
+  }finally {
+    setIsLoading(false); // ✅ ADD THIS
   }
 };
 
