@@ -177,3 +177,112 @@ export const verifyOTP =async (req, res) => {
   }
 };
 
+
+
+
+// admin login with email and password
+
+export const adminLogin = (req, res, next) => {
+
+  console.log("admin login api", req.body);
+
+  const { email, password } = req.body;
+
+  // bcrypt.hash(password,10,(err,hash)=>{
+  //   if(err){
+  //     console.log("Error while hashing password", err);
+
+  //     return next(
+  //       new HandleError(
+  //         "Error while hashing password",
+  //         500
+  //       )
+  //     );
+  //   }
+
+  //   console.log("Hashed password:", hash);
+
+  // })
+
+  connection.query(
+    `select * from admin where email=?`,
+    [email],
+    (err, result) => {
+
+      if (err) {
+        console.log("Error while querying admin", err);
+
+        return next(
+          new HandleError(
+            "DB error",
+            500
+          )
+        );
+      }
+
+      if (result.length === 0) {
+        return next(
+          new HandleError(
+            "Wrong email",
+            400
+          )
+        );
+      }
+
+      console.log("Admin query result", result);
+
+      const hash = result[0].password;
+
+      // compare password with hash password using bcrypt
+      bcrypt.compare(
+        password,
+        hash,
+        (err, result) => {
+
+          if (err) {
+            console.log("Error while comparing password", err);
+
+            return next(
+              new HandleError(
+                "Error while comparing password",
+                500
+              )
+            );
+          }
+
+          console.log("Password comparison result:", result);
+
+          if (result === true) {
+
+            const token = jwt.sign(
+              {
+                email: email,
+                role: "admin"
+              },
+              process.env.JWT_SECRET,
+              {
+                expiresIn: "7d"
+              }
+            );
+
+            res.status(200).json({
+              success: true,
+              message: "Admin logged in successfully",
+              token: token
+            });
+
+          } else {
+
+            return next(
+              new HandleError(
+                "Wrong password",
+                400
+              )
+            );
+          }
+        }
+      );
+    }
+  );
+};
+

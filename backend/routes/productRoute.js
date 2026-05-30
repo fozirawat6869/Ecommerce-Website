@@ -1,14 +1,16 @@
 import express from 'express'
 import {getAllProducts,createProduct,productDetails
   ,newlyAddedProducts
-    ,categoryProducts,sendOTP,verifyOTP,loginOTP
+    ,categoryProducts
       , categories , userProfile,updateUserProfile,
       reUpdateProfile ,reviews ,addToCart , cartCount
-      ,cartProducts ,removeFromCart , adminLogin
+      ,cartProducts ,removeFromCart 
       ,allUsers , inputSearch ,deleteProduct,
       getAddress,
       addAddress
       } from '../controllers/productController.js'
+
+      import { adminLogin,sendOTP,verifyOTP,loginOTP } from '../controllers/authControler.js'
 // import { test } from '../controllers/productController.js';
 import upload from '../config/multer.js'
 import isAuthenticated from '../middleware/isAuthenticated.js'
