@@ -227,7 +227,7 @@ function CategoryPage() {
           <button
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
-            className='bg-red-500 px-3 sm:px-4 py-2 rounded text-white text-sm sm:text-base disabled:opacity-50'
+            className='bg-red-500 px-3 sm:px-4 py-2 rounded-xl text-white text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed'
           >
             Previous
           </button>
@@ -235,7 +235,7 @@ function CategoryPage() {
           <button
             disabled={data?.length < 10}
             onClick={() => setPage(page + 1)}
-            className='bg-green-500 px-3 sm:px-4 py-2 rounded text-white text-sm sm:text-base disabled:opacity-50'
+            className='bg-green-500 px-3 sm:px-4 py-2 rounded-xl text-white text-sm sm:text-base disabled:opacity-50 disabled:bg-transparent'
           >
             Next
           </button>

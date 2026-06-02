@@ -275,7 +275,7 @@ function ProductDetails() {
         refetch();
         return;
       }
-    } catch {
+    } catch {f
       console.log("Failed to submit review");
     }
   };
