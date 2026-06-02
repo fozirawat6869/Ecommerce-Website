@@ -475,7 +475,13 @@ export const getPaymentProductDetails=(req,res,next)=>{
   const {id}=req.params;
   // console.log("Product ID for payment details:", id);
 
-  const query=`select *, (select image_path from product_images where product_id=product.product_id limit 1 ) as image from product  where product_id=?`
+  const query=`select *, 
+  (select image_path from product_images where product_id=product.product_id limit 1 ) 
+  as image ,
+  (select round(avg(rating),1) 
+  from reviews where product_id = product.product_id) 
+  as avg_rating
+  from product  where product_id=?`
     
   connection.query(query,[id],(err,result)=>{
     console.log("Payment Product Details Result:", result);
@@ -490,6 +496,8 @@ export const getPaymentProductDetails=(req,res,next)=>{
     success:true,
     product:result[0]
   })
+
+    
 
   })
 
