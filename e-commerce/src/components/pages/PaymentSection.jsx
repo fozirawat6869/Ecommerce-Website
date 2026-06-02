@@ -12,6 +12,7 @@ import {
 
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import api from "../../utils/api";
+import FroPaymentCompo from "../../Loaders/ForPaymentCompo";
 
 function PaymentSection() {
   const navigate = useNavigate();
@@ -135,9 +136,7 @@ function PaymentSection() {
   // }
 };
  if (isLoading) {
-  return (
-    
-  );
+  <FroPaymentCompo/>
 }
 
   return (
