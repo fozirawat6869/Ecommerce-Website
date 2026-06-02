@@ -10,7 +10,7 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import api from "../../utils/api";
 
 function PaymentSection() {
@@ -18,6 +18,34 @@ function PaymentSection() {
   const [selected, setSelected] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const token = localStorage.getItem("token");
+
+  // Get product details for payment section
+  const { id } = useParams();
+  console.log("Product ID from URL:", id);
+
+  // get quantity from search params
+
+  const [searchParams]=useSearchParams()
+  const quantity = searchParams.get("quantity");
+  console.log("Quantity from search params:", quantity);
+
+  const handleFetchPaymentProductDetails=async()=>{
+    try {
+      const res = await api.get(`/api/paymentProductDetails/${id}`);
+      console.log("Payment product details response:", res);
+      return res.data.product || null;
+    } catch (err) {
+      console.log("Error fetching payment product details:", err);
+      return null;
+    }
+  }
+
+  const {data:productDetailsForPaymentSection}=useQuery({
+    queryKey:["paymentProductDetails",id],
+    queryFn:handleFetchPaymentProductDetails,
+  })
+
+  console.log("Product details for payment section:", productDetailsForPaymentSection);
   
 
   // Fetch Address

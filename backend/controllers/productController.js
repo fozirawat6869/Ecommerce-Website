@@ -467,3 +467,31 @@ export const getProductCount = async (req, res) => {
 };
 
 
+
+// for payment section to get the product details with price and name
+
+export const getPaymentProductDetails=(req,res,next)=>{
+  console.log("Getting product details for payment section");
+  const {id}=req.params;
+  // console.log("Product ID for payment details:", id);
+
+  const query=`select *, (select image_path from product_images where product_id=product.product_id limit 1 ) as image from product  where product_id=?`
+    
+  connection.query(query,[id],(err,result)=>{
+    console.log("Payment Product Details Result:", result);
+    if(err){
+      console.log("Error in payment product details query:", err);
+      return next(new HandleError("Error fetching product details for payment", 500));
+    }
+      if (result.length === 0) {
+      return next(new HandleError("Product not found", 404));
+    }
+      res.status(200).json({
+    success:true,
+    product:result[0]
+  })
+
+  })
+
+
+}

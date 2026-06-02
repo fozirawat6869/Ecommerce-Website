@@ -79,7 +79,7 @@ function App() {
               <Route path='/adminAllProducts' element={<AdminAllProducts />} />
               <Route path='/allUsers' element={<AllUsers />} />
               <Route path='/searchInput/:search' element={<SearchInputsProduct />} />
-              <Route path='/paymentSection' element={<PaymentSection/>}/>
+              <Route path='/paymentSection/:id' element={<PaymentSection/>}/>
               <Route path='/addAddress' element={<AddAddress/>} />
               
               <Route path="*" element={<div className="px-10 py-5 text-center">Page not found</div>} />

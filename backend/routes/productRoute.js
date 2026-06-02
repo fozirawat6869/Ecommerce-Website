@@ -1,7 +1,7 @@
 import express from 'express'
 import {getAllProducts,createProduct,productDetails
   ,newlyAddedProducts,categoryProducts
-      , categories, inputSearch ,getProductCount} from '../controllers/productController.js'
+      , categories, inputSearch ,getProductCount,getPaymentProductDetails} from '../controllers/productController.js'
 
 import { sendOTP,verifyOTP,loginOTP } from '../controllers/authController.js'
 import { userProfile,updateUserProfile,
@@ -90,5 +90,10 @@ router.route('/getAddress').get(isAuthenticated,getAddress)
 
 // add Address
 router.route('/addAddress').post(isAuthenticated,addAddress)
+
+
+// get product details for payment section
+
+router.route('/paymentProductDetails/:id').get(getPaymentProductDetails)
 
 export default router
