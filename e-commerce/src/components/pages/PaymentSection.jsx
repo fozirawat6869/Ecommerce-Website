@@ -136,12 +136,15 @@ function PaymentSection() {
   // }
 };
  if (isLoading) {
-  <FroPaymentCompo/>
+ return(
+   <FroPaymentCompo/>
+ )
 }
 
   return (
     <>
       {showPopup && (
+        
   <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
     <div className="bg-white p-6 rounded-2xl text-center">
@@ -186,9 +189,13 @@ function PaymentSection() {
           >
             Add Address
           </button>
+
+
+
         </div>
 
       ) : (
+        
 
         <div className="bg-white w-full max-w-sm sm:max-w-md rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-6 border border-gray-200">
 
@@ -217,6 +224,9 @@ function PaymentSection() {
 
             </div>
 
+
+            
+
           </div>
 
           <div className="mt-4 sm:mt-5 bg-green-100 border border-green-200 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-center justify-between">
@@ -230,11 +240,26 @@ function PaymentSection() {
             </button>
 
           </div>
+
+          
         </div>
+
+
+
+
       )}
+
+
+
+
+     
+
+
 
       {/* PAYMENT SECTION */}
       <div className="w-full max-w-sm sm:max-w-md lg:max-w-3xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-7">
+
+
 
         <div className="mb-5 sm:mb-7">
 
@@ -360,4 +385,15 @@ function PaymentSection() {
 }
 
 export default PaymentSection;
+
+
+
+
+
+
+
+
+
+
+
 
