@@ -115,7 +115,7 @@ function PaymentSection() {
     }
 
     try{
-    
+
     const res=await api.post("/api/placeOrder",orderData,{
       headers:{
         Authorization: `Bearer ${token}`
@@ -162,6 +162,8 @@ function PaymentSection() {
           </div>
         </div>
       )}
+
+  
 
       <div className="bg-gray-100 flex flex-col lg:flex-row gap-4 lg:gap-5 items-center lg:items-stretch justify-center p-2">
 
@@ -296,7 +298,11 @@ function PaymentSection() {
                     >
                       +
                     </button>
+                    
                   </div>
+                 <p className="text-green-600 font-semibold  text-sm">
+                  In Stock ({product.product_quantity} left)
+                 </p>
                 </div>
               </div>
             </div>
