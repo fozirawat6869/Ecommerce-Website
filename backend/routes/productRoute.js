@@ -9,6 +9,8 @@ import { userProfile,updateUserProfile,
 import { adminLogin,deleteProduct } from '../controllers/adminController.js'
 import { addToCart,cartCount,cartProducts,removeFromCart } from '../controllers/cartController.js'
 import { reviews } from '../controllers/reviewsController.js'
+import { placeOrder } from '../controllers/orderController.js'
+
 import upload from '../config/multer.js'
 import isAuthenticated from '../middleware/isAuthenticated.js'
 import {globalLimiter,authLimiter,otpLimiter} from '../middleware/rateLimiter.js'
@@ -95,5 +97,9 @@ router.route('/addAddress').post(isAuthenticated,addAddress)
 // get product details for payment section
 
 router.route('/paymentProductDetails/:id').get(getPaymentProductDetails)
+
+
+// place order
+router.route('/placeOrder').post(isAuthenticated,placeOrder)
 
 export default router

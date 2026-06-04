@@ -46,6 +46,8 @@ function PaymentSection() {
   const { data: productDetailsForPaymentSection } = useQuery({
     queryKey: ["paymentProductDetails", id],
     queryFn: handleFetchPaymentProductDetails,
+    cacheTime: 1000*60*10, // Cache for 5 minutes
+    staleTime: 1000*60*10, // Data is fresh for 5 minutes
   });
 
  
@@ -67,6 +69,8 @@ function PaymentSection() {
   const { data, isLoading } = useQuery({
     queryKey: ["getAddress"],
     queryFn: fetchAddress,
+    cacheTime: 1000*60*10, // Cache for 5 minutes
+    staleTime: 1000*60*10, // Data is fresh for 5 minutes
   });
 
   const addressData = Array.isArray(data)
