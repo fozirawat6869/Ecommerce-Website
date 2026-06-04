@@ -17,16 +17,21 @@ import FroPaymentCompo from "../../Loaders/ForPaymentCompo";
 const BASE_URL = "https://ecommerce-website-egix.onrender.com";
 
 function PaymentSection() {
+
+
+
   const navigate = useNavigate();
   const [selected, setSelected] = useState("");
   const [showPopup, setShowPopup] = useState(false);
-  const token = localStorage.getItem("token");
 
+
+  const token = localStorage.getItem("token");
   const { id } = useParams();
   const [searchParams] = useSearchParams();
-  const [quantity, setQuantity] = useState(
-    parseInt(searchParams.get("quantity")) || 1
-  );
+
+  const [quantity, setQuantity] = useState(parseInt(searchParams.get("quantity"))||1);
+  
+  console.log("selected payment method:", selected);
 
   const handleFetchPaymentProductDetails = async () => {
     try {
@@ -43,11 +48,15 @@ function PaymentSection() {
     queryFn: handleFetchPaymentProductDetails,
   });
 
+ 
+   console.log("Product details for payment section:", productDetailsForPaymentSection?.product_price);
+   
   const fetchAddress = async () => {
     try {
       const res = await api.get("/api/getAddress", {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log("Fetched address data of user :", res.data.userAddress[0].id);
       return res.data.userAddress || [];
     } catch (err) {
       console.log("wrong api", err);
@@ -89,8 +98,39 @@ function PaymentSection() {
   ];
 
   const handlePlaceOrder = async () => {
+    
+    const orderData={
+      address_id: addressData?.[0]?.id,
+      product_id: id,
+      quantity: quantity,
+      price:parseInt(productDetailsForPaymentSection?.product_price),
+       total_price: parseInt(productDetailsForPaymentSection?.product_price) * quantity,
+      payment_method: selected,
+      payment_status:"pending",
+      order_status:"pending"
+    }
+
+    try{
+    
+    const res=await api.post("/api/placeOrder",orderData,{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+
+    })
+
+    
+      console.log("Order placed successfully:", res)
+
     setShowPopup(true);
     setTimeout(() => navigate("/"), 2000);
+
+    }catch(err){
+      console.log("Error placing order:", err);
+    }
+
+
+  
   };
 
   if (isLoading) return <FroPaymentCompo />;
