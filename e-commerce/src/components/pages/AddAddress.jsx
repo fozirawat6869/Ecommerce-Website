@@ -382,7 +382,7 @@ function AddAddress() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 sm:py-3 rounded-lg sm:rounded-2xl font-semibold text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white py-2 sm:py-3 rounded-lg sm:rounded-2xl font-semibold text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Saving..." : "Save Address"}
           </button>
@@ -390,7 +390,7 @@ function AddAddress() {
           <button
             onClick={() => navigate(-1)}
             type="button"
-            className="w-full border border-gray-300 hover:bg-gray-100 py-2 sm:py-3 rounded-lg sm:rounded-2xl font-semibold text-sm sm:text-base"
+            className="w-full cursor-pointer border border-gray-300 hover:bg-gray-100 py-2 sm:py-3 rounded-lg sm:rounded-2xl font-semibold text-sm sm:text-base"
           >
             Cancel
           </button>
