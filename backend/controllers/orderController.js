@@ -63,3 +63,52 @@ export const placeOrder=(req,res,next)=>{
       
 })
 }
+
+
+// show orders for a user
+
+
+export const showOrders=(req,res,next)=>{
+    console.log("inside the show orders api")
+    const {mobile} = req.user; // Assuming you have user authentication and the user ID is available in req.user
+   console.log("Fetching orders for user with mobile:", mobile);
+    connection.query('SELECT id FROM users WHERE mobile = ?', [mobile], (err, userResult) => {
+        if (err) {
+            console.log("Error while getting user id in show orders", err);
+            return next(
+                new HandleError(
+                    "DB error",
+                    500
+                )
+            );
+        }
+        if (userResult.length === 0) {
+            return next(
+                new HandleError(
+                    "No user found for this user",
+                    404
+                )
+            );
+        }
+        const user_id = userResult[0].id;  // get the user id from the query result
+
+        connection.query('SELECT * FROM orders WHERE user_id = ?', [user_id], (err, ordersResult) => {
+            if (err) {
+                console.log("Error while fetching orders", err);
+                return next(
+                    new HandleError(
+                        "DB error while fetching orders",
+                        500
+                    )
+                );
+            }
+            console.log("Orders fetched successfully:", ordersResult);
+
+            res.status(200).json({
+                success: true,
+                message: "Orders fetched successfully",
+                orders:ordersResult
+            });
+        });
+    });
+}

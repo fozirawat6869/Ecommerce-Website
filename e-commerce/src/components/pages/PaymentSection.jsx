@@ -104,6 +104,9 @@ function PaymentSection() {
 
   const handlePlaceOrder = async () => {
     
+     if (isPlacingOrder) return;
+
+
     const orderData={
       address_id: addressData?.[0]?.id,
       product_id: id,
@@ -116,6 +119,8 @@ function PaymentSection() {
     }
 
     try{
+
+      setIsPlacingOrder(true);
 
     const res=await api.post("/api/placeOrder",orderData,{
       headers:{
