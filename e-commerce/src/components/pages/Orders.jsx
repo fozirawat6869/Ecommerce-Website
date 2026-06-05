@@ -42,6 +42,16 @@ export default function Orders() {
       );
 
 
+
+      function handleCancelOrder(orderId){
+       
+        console.log("Cancel order with id", orderId);
+
+        // Make API call to cancel the order
+
+      }
+
+
 if(isLoading){
   return (
     <div className="flex flex-col items-center justify-center h-[70vh] gap-3">  
@@ -204,12 +214,15 @@ return (
                 </p>
 
                 {order.order_status === "pending" && (
-                  <button className="w-full mt-3 bg-red-500 hover:bg-red-600 text-white py-2 rounded-xl">
+                  <button 
+                  className="cursor-cursor-pointer w-full mt-3 bg-red-500 hover:bg-red-600 text-white py-2 rounded-xl"
+                  onClick={()=>handleCancelOrder(order.id)}
+                  >
                     Cancel Order
                   </button>
                 )}
 
-                <button className="w-full mt-3 border py-2 rounded-xl hover:bg-gray-50">
+                <button className="cursor-pointer w-full mt-3 border py-2 rounded-xl hover:bg-gray-50">
                   View Details
                 </button>
 

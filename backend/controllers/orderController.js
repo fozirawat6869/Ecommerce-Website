@@ -69,7 +69,7 @@ export const placeOrder=(req,res,next)=>{
 
 
 export const showOrders=(req,res,next)=>{
-    console.log("inside the show orders api")
+  
     const {mobile} = req.user; // Assuming you have user authentication and the user ID is available in req.user
    console.log("Fetching orders for user with mobile:", mobile);
     connection.query('SELECT id FROM users WHERE mobile = ?', [mobile], (err, userResult) => {
@@ -126,4 +126,33 @@ export const showOrders=(req,res,next)=>{
             });
         });
     });
+}
+
+
+
+
+//  Cancel order 
+
+
+export const cancelOrder=(req,res,next)=>{
+
+    connection.query('update orders set order_status="cancelled" where id=?',[req.params.id],(err,result)=>{
+        if(err){
+            console.log("Error while cancelling order", err);
+            return next(
+                new HandleError(
+                    "DB error while cancelling order",
+                    500
+                )
+            );
+        }
+        console.log("Order cancelled successfully:", result);
+
+        res.status(200).json({
+            success: true,
+            message: "Order cancelled successfully",
+        });
+    }
+    )
+
 }
