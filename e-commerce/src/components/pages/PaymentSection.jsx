@@ -23,6 +23,7 @@ function PaymentSection() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState("");
   const [showPopup, setShowPopup] = useState(false);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
 
   const token = localStorage.getItem("token");
@@ -131,6 +132,7 @@ function PaymentSection() {
 
     }catch(err){
       console.log("Error placing order:", err);
+       setIsPlacingOrder(false);
     }
 
 
@@ -442,7 +444,7 @@ function PaymentSection() {
           {/* push button to bottom */}
           <div className="flex-1" />
 
-          <button
+          {/* <button
             onClick={handlePlaceOrder}
             disabled={selected !== "cod" || addressData.length === 0}
             className={`w-full mt-6 sm:mt-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-lg font-semibold transition
@@ -457,7 +459,34 @@ function PaymentSection() {
               : selected === "cod"
               ? "Place Order"
               : "Select Payment Method"}
-          </button>
+          </button> */}
+
+
+          <button
+  onClick={handlePlaceOrder}
+  disabled={
+    selected !== "cod" ||
+    addressData.length === 0 ||
+    isPlacingOrder
+  }
+  className={`w-full mt-6 sm:mt-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-lg font-semibold transition
+    ${
+      selected === "cod" &&
+      addressData.length > 0 &&
+      !isPlacingOrder
+        ? "bg-green-600 hover:bg-green-700 text-white"
+        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+    }
+  `}
+>
+  {isPlacingOrder
+    ? "Placing Order..."
+    : addressData.length === 0
+    ? "Add Address First"
+    : selected === "cod"
+    ? "Place Order"
+    : "Select Payment Method"}
+</button>
 
         </div>
       </div>
