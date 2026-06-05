@@ -136,7 +136,10 @@ export const showOrders=(req,res,next)=>{
 
 export const cancelOrder=(req,res,next)=>{
 
-    connection.query('update orders set order_status="cancelled" where id=?',[req.params.id],(err,result)=>{
+    const { id } = req.params; // Get the order ID from the request parameters
+console.log("Cancelling order with id:", id);
+    connection.query( "UPDATE orders SET order_status = ? WHERE id = ?",
+  ["cancelled", id],(err,result)=>{
         if(err){
             console.log("Error while cancelling order", err);
             return next(

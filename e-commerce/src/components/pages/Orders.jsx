@@ -2,19 +2,23 @@
 
 
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../../utils/api";
 
 export default function Orders() {
+
+  const queryClient = useQueryClient();
   const [filter, setFilter] = useState("all");
 
+
+  const token =localStorage.getItem("token")
 
 
   const handleShowOrders=async()=>{
        try{
         const res=await api.get('/api/showOrders',{
           headers:{
-            Authorization: `Bearer ${localStorage.getItem("token")}`
+            Authorization: `Bearer ${token}`
           }
         })
         console.log("Orders data from API", res.data.orders);
@@ -43,11 +47,29 @@ export default function Orders() {
 
 
 
-      function handleCancelOrder(orderId){
+    async function handleCancelOrder(orderId){
        
-        console.log("Cancel order with id", orderId);
+       try{
+         console.log("Cancel order with id", orderId);
 
         // Make API call to cancel the order
+
+       const res=await api.put(`/api/cancelOrder/${orderId}`,{},{
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        })
+        queryClient.invalidateQueries(["orders"]) // Invalidate the orders query to refetch the updated orders list
+        console.log("Cancel order response", res);
+        if(res.data.success){
+          alert("Order cancelled successfully")
+        }
+
+       }catch(err){
+        console.log("Error while cancelling order", err);
+
+       }
+
 
       }
 
@@ -84,10 +106,10 @@ return (
             <button
               key={item}
               onClick={() => setFilter(item)}
-              className={`px-5 py-2 rounded-full font-medium transition
+              className={`px-5 py-2 rounded-full cursor-pointer font-medium transition hover:scale-105 transition-all 
               ${
                 filter === item
-                  ? "bg-blue-600 text-white"
+                  ? "bg-yellow-500 text-white"
                   : "bg-white border"
               }`}
             >
@@ -215,14 +237,14 @@ return (
 
                 {order.order_status === "pending" && (
                   <button 
-                  className="cursor-cursor-pointer w-full mt-3 bg-red-500 hover:bg-red-600 text-white py-2 rounded-xl"
+                  className="hover:scale-105 transition-all cursor-pointer w-full mt-3 bg-red-500 hover:bg-red-600 text-white py-2 rounded-xl"
                   onClick={()=>handleCancelOrder(order.id)}
                   >
                     Cancel Order
                   </button>
                 )}
 
-                <button className="cursor-pointer w-full mt-3 border py-2 rounded-xl hover:bg-gray-50">
+                <button className="hover:scale-105 transition-all cursor-pointer w-full mt-3 border py-2 rounded-xl hover:bg-blue-400">
                   View Details
                 </button>
 
