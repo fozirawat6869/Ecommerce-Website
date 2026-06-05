@@ -92,7 +92,22 @@ export const showOrders=(req,res,next)=>{
         }
         const user_id = userResult[0].id;  // get the user id from the query result
 
-        connection.query('SELECT * FROM orders WHERE user_id = ?', [user_id], (err, ordersResult) => {
+
+         const query=`
+  select 
+  o.*,p.product_name,p.product_description , 
+  (select image_path from product_images where product_id=p.product_id limit 1) as image_path
+  from orders o 
+  join product p 
+  on p.product_id=o.product_id
+ 
+  where o.user_id=? 
+  order by o.created_at desc
+  
+  `
+
+
+        connection.query(query, [user_id], (err, ordersResult) => {
             if (err) {
                 console.log("Error while fetching orders", err);
                 return next(
