@@ -146,22 +146,36 @@ function PaymentSection() {
 
   return (
     <>
-      {showPopup && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-2xl text-center">
-            <h1 className="text-2xl font-bold text-green-600">
-              🎉 Order Placed Successfully
-            </h1>
-            <p className="text-gray-600 mt-2">Your order has been confirmed</p>
-            <button
-              onClick={() => navigate("/")}
-              className="mt-4 bg-yellow-400 text-white px-5 py-2 rounded-lg"
-            >
-              Continue Shopping
-            </button>
-          </div>
-        </div>
-      )}
+     {showPopup && (
+  <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-bounce">
+    <div className="bg-white shadow-2xl border border-green-200 rounded-2xl px-6 py-4 flex items-center gap-4">
+      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+        <svg
+          className="w-7 h-7 text-green-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={3}
+            d="M5 13l4 4L19 7"
+          />
+        </svg>
+      </div>
+
+      <div>
+        <h3 className="font-bold text-gray-800">
+          Order Placed Successfully
+        </h3>
+        <p className="text-sm text-gray-500">
+          Your order has been confirmed 🎉
+        </p>
+      </div>
+    </div>
+  </div>
+)}
 
   
 
