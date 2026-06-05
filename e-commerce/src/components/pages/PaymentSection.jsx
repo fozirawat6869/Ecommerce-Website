@@ -1,6 +1,6 @@
 
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import {
   FaCreditCard,
@@ -18,12 +18,12 @@ const BASE_URL = "https://ecommerce-website-egix.onrender.com";
 
 function PaymentSection() {
 
-
-
   const navigate = useNavigate();
   const [selected, setSelected] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+
+  const queryClient = useQueryClient();
 
 
   const token = localStorage.getItem("token");
@@ -125,13 +125,12 @@ function PaymentSection() {
     const res=await api.post("/api/placeOrder",orderData,{
       headers:{
         Authorization: `Bearer ${token}`
-      }
-
-    })
+      }})
 
     
       console.log("Order placed successfully:", res)
-
+     
+      queryClient.invalidateQueries(["orders"]);
     setShowPopup(true);
     setTimeout(() => navigate("/"), 2000);
 
