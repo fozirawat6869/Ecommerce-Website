@@ -4,11 +4,14 @@
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../../utils/api";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Orders() {
 
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState("all");
+  const navigate = useNavigate();
 
 
   const token =localStorage.getItem("token")
@@ -139,13 +142,13 @@ return (
             <div className="flex flex-col md:flex-row gap-5">
 
               {/* Image */}
-              <div className="w-full md:w-40 h-40 flex-shrink-0">
+              <Link to={`/product/${order.product_id}`} className="w-full md:w-40 h-40 flex-shrink-0">
                 <img
                   src={`${BASE_URL}/${order.image_path}`}
                   alt={order.product_name}
                   className="w-full h-full object-cover rounded-xl"
                 />
-              </div>
+              </Link>
 
               {/* Details */}
               <div className="flex-1">
@@ -244,7 +247,10 @@ return (
                   </button>
                 )}
 
-                <button className="hover:scale-105 transition-all cursor-pointer w-full mt-3 border py-2 rounded-xl hover:bg-blue-400">
+                <button 
+                className="hover:scale-105 transition-all cursor-pointer w-full mt-3 border py-2 rounded-xl hover:bg-blue-400"
+              
+                >
                   View Details
                 </button>
 
