@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api, { BASE_URL } from "../../utils/api";
 import AddToCartLoader from "../../Loaders/ForAddToCart";
+import { Link } from "react-router-dom";
 
 function AddToCart() {
   const queryClient = useQueryClient();
@@ -82,7 +83,7 @@ function AddToCart() {
   // ✅ EMPTY
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="h-[60vh] flex items-center justify-center">
         <h2 className="text-xl text-gray-500">
           Your cart is empty 🛒
         </h2>
@@ -103,15 +104,17 @@ function AddToCart() {
           {cartItems.map((item) => (
             <div
               key={item.cart_id}
-              className="bg-white p-4 sm:p-5 rounded-2xl shadow-sm hover:shadow-md transition flex flex-col sm:flex-row justify-between gap-4"
+              className="bg-white p-4 sm:p-5 rounded-2xl shadow-sm hover:shadow-md transition  flex flex-col sm:flex-row justify-between gap-4"
             >
               
               <div className="flex gap-4 sm:gap-5 items-center">
+               <Link to={`/product/${item.product_id}`} className="w-20 h-20 sm:w-28 sm:h-28 flex-shrink-0 hover:scale-105 transition-transform">
                 <img
                   src={`${BASE_URL}/${item.image}`}
                   alt={item.product_name}
                   className="w-20 h-20 sm:w-28 sm:h-28 object-cover rounded-xl border"
                 />
+                </Link>
 
                 <div>
                   <h2 className="text-sm sm:text-lg font-semibold text-gray-800">
@@ -144,7 +147,7 @@ function AddToCart() {
                 </div>
               </div>
 
-              {/* RIGHT SIDE */}
+              {/* LEFT RIGHT SIDE */}
               <div className="flex sm:flex-col justify-between items-center">
                 <p className="text-lg font-bold text-gray-800">
                   ₹
@@ -152,13 +155,21 @@ function AddToCart() {
                     Number(item.cart_quantity)}
                 </p>
 
-                <button
-                  onClick={() => removeMutation.mutate(item.cart_id)}
-                  disabled={removeMutation.isPending && removeMutation.variables === item.cart_id}
-                  className="text-red-500 text-sm hover:underline disabled:opacity-50 cursor-pointer"
-                >
-                 {removeMutation.isPending && removeMutation.variables === item.cart_id ? "Removing..." : "Remove"}
-                </button>
+ <button
+  onClick={() => removeMutation.mutate(item.cart_id)}
+  disabled={
+    removeMutation.isPending &&
+    removeMutation.variables === item.cart_id
+  }
+  className="w-20 text-red-500 text-sm hover:underline disabled:opacity-50 cursor-pointer flex justify-center"
+>
+  {removeMutation.isPending &&
+  removeMutation.variables === item.cart_id ? (
+    <div className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+  ) : (
+    "Remove"
+  )}
+</button>
               </div>
             </div>
           ))}

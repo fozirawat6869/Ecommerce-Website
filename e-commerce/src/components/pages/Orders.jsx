@@ -142,7 +142,7 @@ return (
             <div className="flex flex-col md:flex-row gap-5">
 
               {/* Image */}
-              <Link to={`/product/${order.product_id}`} className="w-full md:w-40 h-40 flex-shrink-0">
+              <Link to={`/product/${order.product_id}`} className="w-full md:w-40 h-40 flex-shrink-0 hover:scale-105 transition-transform">
                 <img
                   src={`${BASE_URL}/${order.image_path}`}
                   alt={order.product_name}

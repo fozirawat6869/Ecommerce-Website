@@ -315,7 +315,7 @@ return (
               />
             </div>
 
-            <div className=" mb-2">
+            <div className="flex gap-5 mb-2">
                 <button 
                 onClick={()=>{
                   localStorage.removeItem("token")
@@ -325,6 +325,17 @@ return (
                 }
                 className="bg-red-500 text-white font-bold px-3 py-2 rounded-xl cursor-pointer hover:scale-105 transition-transform"> 
                   Logout
+                </button>
+
+                  <button 
+                onClick={()=>{
+                  localStorage.removeItem("token")
+                    navigate("/orders");
+                   
+                }   
+                }
+                className="bg-green-500 text-white font-bold px-3 py-2 rounded-xl cursor-pointer hover:scale-105 transition-transform"> 
+                  Orders
                 </button>
             </div>
 
