@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { BASE_URL } from "../../utils/api";
 
 export default function Orders() {
 
@@ -90,10 +91,10 @@ if(isLoading){
 
 
 // const BASE_URL = "https://ecommerce-website-egix.onrender.com";
-const BASE_URL = "http://localhost:8000";
+
 
 return (
-  <div className="min-h-screen bg-gray-100 p-4 md:p-8">
+  <div className=" bg-gray-100 p-4 md:p-8">
 
     <div className="max-w-7xl mx-auto">
 
