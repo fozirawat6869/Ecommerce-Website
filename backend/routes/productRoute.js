@@ -118,4 +118,8 @@ router.route('/totalOrders').get(isAuthenticated,totalOrders)
 // all order detail for admin 
 router.route('/allOrderDetailsForAdmin').get(isAuthenticated,allOrdersAdmin)
 
+// Update Order Status for admin
+router.route('/updateOrderStatus/:id')
+.put(isAuthenticated, updateOrderStatus);
+
 export default router

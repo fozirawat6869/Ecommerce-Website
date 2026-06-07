@@ -286,3 +286,37 @@ export const allOrdersAdmin=(req,res,next)=>{
         })
     })
 }
+
+
+// Update Order Status for admin
+
+export const updateOrderStatus = (req, res, next) => {
+  const { id } = req.params;
+  const { order_status } = req.body;
+
+  const query = `
+    UPDATE orders
+    SET order_status = ?
+    WHERE id = ?
+  `;
+
+  connection.query(
+    query,
+    [order_status, id],
+    (err, result) => {
+      if (err) {
+        return next(
+          new HandleError(
+            "DB error while updating order status",
+            500
+          )
+        );
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Order status updated successfully",
+      });
+    }
+  );
+};
