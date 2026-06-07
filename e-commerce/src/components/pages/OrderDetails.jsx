@@ -1,254 +1,367 @@
-import { useQuery } from "@tanstack/react-query";
+
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import {  useParams,Navigate, useNavigate } from "react-router-dom";
 import {
-  FaBox,
   FaMapMarkerAlt,
-  FaMoneyBillWave,
+  FaCreditCard,
+  FaBoxOpen,
   FaCheckCircle,
 } from "react-icons/fa";
-import api from "../../utils/api";
-import { useParams } from "react-router-dom";
+import api,{BASE_URL} from "../../utils/api";
+
 
 function OrderDetails() {
 
-    const params = useParams();
-    console.log("Order ID from URL params:", params.id);
+  const navigate=useNavigate()
+  const { id } = useParams();
+  const token = localStorage.getItem("token");
 
-    const token =localStorage.getItem("token")
-
-    const handleShowOrderDetails=async()=>{
-       
-        try{
-            const res=await api.get(`/api/orderDetails/${params.id}`,{
-                headers:{
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            console.log("Order details:", res.data.orderDetails);
-            return res.data;
-        } catch (error) {
-            console.error("Error fetching order details:", error);
-            throw error;
-        }
-    }
-
-    const {data:orderDetails,isLoading}=useQuery({
-        queryKey:["orderDetails"],
-        queryFn:handleShowOrderDetails,
-        cacheTime:1000*60*10, // cache for 10 minutes
-        staleTime:1000*60*5, // data is fresh for 5 minutes
-    })
-
-
-  const order = {
-    id: 101,
-    product_name: "GymWar Ankle Support Wrap",
-    image:
-      "https://images.unsplash.com/photo-1584865288642-42078afe6942?w=500",
-    quantity: 2,
-    price: 109,
-    total_price: 218,
-    payment_method: "cod",
-    payment_status: "completed",
-    order_status: "delivered",
-    created_at: "2026-06-07",
-
-    address: {
-      name: "Mayur Rawat",
-      phone: "8755306869",
-      city: "Haridwar",
-      state: "Uttarakhand",
-      pincode: "249401",
-      address:
-        "Chwincha Gawn Pauri Subdistrict, Garhwal District Uttarakhand",
-    },
+  const handleShowOrderDetails = async () => {
+    const res = await api.get(`/api/orderDetails/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+console.log(res.data.orderDetails)
+    return res.data;
   };
 
-  const timeline = [
-    "Order Placed",
-    "Packed",
-    "Shipped",
-    "Delivered",
-  ];
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["orderDetails", id],
+    queryFn: handleShowOrderDetails,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <div className="w-14 h-14 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <h1 className="text-red-500 text-xl">
+          Failed to load order details
+        </h1>
+      </div>
+    );
+  }
+
+  const order = data?.orderDetails;
+
+  const imageUrl = `${BASE_URL}/${order?.image_path}`;
+
+  const steps = ["pending", "shipped", "delivered"];
+
+  const currentStep = steps.indexOf(order?.order_status);
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-700";
+
+      case "shipped":
+        return "bg-blue-100 text-blue-700";
+
+      case "delivered":
+        return "bg-green-100 text-green-700";
+
+      case "cancelled":
+        return "bg-red-100 text-red-700";
+
+      default:
+        return "bg-gray-100 text-gray-700";
+    }
+  };
+
+  const getPaymentColor = (status) => {
+    switch (status) {
+      case "completed":
+        return "bg-green-100 text-green-700";
+
+      case "failed":
+        return "bg-red-100 text-red-700";
+
+      default:
+        return "bg-yellow-100 text-yellow-700";
+    }
+  };
 
   return (
-    <div className="max-w-7xl mx-auto p-4 lg:p-6">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* LEFT SECTION */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* PRODUCT CARD */}
-          <div className="bg-white rounded-xl shadow border p-4">
-            <h2 className="text-xl font-semibold mb-4">
-              Product Details
-            </h2>
+    <div className="min-h-screen bg-gray-100 py-6">
+      <div className="max-w-7xl mx-auto px-4">
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <img
-                src={order.image}
-                alt=""
-                className="w-32 h-32 object-cover rounded-lg border"
-              />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold">
-                  {order.product_name}
-                </h3>
+          {/* LEFT */}
+          <div className="lg:col-span-2 space-y-6">
 
-                <p className="text-gray-600 mt-2">
-                  Quantity : {order.quantity}
-                </p>
+            {/* PRODUCT */}
+            <div className="bg-white rounded-2xl shadow-sm border">
+              <div className="p-6">
+                <h2 className="text-xl font-bold flex items-center gap-2 mb-6">
+                  <FaBoxOpen />
+                  Product Details
+                </h2>
 
-                <p className="text-gray-600">
-                  Price : ₹{order.price}
-                </p>
+                <div className="flex flex-col md:flex-row gap-6">
+                  
+                    <img 
+                    onClick={()=>navigate(`/product/${data.orderDetails.product_id}`)}
+                    src={imageUrl}
+                    alt={order?.product_name}
+                    className="w-48 h-48 object-cover rounded-xl border cursor-pointer"
+                  />
+                 
 
-                <p className="text-xl font-bold mt-2">
-                  ₹{order.total_price}
-                </p>
+                  <div className="flex-1">
+                    <h1 className="text-2xl font-bold">
+                      {order?.product_name}
+                    </h1>
 
-                <span
-                  className={`inline-block mt-3 px-3 py-1 rounded-full text-sm ${
-                    order.order_status === "delivered"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}
-                >
-                  {order.order_status}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* ORDER TRACKING */}
-          <div className="bg-white rounded-xl shadow border p-4">
-            <h2 className="text-xl font-semibold mb-6">
-              Order Timeline
-            </h2>
-
-            <div className="space-y-8">
-              {timeline.map((item, index) => (
-                <div key={index} className="flex gap-4">
-                  <FaCheckCircle className="text-green-600 text-xl mt-1" />
-
-                  <div>
-                    <p className="font-medium">{item}</p>
-
-                    <p className="text-sm text-gray-500">
-                      Jun 07, 2026
+                    <p className="text-gray-600 mt-3">
+                      {order?.product_description}
                     </p>
+
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      <span className="px-3 py-1 bg-gray-100 rounded-lg text-sm">
+                        Brand: {order?.product_attributes?.brand}
+                      </span>
+
+                      <span className="px-3 py-1 bg-gray-100 rounded-lg text-sm">
+                        RAM: {order?.product_attributes?.ram}
+                      </span>
+
+                      <span className="px-3 py-1 bg-gray-100 rounded-lg text-sm">
+                        Storage: {order?.product_attributes?.storage}
+                      </span>
+                    </div>
+
+                    <div className="mt-5">
+                      <p className="text-3xl font-bold text-green-600">
+                        ₹{Number(order?.total_price).toLocaleString()}
+                      </p>
+
+                      <p className="text-gray-500 mt-1">
+                        Quantity: {order?.quantity}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3 mt-5">
+                      <span
+                        className={`px-4 py-2 rounded-full text-sm font-medium capitalize ${getStatusColor(
+                          order?.order_status
+                        )}`}
+                      >
+                        {order?.order_status}
+                      </span>
+
+                      <span
+                        className={`px-4 py-2 rounded-full text-sm font-medium capitalize ${getPaymentColor(
+                          order?.payment_status
+                        )}`}
+                      >
+                        Payment {order?.payment_status}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              ))}
+              </div>
+            </div>
+
+            {/* TRACKING */}
+            <div className="bg-white rounded-2xl shadow-sm border p-6">
+              <h2 className="text-xl font-bold mb-8">
+                Order Tracking
+              </h2>
+
+              {order?.order_status === "cancelled" ? (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-5">
+                  <h3 className="text-red-600 font-semibold text-lg">
+                    ❌ Order Cancelled
+                  </h3>
+
+                  <p className="text-red-500 mt-2">
+                    This order has been cancelled.
+                  </p>
+                </div>
+              ) : (
+                <div>
+                  {steps.map((step, index) => (
+                    <div
+                      key={step}
+                      className="flex gap-4 relative pb-10"
+                    >
+                      {index !== steps.length - 1 && (
+                        <div
+                          className={`absolute left-4 top-8 w-1 h-16 ${
+                            index < currentStep
+                              ? "bg-green-500"
+                              : "bg-gray-300"
+                          }`}
+                        />
+                      )}
+
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
+                          index <= currentStep
+                            ? "bg-green-500 text-white"
+                            : "bg-gray-300"
+                        }`}
+                      >
+                        <FaCheckCircle size={14} />
+                      </div>
+
+                      <div>
+                        <h3 className="font-semibold capitalize">
+                          {step}
+                        </h3>
+
+                        <p className="text-sm text-gray-500">
+                          {index <= currentStep
+                            ? "Completed"
+                            : "Waiting"}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-        </div>
 
-        {/* RIGHT SECTION */}
-        <div className="space-y-6">
-          {/* DELIVERY DETAILS */}
-          <div className="bg-white rounded-xl shadow border p-4">
-            <h2 className="text-xl font-semibold mb-4">
-              Delivery Details
-            </h2>
+          {/* RIGHT */}
+          <div className="space-y-6">
 
-            <div className="space-y-4">
-              <div className="flex gap-3">
-                <FaMapMarkerAlt className="mt-1 text-gray-600" />
+            {/* ADDRESS */}
+            <div className="bg-white rounded-2xl shadow-sm border p-6">
+              <h2 className="text-xl font-bold flex items-center gap-2 mb-4">
+                <FaMapMarkerAlt />
+                Delivery Address
+              </h2>
 
-                <div>
-                  <p className="font-semibold">
-                    {order.address.name}
-                  </p>
+              <h3 className="font-semibold text-lg">
+                {order?.full_name}
+              </h3>
 
-                  <p className="text-sm text-gray-600">
-                    {order.address.address}
-                  </p>
+              <p className="text-gray-600 mt-2">
+                {order?.addres}
+              </p>
 
-                  <p className="text-sm text-gray-600">
-                    {order.address.city},{" "}
-                    {order.address.state} -{" "}
-                    {order.address.pincode}
-                  </p>
+              <p className="text-gray-600">
+                {order?.city}, {order?.state}
+              </p>
 
-                  <p className="text-sm text-gray-600 mt-1">
-                    {order.address.phone}
-                  </p>
+              <p className="text-gray-600">
+                {order?.pincode}
+              </p>
+
+              <p className="font-medium mt-3">
+                {order?.mobile}
+              </p>
+            </div>
+
+            {/* PRICE */}
+            <div className="bg-white rounded-2xl shadow-sm border p-6">
+              <h2 className="text-xl font-bold mb-5">
+                Price Details
+              </h2>
+
+              <div className="space-y-4">
+                <div className="flex justify-between">
+                  <span>Price</span>
+                  <span>
+                    ₹{Number(order?.price).toLocaleString()}
+                  </span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span>Quantity</span>
+                  <span>{order?.quantity}</span>
+                </div>
+
+                <hr />
+
+                <div className="flex justify-between text-xl font-bold">
+                  <span>Total</span>
+
+                  <span className="text-green-600">
+                    ₹{Number(order?.total_price).toLocaleString()}
+                  </span>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* PRICE DETAILS */}
-          <div className="bg-white rounded-xl shadow border p-4">
-            <h2 className="text-xl font-semibold mb-4">
-              Price Details
-            </h2>
+            {/* PAYMENT */}
+            <div className="bg-white rounded-2xl shadow-sm border p-6">
+              <h2 className="text-xl font-bold flex items-center gap-2 mb-5">
+                <FaCreditCard />
+                Payment Details
+              </h2>
 
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span>Price</span>
-                <span>₹{order.price}</span>
-              </div>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span>Method</span>
+                  <span className="uppercase font-medium">
+                    {order?.payment_method}
+                  </span>
+                </div>
 
-              <div className="flex justify-between">
-                <span>Quantity</span>
-                <span>{order.quantity}</span>
-              </div>
+                <div className="flex justify-between">
+                  <span>Status</span>
 
-              <div className="flex justify-between">
-                <span>Payment</span>
-                <span className="capitalize">
-                  {order.payment_method}
-                </span>
-              </div>
-
-              <div className="flex justify-between">
-                <span>Status</span>
-
-                <span
-                  className={`font-medium ${
-                    order.payment_status === "completed"
-                      ? "text-green-600"
-                      : "text-yellow-600"
-                  }`}
-                >
-                  {order.payment_status}
-                </span>
-              </div>
-
-              <hr />
-
-              <div className="flex justify-between text-lg font-bold">
-                <span>Total</span>
-                <span>₹{order.total_price}</span>
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm capitalize ${getPaymentColor(
+                      order?.payment_status
+                    )}`}
+                  >
+                    {order?.payment_status}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* ORDER INFO */}
-          <div className="bg-white rounded-xl shadow border p-4">
-            <h2 className="text-xl font-semibold mb-4">
-              Order Info
-            </h2>
+            {/* ORDER INFO */}
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl p-6">
+              <h2 className="text-xl font-bold mb-5">
+                Order Summary
+              </h2>
 
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span>Order ID</span>
-                <span>#{order.id}</span>
-              </div>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span>Order ID</span>
+                  <span>#{order.order_id}</span>
+                </div>
 
-              <div className="flex justify-between">
-                <span>Date</span>
-                <span>{order.created_at}</span>
-              </div>
+                {/* <div className="flex justify-between">
+                  <span>Date</span>
 
-              <div className="flex justify-between">
-                <span>Status</span>
-                <span className="capitalize">
-                  {order.order_status}
-                </span>
+                  <span>
+                    {new Date(order.created_at).toLocaleDateString()}
+                  </span>
+                </div> */}
+
+                <div className="flex justify-between">
+                  <span>Status</span>
+
+                  <span className="capitalize">
+                    {order?.order_status}
+                  </span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span>Payment</span>
+
+                  <span className="capitalize">
+                    {order?.payment_status}
+                  </span>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>

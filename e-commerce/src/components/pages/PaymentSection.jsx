@@ -11,10 +11,10 @@ import {
   FaStar,
 } from "react-icons/fa";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import api from "../../utils/api";
+import api,{BASE_URL} from "../../utils/api";
 import FroPaymentCompo from "../../Loaders/ForPaymentCompo";
 
-const BASE_URL = "https://ecommerce-website-egix.onrender.com";
+
 
 function PaymentSection() {
 
@@ -448,22 +448,7 @@ function PaymentSection() {
           {/* push button to bottom */}
           <div className="flex-1" />
 
-          {/* <button
-            onClick={handlePlaceOrder}
-            disabled={selected !== "cod" || addressData.length === 0}
-            className={`w-full mt-6 sm:mt-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-lg font-semibold transition
-              ${selected === "cod" && addressData.length > 0
-                ? "bg-green-600 hover:bg-green-700 text-white"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }
-            `}
-          >
-            {addressData.length === 0
-              ? "Add Address First"
-              : selected === "cod"
-              ? "Place Order"
-              : "Select Payment Method"}
-          </button> */}
+      
 
 
           <button

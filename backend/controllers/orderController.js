@@ -169,15 +169,41 @@ export const getOrderDetails=(req,res,next)=>{
     console.log("Fetching details for order with id:", id);
 
     const query=`
-      select p.*,o.*,ad.*,
-      (select image_path from product_images pi
-       where p.product_id=pi.product_id 
-       limit 1) as image_path 
-       from product p
-       join orders o 
-       on p.product_id=o.product_id
-       join address ad
-       on o.address_id=ad.id
+    SELECT
+    o.id AS order_id,
+    o.created_at AS order_date,
+
+    p.*,
+
+    o.user_id,
+    o.address_id,
+    o.product_id,
+    o.quantity,
+    o.price,
+    o.total_price,
+    o.payment_method,
+    o.payment_status,
+    o.order_status,
+
+    ad.id AS address_table_id,
+    ad.full_name,
+    ad.mobile,
+    ad.pincode,
+    ad.state,
+    ad.city,
+    ad.addres,
+
+    (
+      SELECT image_path
+      FROM product_images pi
+      WHERE pi.product_id = p.product_id
+      LIMIT 1
+    ) AS image_path
+
+FROM orders o
+JOIN product p ON p.product_id = o.product_id
+JOIN address ad ON ad.id = o.address_id
+WHERE o.id = ?
     `
     connection.query(query,[id],(err,result)=>{
         if(err){

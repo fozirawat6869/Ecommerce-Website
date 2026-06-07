@@ -90,7 +90,7 @@ if(isLoading){
 
 
 
-// const BASE_URL = "https://ecommerce-website-egix.onrender.com";
+
 
 
 return (
