@@ -248,3 +248,24 @@ export const totalOrders=(req,res,next)=>{
         })
       })
 }
+
+
+
+// show all orders for admin 
+
+export const allOrdersAdmin=(req,res,next)=>{
+    connection.query(`select * from orders`,(err,result)=>{
+        if(err){
+            console.log("error while fetching all orders for admin homepage",err)
+            return next( new HandleError(
+                    "DB error while fetching order details",
+                    500
+                ))
+        }
+        res.status(200).json({
+            success:true,
+            message:"all order for admin fetched",
+            allOrdersDetails:result
+        })
+    })
+}
