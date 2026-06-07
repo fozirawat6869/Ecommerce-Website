@@ -250,7 +250,7 @@ return (
 
                 <button 
                 className="hover:scale-105 transition-all cursor-pointer w-full mt-3 border py-2 rounded-xl hover:bg-blue-400"
-              
+                 onClick={()=>navigate(`/orderDetails/${order.id}`)}
                 >
                   View Details
                 </button>

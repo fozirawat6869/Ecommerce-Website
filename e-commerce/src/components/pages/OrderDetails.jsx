@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import {
   FaBox,
@@ -5,8 +6,40 @@ import {
   FaMoneyBillWave,
   FaCheckCircle,
 } from "react-icons/fa";
+import api from "../../utils/api";
+import { useParams } from "react-router-dom";
 
 function OrderDetails() {
+
+    const params = useParams();
+    console.log("Order ID from URL params:", params.id);
+
+    const token =localStorage.getItem("token")
+
+    const handleShowOrderDetails=async()=>{
+       
+        try{
+            const res=await api.get(`/api/orderDetails/${params.id}`,{
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log("Order details:", res.data.orderDetails);
+            return res.data;
+        } catch (error) {
+            console.error("Error fetching order details:", error);
+            throw error;
+        }
+    }
+
+    const {data:orderDetails,isLoading}=useQuery({
+        queryKey:["orderDetails"],
+        queryFn:handleShowOrderDetails,
+        cacheTime:1000*60*10, // cache for 10 minutes
+        staleTime:1000*60*5, // data is fresh for 5 minutes
+    })
+
+
   const order = {
     id: 101,
     product_name: "GymWar Ankle Support Wrap",

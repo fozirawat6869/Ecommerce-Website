@@ -24,8 +24,10 @@ const AllUsers = lazy(() => import('./components/adminPages/AllUsers'))
 const SearchInputsProduct = lazy(() => import('./components/pages/SearchInputsProduct'))
 const PaymentSection=lazy(()=>import('./components/pages/PaymentSection'))
 const AddAddress=lazy(()=>import('./components/pages/AddAddress'))
+const OrderDetails=lazy(()=>import('./components/pages/OrderDetails'))
 
 import Layout from './components/layout/Layout'
+// import OrderDetails from './components/pages/OrderDetails'
 
 
 
@@ -81,6 +83,7 @@ function App() {
               <Route path='/searchInput/:search' element={<SearchInputsProduct />} />
               <Route path='/paymentSection/:id' element={<PaymentSection/>}/>
               <Route path='/addAddress' element={<AddAddress/>} />
+              <Route path='/orderDetails/:id' element={<OrderDetails/>} />
               
               <Route path="*" element={<div className="px-10 py-5 text-center">Page not found</div>} />
             </Route>

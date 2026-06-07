@@ -159,3 +159,44 @@ console.log("Cancelling order with id:", id);
     )
 
 }
+
+
+// Get order details by order ID
+
+export const getOrderDetails=(req,res,next)=>{
+    console.log('inside get order details api');
+    const { id } = req.params; // Get the order ID from the request parameters
+    console.log("Fetching details for order with id:", id);
+
+    const query=`
+      select p.*,o.*,ad.*,
+      (select image_path from product_images pi
+       where p.product_id=pi.product_id 
+       limit 1) as image_path 
+       from product p
+       join orders o 
+       on p.product_id=o.product_id
+       join address ad
+       on o.address_id=ad.id
+    `
+    connection.query(query,[id],(err,result)=>{
+        if(err){
+            console.log("Error while fetching order details", err);
+            return next(
+                new HandleError(
+                    "DB error while fetching order details",
+                    500
+                )
+            );
+        }
+        console.log("Order details fetched successfully:", result);
+
+        res.status(200).json({
+            success: true,
+            message: "Order details fetched successfully",
+            orderDetails:result[0] // Assuming the query returns a single order detail
+        });
+        
+    }
+    )
+}
