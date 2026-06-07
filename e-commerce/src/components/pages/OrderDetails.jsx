@@ -30,6 +30,8 @@ console.log(res.data.orderDetails)
   const { data, isLoading, isError } = useQuery({
     queryKey: ["orderDetails", id],
     queryFn: handleShowOrderDetails,
+    cacheTime:1000*60*10,
+    staleTime:1000*60*10
   });
 
   if(isLoading){

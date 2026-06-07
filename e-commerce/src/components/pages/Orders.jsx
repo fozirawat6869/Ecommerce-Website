@@ -38,7 +38,7 @@ export default function Orders() {
     queryKey:["orders"],
     queryFn:handleShowOrders,
     cacheTime:1000*60*10, // cache for 10 minutes
-    staleTime:1000*60*5, // data is fresh for 5 minutes
+    staleTime:1000*60*10, // data is fresh for 5 minutes
   })
 
   console.log("Orders data in Orders component", orderData);
