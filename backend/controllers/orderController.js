@@ -254,7 +254,24 @@ export const totalOrders=(req,res,next)=>{
 // show all orders for admin 
 
 export const allOrdersAdmin=(req,res,next)=>{
-    connection.query(`select * from orders`,(err,result)=>{
+   const query = `
+  SELECT
+    o.*,
+    p.product_name,
+    p.product_description,
+    p.product_price,
+    (
+      SELECT image_path
+      FROM product_images pi
+      WHERE pi.product_id = p.product_id
+      LIMIT 1
+    ) AS image_path
+  FROM orders o
+  JOIN product p
+    ON o.product_id = p.product_id
+  ORDER BY o.order_id DESC
+`;
+    connection.query(query,(err,result)=>{
         if(err){
             console.log("error while fetching all orders for admin homepage",err)
             return next( new HandleError(
@@ -265,7 +282,7 @@ export const allOrdersAdmin=(req,res,next)=>{
         res.status(200).json({
             success:true,
             message:"all order for admin fetched",
-            allOrdersDetails:result
+            allData:result
         })
     })
 }
