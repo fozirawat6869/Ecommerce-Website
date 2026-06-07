@@ -41,17 +41,40 @@ const handleAllProudcts = async () => {
     }
   }
 
+  const handleAllOrders=async ()=>{
+         try {
+      const res = await api.get("/api/totalOrders",{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      })  
+      console.log("Total orders res", res.data.allOrders)
+      // await new Promise((resolve)=>setTimeout(resolve,5000))
+      return res.data.allOrders || []
+    } catch {
+      console.log("error fetching allOrders")
+      return []
+    }
+  }
+
   const{data:productCount,isLoading:allProductLoader}=useQuery({
     queryKey:["allProducts"],
     queryFn:handleAllProudcts,
-    cacheTime:1000*60*5, // 5 min cache
-    staleTime:1000*60*2, // 2 min fresh
+    cacheTime:1000*60*10, // 5 min cache
+    staleTime:1000*60*10, // 2 min fresh
   })
    const{data:allUsers,isLoading:allUsersLoader}=useQuery({
     queryKey:["allUsers"],
     queryFn:handleAllUsers,
-    cacheTime:1000*60*5, // 5 min cache
-    staleTime:1000*60*2, // 2 min fresh
+    cacheTime:1000*60*10, // 5 min cache
+    staleTime:1000*60*10, // 2 min fresh
+  })
+
+  const {data:allOrders,isLoading:allOrdersLoader}=useQuery({
+       queryKey:['allOrders'],
+       queryFn:handleAllOrders,
+       cacheTime:1000*60*10, // 5 min cache
+    staleTime:1000*60*10, // 2 min fresh
   })
 
   
@@ -91,7 +114,7 @@ const handleAllProudcts = async () => {
           <FaShoppingCart className="text-green-600 text-3xl" />
           <div>
             <h2 className="text-gray-500">Total Orders</h2>
-            <p className="text-2xl font-bold">340</p>
+            <p className="text-2xl font-bold">{allOrders?.length}</p>
           </div>
         </div>
 

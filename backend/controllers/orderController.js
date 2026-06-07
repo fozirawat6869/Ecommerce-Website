@@ -226,3 +226,25 @@ WHERE o.id = ?
     }
     )
 }
+
+
+
+
+// total order for admin
+
+export const totalOrders=(req,res,next)=>{
+      connection.query(`select id from orders`,(err,result)=>{
+        if(err){
+            console.log("error while fetching total orders for admin homepage",err)
+            return next( new HandleError(
+                    "DB error while fetching order details",
+                    500
+                ))
+        }
+        res.status(200).json({
+            success:true,
+            message:"total orders fetched successfully",
+            allOrders:result
+        })
+      })
+}
