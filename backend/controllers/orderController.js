@@ -269,7 +269,7 @@ export const allOrdersAdmin=(req,res,next)=>{
   FROM orders o
   JOIN product p
     ON o.product_id = p.product_id
-  ORDER BY o.order_id DESC
+  ORDER BY o.id DESC
 `;
     connection.query(query,(err,result)=>{
         if(err){

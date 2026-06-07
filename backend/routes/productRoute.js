@@ -9,7 +9,7 @@ import { userProfile,updateUserProfile,
 import { adminLogin,deleteProduct } from '../controllers/adminController.js'
 import { addToCart,cartCount,cartProducts,removeFromCart } from '../controllers/cartController.js'
 import { reviews } from '../controllers/reviewsController.js'
-import { placeOrder,showOrders,cancelOrder,getOrderDetails,totalOrders, allOrdersAdmin } from '../controllers/orderController.js'
+import { placeOrder,showOrders,cancelOrder,getOrderDetails,totalOrders, allOrdersAdmin, updateOrderStatus } from '../controllers/orderController.js'
 
 import upload from '../config/multer.js'
 import isAuthenticated from '../middleware/isAuthenticated.js'
@@ -120,6 +120,6 @@ router.route('/allOrderDetailsForAdmin').get(isAuthenticated,allOrdersAdmin)
 
 // Update Order Status for admin
 router.route('/updateOrderStatus/:id')
-.put(isAuthenticated, updateOrderStatus);
+.put(isAuthenticated,updateOrderStatus);
 
 export default router
