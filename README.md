@@ -2,7 +2,7 @@
 
 
 ## 🚀 Live Demo
-🔗 Frontend: https://ecommerce-website-two-rose.vercel.app
+🔗 E-commerce website : https://ecommerce-website-two-rose.vercel.app
 
 ---
 
