@@ -32,13 +32,14 @@ console.log(res.data.orderDetails)
     queryFn: handleShowOrderDetails,
   });
 
-  if (isLoading) {
-    return (
-      <div className="h-screen flex justify-center items-center">
-        <div className="w-14 h-14 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
+  if(isLoading){
+  return (
+    <div className="flex flex-col items-center justify-center h-[70vh] gap-3">  
+      <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin" />
+      <p className="text-gray-400 text-sm">Loading your order details...</p>
+    </div>
+  )
+}
 
   if (isError) {
     return (
