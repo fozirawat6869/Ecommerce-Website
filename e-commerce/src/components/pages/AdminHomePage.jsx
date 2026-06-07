@@ -41,13 +41,13 @@ const handleAllProudcts = async () => {
     }
   }
 
-  const{data:productCount,isLoading}=useQuery({
+  const{data:productCount,isLoading:allProductLoader}=useQuery({
     queryKey:["allProducts"],
     queryFn:handleAllProudcts,
     cacheTime:1000*60*5, // 5 min cache
     staleTime:1000*60*2, // 2 min fresh
   })
-   const{data:allUsers}=useQuery({
+   const{data:allUsers,isLoading:allUsersLoader}=useQuery({
     queryKey:["allUsers"],
     queryFn:handleAllUsers,
     cacheTime:1000*60*5, // 5 min cache
@@ -56,7 +56,9 @@ const handleAllProudcts = async () => {
 
   
 
-  if(isLoading){
+  
+
+  if(allProductLoader||allOrdersLoader||allUsersLoader){
     return (
      <AdminLoader/>
     )
