@@ -32,6 +32,7 @@ A full-stack e-commerce web application built with modern technologies, featurin
 - Add new products
 - Delete products
 - Manage platform data
+- View all orders
 
 ---
 
