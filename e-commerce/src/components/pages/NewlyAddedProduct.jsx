@@ -33,7 +33,12 @@ function NewlyAddedProduct() {
 
         <div className='flex justify-center'>
           <div className='flex flex-wrap justify-center gap-3 sm:gap-6 max-w-6xl w-full px-2'>
-
+             
+            {!loading && newlyProduct.length === 0 && (
+  <div className="w-full text-center py-10">
+    No newly added products available.
+  </div>
+)}
             {loading
               ? Array.from({ length: limit }).map((_, index) => (
                 <div
