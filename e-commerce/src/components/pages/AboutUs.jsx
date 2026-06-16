@@ -172,15 +172,7 @@ function AboutUs() {
               >
                 View Code on GitHub
               </a>
-                {/* live  */}
-                <a
-                href="https://portfolio-website-mayur.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-auto inline-block  hover:bg-pink-500 text-white px-4 py-2 rounded-lg bg-blue-500 transition text-center"
-              >
-                Live Demo
-              </a>
+            
                </div>
             </div>
 
