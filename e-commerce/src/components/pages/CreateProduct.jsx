@@ -94,6 +94,7 @@ const handleSubmit = async (e) => {
     console.log("res.data:", res.data);
     alert("Product created successfully!");
     queryClient.invalidateQueries({ queryKey: ['products'] });
+    queryClient.invalidateQueries( {queryKey: ['allProducts'] })
 
     setFormData({
       name: "",
