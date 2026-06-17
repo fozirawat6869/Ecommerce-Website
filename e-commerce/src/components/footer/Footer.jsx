@@ -18,7 +18,9 @@ function Footer() {
         <div className="container mx-auto px-5 grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {/* Contact Section */}
-          <div className="bg-white p-6 rounded-2xl shadow flex flex-col justify-between">
+          <Link to={'/contact'}
+             onClick={() => window.scrollTo(0, 0)}
+          className="bg-white p-6 rounded-2xl shadow flex flex-col justify-between">
             <h1 className="text-2xl font-bold text-center">Contact Us</h1>
 
             <div className="mt-4 space-y-3">
@@ -29,7 +31,7 @@ function Footer() {
                 <MdEmail /> rawatmayur0703@gmail.com
               </p>
             </div>
-          </div>
+          </Link>
 
        
 <div className="flex flex-col gap-3 bg-white p-5 rounded-2xl">
