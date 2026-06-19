@@ -7,6 +7,7 @@ import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../../utils/api";
+import ForOrders from "../../Loaders/ForOrders";
 
 export default function Orders() {
 
@@ -80,10 +81,7 @@ export default function Orders() {
 
 if(isLoading){
   return (
-    <div className="flex flex-col items-center justify-center h-[70vh] gap-3">  
-      <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin" />
-      <p className="text-gray-400 text-sm">Loading your orders...</p>
-    </div>
+     <ForOrders />
   )
 }
 
