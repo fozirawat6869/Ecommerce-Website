@@ -320,3 +320,38 @@ export const updateOrderStatus = (req, res, next) => {
     }
   );
 };
+
+
+
+// update payment status 
+
+export const updatePaymentStatus = (req, res, next) => {
+  const { id } = req.params;
+  const { payment_status } = req.body;
+
+  const query = `
+    UPDATE orders
+    SET payment_status = ?
+    WHERE id = ?
+  `;
+
+  connection.query(
+    query,
+    [payment_status, id],
+    (err, result) => {
+      if (err) {
+        return next(
+          new HandleError(
+            "DB error while updating payment status",
+            500
+          )
+        );
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Payment status updated successfully",
+      });
+    }
+  );
+};
