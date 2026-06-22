@@ -57,35 +57,53 @@ const handleAllProudcts = async () => {
     }
   }
 
+  const getRevenue = async () => {
+  const res = await api.get("/api/totalRevenue",{
+      headers:{
+          Authorization:`Bearer ${token}`
+        }
+  });
+  return res.data.totalRevenue;
+};
+
+
+
   const{data:productCount,isLoading:allProductLoader}=useQuery({
     queryKey:["allProducts"],
     queryFn:handleAllProudcts,
-    cacheTime:1000*60*10, // 5 min cache
-    staleTime:1000*60*10, // 2 min fresh
+    cacheTime:1000*60*10, // 10 min cache
+    staleTime:1000*60*10, // 10 min fresh
   })
    const{data:allUsers,isLoading:allUsersLoader}=useQuery({
     queryKey:["allUsers"],
     queryFn:handleAllUsers,
-    cacheTime:1000*60*10, // 5 min cache
-    staleTime:1000*60*10, // 2 min fresh
+    cacheTime:1000*60*10, // 10 min cache
+    staleTime:1000*60*10, // 10 min fresh
   })
 
   const {data:allOrders,isLoading:allOrdersLoader}=useQuery({
        queryKey:['allOrders'],
        queryFn:handleAllOrders,
-       cacheTime:1000*60*10, // 5 min cache
-    staleTime:1000*60*10, // 2 min fresh
+       cacheTime:1000*60*10, // 10 min cache
+    staleTime:1000*60*10, // 10 min fresh
   })
 
   
-
+const { data:totalRevenue,isLoading:allTotalRevenue } = useQuery({
+  queryKey: ["revenue"],
+  queryFn: getRevenue,
+    cacheTime:1000*60*10, // 10 min cache
+    staleTime:1000*60*10, // 10 min fresh
+});
   
 
-  if(allProductLoader||allOrdersLoader||allUsersLoader){
+  if(allProductLoader||allOrdersLoader||allUsersLoader||allTotalRevenue){
     return (
      <AdminLoader/>
     )
   }
+
+  console.log("total revenue is : ",totalRevenue)
 
 
 
@@ -159,7 +177,7 @@ return (
           <div>
             <p className="text-gray-500 text-sm">Revenue</p>
             <h2 className="text-2xl sm:text-3xl font-bold mt-1">
-              ₹1,30,000
+              ₹{totalRevenue}
             </h2>
           </div>
 
@@ -264,7 +282,7 @@ return (
             <div className="flex justify-between">
               <span className="text-gray-600">Revenue</span>
               <span className="font-bold text-green-600">
-                ₹1,30,000
+                ₹{totalRevenue}
               </span>
             </div>
 

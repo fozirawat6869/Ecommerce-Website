@@ -355,3 +355,31 @@ export const updatePaymentStatus = (req, res, next) => {
     }
   );
 };
+
+
+
+// total revenue
+
+export const getTotalRevenue = (req, res, next) => {
+  const query = `
+    SELECT COALESCE(SUM(total_price), 0) AS totalRevenue
+    FROM orders
+    WHERE payment_status = 'completed'
+  `;
+
+  connection.query(query, (err, result) => {
+    if (err) {
+      return next(
+        new HandleError(
+          "Failed to fetch total revenue",
+          500
+        )
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      totalRevenue: result[0].totalRevenue,
+    });
+  });
+};

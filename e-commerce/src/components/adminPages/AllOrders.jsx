@@ -136,6 +136,7 @@ function AllOrders() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["allOrders"]);
+      queryClient.invalidateQueries(["revenue"]);
       setUpdatingPaymentId(null);
     },
     onError: () => setUpdatingPaymentId(null),
