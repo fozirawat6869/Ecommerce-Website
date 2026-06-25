@@ -164,3 +164,38 @@ The application is fully responsive and optimized for:
 * Protected Routes
 * Admin Authorization
 * Role-Based Access Control
+
+---
+
+# 💰 Revenue System
+
+Revenue is automatically calculated from orders where:
+
+```sql
+payment_status = 'completed'
+```
+
+Payment Status Options:
+
+* Pending
+* Completed
+* Failed
+
+This ensures revenue reflects only successfully paid orders.
+
+---
+
+# 📂 Project Highlights
+
+* Full Stack MERN-style Architecture
+* RESTful API Design
+* MySQL Relational Database
+* JWT Authentication
+* Admin Dashboard
+* Order Management System
+* Payment Status Tracking
+* Revenue Analytics
+* Responsive UI
+* React Query Caching
+* Production Deployment
+
