@@ -11,6 +11,27 @@ const server=app.listen(port,()=>{
     console.log(`server running on port : ${port}`)
 })
 
+
+// Server is running
+//        │
+//        ▼
+// A Promise fails
+//        │
+//        ▼
+// Nobody catches the error
+//        │
+//        ▼
+// process.on("unhandledRejection") runs
+//        │
+//        ▼
+// Print the error
+//        │
+//        ▼
+// Stop accepting new requests
+//        │
+//        ▼
+// Exit the application
+
 process.on("unhandledRejection",(err)=>{
     console.log(err.message)
     console.log("server goes down");
