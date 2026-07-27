@@ -351,7 +351,7 @@ export const newlyAddedProducts = (req, res, next) => {
         LIMIT 1
       ) AS main_image
       FROM product p
-      WHERE p.created_at >= DATE_SUB(NOW(), INTERVAL 2 month)
+      WHERE p.created_at >= DATE_SUB(NOW(), INTERVAL 3 month)
       ORDER BY p.created_at DESC
       LIMIT ? OFFSET ?
     `;
